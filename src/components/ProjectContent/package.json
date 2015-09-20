@@ -1,0 +1,6 @@
+{
+  "name": "ProjectContent",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ProjectContent.js"
+}

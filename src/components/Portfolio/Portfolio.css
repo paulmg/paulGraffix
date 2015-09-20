@@ -1,0 +1,53 @@
+@import '../variables.css';
+
+.Portfolio {
+
+}
+
+.Portfolio.opening .project-card.current {
+  animation: moveFromBottom .5s both var(--animation-swift);
+}
+.Portfolio.open .project-card.current {
+  /*transform: translateY(-100%);*/
+}
+
+.Portfolio.next-opening .project-card.current {
+  overflow: hidden;
+  transform-origin: 0% 50%;
+  animation: rotateRightSideFirst 5s both var(--animation-swift);
+}
+.Portfolio.next-open .project-card.current {
+
+}
+
+.project-card {
+  position: fixed;
+  top: 100%;
+  left: 0;
+  overflow-y: auto;
+  padding: 5em;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background-color: lightblue;
+
+  transform: translate3d(0, -100%, 0);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.project-card.next {
+
+}
+
+
+@keyframes moveFromBottom {
+  from { transform: translateY(0%); }
+  to { transform: translateY(-100%); }
+}
+
+@keyframes rotateRightSideFirst {
+  0% { }
+  40% { transform: rotateY(15deg) translate3d(0, -100%, 0); opacity: .8; animation-timing-function: ease-out; }
+  100% { transform: scale(0.8) translate3d(0, -80%, -200px); opacity:0; }
+}

@@ -1,0 +1,18 @@
+@import '../variables.css';
+
+.ProjectInfo {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  padding: 30px 40px 22px;
+  color: #888;
+  background: #fff;
+}
+
+.ProjectInfo--closed {
+  margin-top: 0;
+  padding: 5px 16px;
+  pointer-events: none;
+  background: transparent;
+}

@@ -1,0 +1,88 @@
+@import '../variables.css';
+
+figure.ProjectImage-wrapper {
+  position: relative;
+  position: absolute;
+  /*background: var(--black);*/
+  top: 0;
+  left: 0;
+
+  overflow: hidden;
+
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  cursor: pointer;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+figure.ProjectImage-wrapper img {
+  position: relative;
+  opacity: 0.8;
+
+  transition: transform 0.35s var(--animation-swift), opacity 0.25s var(--animation-swift);
+}
+
+figure.ProjectImage-wrapper:hover img {
+  opacity: 0.4;
+
+  transform: translate3d(0, -20%, 0);
+}
+
+figure.ProjectImage-wrapper figcaption {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3em;
+  background: var(--white);
+  text-transform: uppercase;
+
+  transition: transform 0.35s var(--animation-swift);
+  transform: translate3d(0, 100%, 0);
+  backface-visibility: hidden;
+}
+
+figure.ProjectImage-wrapper h2 {
+  display: inline-block;
+  float: left;
+  padding: 0.7rem 2rem;
+  text-align: left;
+  font-size: 1em;
+}
+
+figure.ProjectImage-wrapper p.description {
+  position: absolute;
+  bottom: 4rem;
+  padding: 2rem;
+  width: 100%;
+  color: var(--white);
+  text-transform: none;
+  text-shadow: 0 1px 2px var(--black);
+  font-size: 90%;
+  opacity: 0;
+
+  transition: opacity 0.35s var(--animation-swift);
+  backface-visibility: hidden;
+}
+
+figure.ProjectImage-wrapper:hover p.description {
+  opacity: 1;
+}
+
+figure.ProjectImage-wrapper h2 {
+  transition: transform 0.35s var(--animation-swift);
+  transform: translate3d(0, 200%, 0);
+}
+
+figure.ProjectImage-wrapper:hover figcaption,
+figure.ProjectImage-wrapper:hover h2 {
+  transform: translate3d(0, 0, 0);
+}
+
+figure.ProjectImage-wrapper:hover h2 {
+  transition-delay: 0.05s;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "ProjectWrapper",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./ProjectWrapper.js"
+}
