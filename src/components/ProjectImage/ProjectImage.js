@@ -18,14 +18,13 @@ class ProjectImage extends React.Component {
   }
 
   componentDidMount() {
-    var self = this;
     var img = document.createElement('img');
 
-    img.onload = function() {
-      self.setState({loaded: true});
-    };
-
     img.src = this.props.src;
+
+    img.onload = () => {
+      this.setState({loaded: true});
+    };
   }
 
   handleClick() {

@@ -1,12 +1,25 @@
 @import '../variables.css';
 
+:root {
+  --max-height: 400px;
+}
+
 .ProjectWrapper {
   position: relative;
-  float: left;
-  margin: 1%;
-  padding-bottom: 20% !important;
-  width: 30% !important;
-  height: 0;
+  overflow: hidden;
+  padding-bottom: 56% !important;
+}
+
+@media only screen and (--medium) {
+  .ProjectWrapper {
+    padding-bottom: 30% !important;
+  }
+}
+
+@media only screen and (--large) {
+  .ProjectWrapper {
+    padding-bottom: 20% !important;
+  }
 }
 
 .ProjectWrapper-container {
@@ -38,16 +51,16 @@
 }
 
 .ProjectWrapper-svgContainer {
-  height: 100%;
+  max-height: var(--max-height);
   width: 100%;
-  max-height: 500px;
+  height: 100%;
 }
 
 .ProjectWrapper-svg {
   position: relative;
   left: 50%;
   display: block;
-  max-height: 500px;
+  max-height: var(--max-height);
   height: 100%;
 
   transition: transform .4s;

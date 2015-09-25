@@ -11,19 +11,16 @@
   width: 100%;
   background: var(--black);
   box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
-  color: var(--white);
 
-  transition: top 0.15s var(--animation-swift);
+  transition: top 0.25s var(--animation-swift);
 }
 
-.Header.nav-up {
+.Header.Header--up {
   top: -var(--header-height);
 }
 
 .Header-container {
-  margin: 0 auto;
   padding: 20px 0;
-  max-width: var(--max-content-width);
 }
 
 .Header-brand {

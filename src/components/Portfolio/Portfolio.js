@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import Rebase from 're-base';
 import classNames from 'classnames';
+import Loader from 'react-loader';
 
 import withStyles from '../../decorators/withStyles';
-import { addEventListener, removeEventListener } from '../../utils/DOMUtils';
 import animations from '../../utils/animations';
 import { DB } from '../../config.js';
 import ProjectInfo from '../ProjectInfo';
@@ -11,7 +12,7 @@ import ProjectWrapper from '../ProjectWrapper';
 import styles from './Portfolio.css';
 
 var activeEl, nextEl, transitionEvent, body, header;
-const ANIM_TIME = 0.8;
+const ANIM_TIME = 0.6;
 
 var base = Rebase.createClass(DB);
 
@@ -22,14 +23,15 @@ var base = Rebase.createClass(DB);
     this.state = {
       data: [],
       activeProjectID: '',
-      wrapperClass: 'closed'
+      wrapperClass: 'closed',
+      loaded: false
     }
   }
 
   componentDidMount() {
     this.init();
 
-    this.el = require('react-dom').findDOMNode(this.refs.projects);
+    this.el = ReactDOM.findDOMNode(this.refs.projects);
     this.isOpen = this.loaded = false;
   }
 
@@ -94,7 +96,7 @@ var base = Rebase.createClass(DB);
       activeProjectID: i
     });
 
-    document.querySelector('.Header').classList.add('nav-up');
+    document.querySelector('.Header').classList.add('Header--up');
     body.classList.add('body--hidden');
     this.itemContainers[i].classList.remove('ProjectWrapper-container--hoverable');
 
@@ -105,7 +107,7 @@ var base = Rebase.createClass(DB);
     let itemContainer = this.itemContainers[i];
     let itemContent = this.itemContentContainers[i];
 
-    TweenLite.to(itemContainer, 0.4, {
+    TweenLite.to(itemContainer, ANIM_TIME, {
       scrollTo: {
         y: 0
       },
@@ -166,7 +168,7 @@ var base = Rebase.createClass(DB);
 
     for(let item of this.items) {
       if(id != i && !this.isOpen) {
-        tl.add(animations.hideAnim(item), 0);
+        tl.add(animations.hideAnim(item, ANIM_TIME), 0);
       }
 
       if(id != i && this.isOpen) {
@@ -186,7 +188,7 @@ var base = Rebase.createClass(DB);
 
     let tl = new TimelineLite();
 
-    tl.add(animations.slideContentDown(itemContent, 0), 0);
+    tl.add(animations.slideContentDown(itemContent, 0.01), 0);
     tl.add(animations.clipImageIn(imageClip, ANIM_TIME, 50), 0);
     tl.add(animations.floatContainer(itemContainer), '-=' + ANIM_TIME * 0.6);
     tl.add(animations.clipImageOut(imageClip, ANIM_TIME), '-=' + ANIM_TIME * 0.3);
@@ -202,7 +204,7 @@ var base = Rebase.createClass(DB);
 
     let tl = new TimelineLite();
 
-    tl.add(animations.slideContentDown(itemContent, 0), 0);
+    tl.add(animations.slideContentDown(itemContent, 0.01), 0);
     tl.add(animations.clipImageIn(imageClip, ANIM_TIME, 50), 0);
     tl.add(animations.floatCloseContainer(itemContainer), '-=' + ANIM_TIME * 0.6);
     tl.add(animations.clipImageOut(imageClip, ANIM_TIME), '-=' + ANIM_TIME * 0.3);
@@ -219,19 +221,19 @@ var base = Rebase.createClass(DB);
     let tl = new TimelineLite({
       paused: true,
       onComplete: this.setNewContent.bind(this),
-      onCompleteParams: [nextProjectID, itemContainer, itemContent, imageClip]
+      onCompleteParams: [nextProjectID, itemContainer, itemContent]
     });
 
     tl.add(animations.slideContentDown(itemContent, ANIM_TIME), 0);
     tl.add(animations.clipImageIn(imageClip, ANIM_TIME, 0), 0);
-    tl.add(animations.hideAnim(this.items[i]))
-    tl.add(animations.clipImageOut(imageClip, 0));
+    tl.add(animations.hideAnim(this.items[i], 0.01));
+    tl.add(animations.clipImageOut(imageClip, 0.01));
     //tl.add(animations.resetWrapper(itemContainer));
 
     tl.play();
   }
 
-  setNewContent(i, oldItemContainer, oldItemContentContainer, oldImageClip) {
+  setNewContent(i, oldItemContainer, oldItemContentContainer) {
     this.setState({
       activeProjectID: i
     });
@@ -248,7 +250,6 @@ var base = Rebase.createClass(DB);
     let tl = new TimelineLite({paused: true});
 
     // switch to new one
-    tl.add(animations.clipImageOut(oldImageClip, ANIM_TIME));
     tl.add(animations.resetWrapper(itemContainer), 0);
     tl.add(animations.slideContentDown(itemContent, 0), 0);
     tl.add(animations.clipImageIn(imageClip, 0, 0), 0);
@@ -259,23 +260,45 @@ var base = Rebase.createClass(DB);
     tl.play();
   }
 
+  scrollToTop(el) {
+    TweenLite.to(el, ANIM_TIME, {
+      scrollTo: {
+        y: 0
+      },
+      onComplete: () => {
+        //itemContainer.style.overflow = 'hidden';
+      },
+      ease: Power2.easeOut
+    });
+  }
+
+  projectLoaded() {
+    console.log('loaded')
+  }
+
   render() {
     let projects = this.state.data.map((project, index) => {
       return (
         <ProjectWrapper key={index} onClick={this.handleClick.bind(this, index)}
                         closeClick={this.handleClose.bind(this, index)}
                         nextClick={this.handleNext.bind(this, index)} prevClick={this.handlePrev.bind(this, index)}
-                        id={index} active={index === this.state.activeProjectID ? 'active' : null} project={project} />
+                        id={index} active={index === this.state.activeProjectID ? 'active' : null}
+                        isLoaded={this.projectLoaded.bind(this)} project={project} />
       )
     });
 
     return (
       <section id="portfolio" className={classNames('Portfolio', this.state.wrapperClass)} ref="portfolio">
         <div className="Portfolio-container row">
-          <h1>Portfolio</h1>
-          <ul className="Portfolio-grid small-block-grid-1 medium-block-grid-2 large-block-grid-3" ref="projects">
-            {projects}
-          </ul>
+          <div className="small-12 columns">
+            <h2 className="Portfolio-title section-title columns">Portfolio</h2>
+
+            <div className="columns">
+              <ul className="Portfolio-grid small-block-grid-1 medium-block-grid-2 large-block-grid-3" ref="projects">
+                {projects}
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
     );

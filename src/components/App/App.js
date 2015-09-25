@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import smoothScroll from 'smooth-scroll';
 
 import withContext from '../../decorators/withContext';
 import withStyles from '../../decorators/withStyles';
@@ -16,13 +17,27 @@ import Contact from '../Contact';
     error: PropTypes.object
   };
 
+  componentDidMount() {
+    smoothScroll.init({
+      easing: 'easeInOutQuad',
+      speed: 300,
+      offset: -40
+    });
+  }
+
+  componentWillUnmount() {
+    smoothScroll.destroy();
+  }
+
   render() {
     return !this.props.error ? (
       <div>
         <Header />
         {this.props.children}
+        <div className="overlay"></div>
         <Portfolio />
         <Contact />
+        <div className="row"><div className="columns"><div className="columns"><div className="columns divider"></div></div></div></div>
         <Footer />
       </div>
     ) : this.props.children;

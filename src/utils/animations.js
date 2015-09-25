@@ -1,5 +1,5 @@
-const hideAnim = function(el) {
-  let tween = TweenLite.to(el, 0.6, {
+const hideAnim = function(el, t) {
+  let tween = TweenLite.to(el, t, {
     scale: 0.8,
     autoAlpha: 0,
     transformOrigin: 'center bottom',
@@ -23,10 +23,10 @@ const showAnim = function(el) {
 const floatContainer = function(el) {
   document.body.classList.add('body--hidden');
 
-  let tl = new TimelineLite;
   let rect = el.parentElement.getBoundingClientRect();
-
   let windowW = window.innerWidth;
+
+  let tl = new TimelineLite;
 
   tl.set(el, {
     width: rect.width,
@@ -37,7 +37,7 @@ const floatContainer = function(el) {
     overflow: 'hidden'
   });
 
-  tl.to(el, 2, {
+  tl.to(el, 1.2, {
     width: windowW,
     height: '100%',
     x: windowW / 2,
@@ -70,7 +70,7 @@ const floatCloseContainer = function(el) {
     clearProps: 'all'
   });
 
-  tl.to([el], 2, {
+  tl.to([el], 1.2, {
     width: windowW,
     height: '100%',
     x: windowW / 2,

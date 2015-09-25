@@ -1,7 +1,29 @@
 import React, { PropTypes } from 'react';
 
 class ProjectContent extends React.Component{
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loaded: false
+    }
+  }
+
   static propTypes = {};
+
+  componentDidMount() {
+    var img = document.createElement('img');
+
+    img.src = this.props.section.images[0];
+
+    img.onload = () => {
+      this.setState({loaded: true});
+      this.props.isLoaded(this.state.loaded);
+    };
+
+   //this.setState({ loaded: true });
+
+  }
 
   render() {
     let imageArr = this.props.section.images.map((images, index) => {
@@ -13,7 +35,7 @@ class ProjectContent extends React.Component{
       <div className="ProjectContent">
         <div className="ProjectContent-section">
           <div className="ProjectContent-text">
-            {text}
+            <p>{text}</p>
           </div>
           <div className="ProjectContent-images">
             {imageArr}

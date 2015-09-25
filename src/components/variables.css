@@ -9,15 +9,18 @@
   --gray-darker:           color(black lightness(+13.5%)); /* #222 */
   --gray-dark:             color(black lightness(+25%));   /* #404040 */
   --gray:                  color(black lightness(+33.5%)); /* #555 */
-  --gray-light:            color(black lightness(+46.7%)); /* #777 */
+  --gray-light:            color(black lightness(+76.7%)); /* #777 */
   --gray-lighter:          color(black lightness(+93.5%)); /* #eee */
+
+  --text-light:            gray(255, 85%);
+  --text-dark:             gray(0, 85%);
 
   /*
    * Typography
    * ======================================================================== */
 
-  /*--font-family-base:      'Segoe UI', 'HelveticaNeue-Light', sans-serif;*/
-  --font-family-base:      'Lato', sans-serif;
+  --font-family-base:      'Noto Sans', sans-serif;
+  --font-family-heading:   'Oxygen', sans-serif;
 
   /*
    * Layout
@@ -29,18 +32,22 @@
    * Media queries breakpoints
    * ======================================================================== */
 
-  --screen-xs-min:         480px;  /* Extra small screen / phone */
-  --screen-sm-min:         768px;  /* Small screen / tablet */
-  --screen-md-min:         992px;  /* Medium screen / desktop */
-  --screen-lg-min:         1200px; /* Large screen / wide desktop */
+  @custom-media --medium (min-width: 40.0625em);
+  @custom-media --large (min-width: 64.0625em);
 
   /*
    * Animations
    * ======================================================================== */
 
-  --animation-swift-out:   .45s cubic-bezier(0.3, 1, 0.4, 1) 0s;
   --animation-swift:        cubic-bezier(0.455, 0.030, 0.515, 0.955);
 
 
+  /*
+   * Elements
+   * ======================================================================== */
+
   --header-height:          82px;
+
+  --section-buffer-s:         2rem;
+  --section-buffer-l:         3rem;
 }

@@ -14,23 +14,14 @@ import ProjectImage from '../ProjectImage';
   };
 
   componentWillMount() {
-    // set up animation here
   }
 
-  handleClose() {
-    this.props.closeClick(this);
+  componentDidUpdate(prevProps, prevState) {
+
   }
 
-  handleNext() {
-    this.props.nextClick(this);
-  }
-
-  handlePrev() {
-    this.props.prevClick(this);
-  }
 
   render() {
-    //console.log(this.props.isActive);
     var sections = null;
 
     if(this.props.isActive) {
@@ -38,18 +29,14 @@ import ProjectImage from '../ProjectImage';
         //console.log(section);
 
         return (
-          <ProjectContent key={index} section={section} />
+          <ProjectContent key={index} section={section} isLoaded={this.props.isLoaded} />
         )
       });
     }
 
     return (
-      <div className="ProjectInfo hide">
-        <a className="button" onClick={this.handleClose.bind(this)}>x</a>
-        <a className="button" onClick={this.handlePrev.bind(this)}>Prev</a>
-        <a className="button" onClick={this.handleNext.bind(this)}>Next</a>
-
-        <div className="ProjectInfo-card">
+      <div className="ProjectInfo columns hide">
+        <div className="ProjectInfo-card columns" ref="projectInfoCard">
           <h2>{this.props.project.name}</h2>
           <p>{this.props.project.description}</p>
 

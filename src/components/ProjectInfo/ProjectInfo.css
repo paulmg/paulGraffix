@@ -1,18 +1,19 @@
 @import '../variables.css';
 
 .ProjectInfo {
-  position: relative;
-  width: 100%;
-  height: auto;
-  margin: 0 auto;
-  padding: 30px 40px 22px;
-  color: #888;
-  background: #fff;
+  padding: 3rem;
+  background: var(--gray-lighter);
 }
 
-.ProjectInfo--closed {
-  margin-top: 0;
-  padding: 5px 16px;
-  pointer-events: none;
-  background: transparent;
+.ProjectInfo-card {
+
+}
+
+.ProjectInfo-card h2, .ProjectInfo-card p {
+  color: var(--text-dark);
+}
+
+
+.ProjectInfo-card p {
+
 }
