@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import Rebase from 're-base';
 import classNames from 'classnames';
 import Loader from 'react-loader';
@@ -11,10 +10,10 @@ import ProjectInfo from '../ProjectInfo';
 import ProjectWrapper from '../ProjectWrapper';
 import styles from './Portfolio.css';
 
-var activeEl, nextEl, transitionEvent, body, header;
+let body;
 const ANIM_TIME = 0.6;
 
-var base = Rebase.createClass(DB);
+let base = Rebase.createClass(DB);
 
 @withStyles(styles) class Portfolio extends React.Component {
   constructor(props) {
@@ -23,16 +22,16 @@ var base = Rebase.createClass(DB);
     this.state = {
       data: [],
       activeProjectID: '',
-      wrapperClass: 'closed',
-      loaded: false
+      wrapperClass: 'closed'
     }
   }
 
   componentDidMount() {
     this.init();
 
-    this.el = ReactDOM.findDOMNode(this.refs.projects);
-    this.isOpen = this.loaded = false;
+    this.el = this.refs.projects;
+    this.isOpen = false;
+    this.loaded = false;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,16 +43,15 @@ var base = Rebase.createClass(DB);
     //console.log('update');
 
     if(!this.loaded) {
-      this.items = this.el.getElementsByTagName('li');
+      this.items = this.el.children;
+
       this.imageClips = [];
       this.itemContainers = [];
       this.itemContentContainers = [];
 
       for(let item of this.items) {
-        let container = item.querySelector('.ProjectWrapper-container');
-
         this.imageClips.push(item.querySelector('#clip'));
-        this.itemContainers.push(container);
+        this.itemContainers.push(item.querySelector('.ProjectWrapper-container'));
         this.itemContentContainers.push(item.querySelector('.ProjectInfo'));
       }
 
@@ -70,7 +68,6 @@ var base = Rebase.createClass(DB);
 
   init() {
     body = document.body;
-    header = document.getElementById('header');
 
     this.ref = base.bindToState('portfolio', {
       context: this,
@@ -140,7 +137,14 @@ var base = Rebase.createClass(DB);
 
       this.setState({
         activeProjectID: ''
-      })
+      });
+
+      TweenLite.to(window, ANIM_TIME, {
+        scrollTo: {
+          y: Math.abs(document.body.getBoundingClientRect().top - this.items[i].getBoundingClientRect().top)
+        },
+        ease: Power2.easeOut
+      });
     });
 
     closeTl.reverse(0);
@@ -260,22 +264,6 @@ var base = Rebase.createClass(DB);
     tl.play();
   }
 
-  scrollToTop(el) {
-    TweenLite.to(el, ANIM_TIME, {
-      scrollTo: {
-        y: 0
-      },
-      onComplete: () => {
-        //itemContainer.style.overflow = 'hidden';
-      },
-      ease: Power2.easeOut
-    });
-  }
-
-  projectLoaded() {
-    console.log('loaded')
-  }
-
   render() {
     let projects = this.state.data.map((project, index) => {
       return (
@@ -283,7 +271,7 @@ var base = Rebase.createClass(DB);
                         closeClick={this.handleClose.bind(this, index)}
                         nextClick={this.handleNext.bind(this, index)} prevClick={this.handlePrev.bind(this, index)}
                         id={index} active={index === this.state.activeProjectID ? 'active' : null}
-                        isLoaded={this.projectLoaded.bind(this)} project={project} />
+                        project={project} ref="projectWrapper" />
       )
     });
 

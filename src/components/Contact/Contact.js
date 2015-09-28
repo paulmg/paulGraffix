@@ -12,12 +12,12 @@ import styles from './Contact.css';
       <section id="contact" className="Contact">
         <div className="Contact-container row">
           <div className="columns">
-            <div className="small-12 medium-6 columns">
+            <div className="Contact-leftSection small-12 medium-6 columns">
               <h2>Contact Me</h2>
               <a className="text-link text-link-icon" target="_blank" href="mailto:paulgraffix@gmail.com"><span
                 className="icon-social"><img src={require('./svg/email.svg')} /></span>paulgraffix@gmail.com</a>
             </div>
-            <div className="Contact-bottomSection small-12 medium-6 columns">
+            <div className="Contact-rightSection small-12 medium-6 columns">
               <h2>Connect</h2>
               <a href="https://github.com/paulmg/" target="_blank" className="text-link text-link-icon"><span
                 className="icon-social"><img src={require('./svg/github.svg')} /></span>Github</a>

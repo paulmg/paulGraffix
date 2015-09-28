@@ -23,17 +23,17 @@
 
 @media only screen and (--medium) {
   .ContentPage-info h1 {
-    font-size: 4.6em;
+    font-size: 5.2em;
   }
 }
 
 .ContentPage-info h2 {
-  margin: 0 0 4rem;
+  margin: 0 0 10vh;
   color: var(--text-light);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 4px;
   font-weight: 500;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .ContentPage-info img {

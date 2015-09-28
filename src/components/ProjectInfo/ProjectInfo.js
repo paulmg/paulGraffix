@@ -10,39 +10,67 @@ import ProjectImage from '../ProjectImage';
 
 @withStyles(styles) class ProjectInfo extends React.Component {
   static propTypes = {
-    project: React.PropTypes.object.isRequired
+    project: React.PropTypes.object.isRequired,
+    isActive: React.PropTypes.string
   };
 
-  componentWillMount() {
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-
-  }
-
-
   render() {
-    var sections = null;
+    let sections = null;
+    //console.log(this.props.project)
 
     if(this.props.isActive) {
       sections = this.props.project.content.map((section, index) => {
         //console.log(section);
 
         return (
-          <ProjectContent key={index} section={section} isLoaded={this.props.isLoaded} />
+          <ProjectContent key={index} section={section} />
         )
       });
+    }
+
+    let stack = [];
+    if(this.props.project.stack) {
+      let keys = Object.keys(this.props.project.stack);
+
+      for(let i = 0; i < keys.length; i++) {
+        let stackItems = this.props.project.stack[keys[i]].map(function(el) {
+          return (' ' + el)
+        });
+
+        stack.push(<div key={i}><span className="ProjectInfo-cardStackTitle">{keys[i]}</span>{' -' + stackItems + '.'}</div>)
+      }
+    }
+
+    let award = null;
+    if(this.props.project.awards) {
+      award = this.props.project.awards.map((award, index) => {
+        //console.log(section);
+
+        return (
+          <div key={index}>{award.title} - {award.award}</div>
+        )
+      })
     }
 
     return (
       <div className="ProjectInfo columns hide">
         <div className="ProjectInfo-card columns" ref="projectInfoCard">
-          <h2>{this.props.project.name}</h2>
-          <p>{this.props.project.description}</p>
+          <div className="ProjectInfo-cardInfo">
+            <h2>{this.props.project.name}</h2>
+            <h4>Client: {this.props.project.client}</h4>
+            <p>{this.props.project.description}</p>
 
-          <div>
+            {stack ? <h4>Stack:</h4> : null}
+            {stack}
+
+            {award ? <h4>Awards:</h4> : null}
+            {award}
+          </div>
+
+          <div className="ProjectInfo-cardSections">
             {sections}
           </div>
+
         </div>
       </div>
     );

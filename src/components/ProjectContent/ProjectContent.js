@@ -1,6 +1,10 @@
 import React, { PropTypes } from 'react';
 
 class ProjectContent extends React.Component{
+  static propTypes = {
+    section: React.PropTypes.object.isRequired
+  };
+
   constructor(props) {
     super(props);
 
@@ -9,8 +13,6 @@ class ProjectContent extends React.Component{
     }
   }
 
-  static propTypes = {};
-
   componentDidMount() {
     var img = document.createElement('img');
 
@@ -18,7 +20,6 @@ class ProjectContent extends React.Component{
 
     img.onload = () => {
       this.setState({loaded: true});
-      this.props.isLoaded(this.state.loaded);
     };
 
    //this.setState({ loaded: true });

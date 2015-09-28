@@ -1,19 +1,40 @@
 @import '../variables.css';
 
 .ProjectInfo {
-  padding: 3rem;
+  padding: 0 4rem 4rem;
   background: var(--gray-lighter);
 }
 
 .ProjectInfo-card {
-
+  padding: 3rem 0;
+  background-color: var(--white);
 }
 
-.ProjectInfo-card h2, .ProjectInfo-card p {
+.ProjectInfo-card h2, .ProjectInfo-card h3, .ProjectInfo-card h4,  .ProjectInfo-card p {
   color: var(--text-dark);
 }
 
 
 .ProjectInfo-card p {
+  margin: 0;
+}
 
+.ProjectInfo-card h4 {
+  margin: 0.2rem 0 0.3rem 0;
+  font-weight: 700;
+}
+
+.ProjectInfo-card img {
+  margin: 1rem 0;
+}
+
+.ProjectInfo-cardInfo {
+  margin: 0 auto;
+  padding: 1rem 0;
+  max-width: 1200px;
+  width: 90%;
+}
+
+.ProjectInfo-cardStackTitle {
+  text-transform: capitalize;
 }

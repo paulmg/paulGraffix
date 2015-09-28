@@ -24,9 +24,9 @@ import styles from './Navigation.css';
     return (
       <div className={classNames(this.props.className, 'Navigation')} role="navigation">
         <div className="Navigation-mobile hide-for-medium-up">
-          <a className="Navigation-Link" href="#" onClick={this.toggleMobileMenu.bind(this)}><img className="icon-social" src={require('./svg/menu.svg')} /></a>
+          <a className="Navigation-link" href="#" onClick={this.toggleMobileMenu.bind(this)}><img className="icon-social" src={require('./svg/menu.svg')} /></a>
         </div>
-        <div className="Navigation-desktop hide-for-small" ref="desktopMenu">
+        <div className="Navigation-desktop" ref="desktopMenu">
           <a className="Navigation-link text-link" data-scroll href="#skills" onClick={this.handleClick.bind(this)}>Skills</a>
           <a className="Navigation-link text-link" data-scroll href="#portfolio" onClick={this.handleClick.bind(this)}>Portfolio</a>
           <a className="Navigation-link text-link" data-scroll href="#contact" onClick={this.handleClick.bind(this)}>Contact</a>

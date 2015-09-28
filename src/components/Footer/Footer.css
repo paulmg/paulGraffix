@@ -33,3 +33,8 @@
 .Footer-link:first-child {
   padding-right: 0;
 }
+
+.Footer-link .icon-arrow {
+  margin-right: 0;
+  margin-left: 0.2em;
+}

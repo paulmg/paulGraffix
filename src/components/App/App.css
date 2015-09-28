@@ -204,25 +204,27 @@ section {
   width: 30px;
   opacity: 0;
   pointer-events: none;
-  background-color: transparent;
+  background-color: var(--white);
 
   transition: opacity 1.35s var(--animation-swift), transform .35s var(--animation-swift), background-color .35s var(--animation-swift);
 }
 .active .button-fixed {
   opacity: 0;
-  pointer-events: all;
 }
 .body--hidden .button-fixed {
   opacity: 1;
+  pointer-events: all;
 }
 
 .button-fixed:hover {
   transform: scale(1.5);
-  background-color: red;
+  background-color: var(--gray-light);
 }
 
 .button-side {
-  top: calc(50vh - 15px);
+  /* (lh = 80 w = 30) / 2 */
+  top: calc(50vh - 55px);
+  line-height: 5;
 }
 
 .button-top {

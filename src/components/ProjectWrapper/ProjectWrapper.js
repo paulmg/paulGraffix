@@ -13,6 +13,9 @@ import ProjectInfo from '../ProjectInfo';
   static propTypes = {
     project: React.PropTypes.object.isRequired,
     onClick: React.PropTypes.func.isRequired,
+    closeClick: React.PropTypes.func.isRequired,
+    nextClick: React.PropTypes.func.isRequired,
+    prevClick: React.PropTypes.func.isRequired,
     id: React.PropTypes.number.isRequired,
     active: React.PropTypes.string
   };
@@ -38,7 +41,6 @@ import ProjectInfo from '../ProjectInfo';
   }
 
   handleUp() {
-    console.log(this.wrapper)
     this.scrollToTop(this.wrapper)
   }
 
@@ -77,7 +79,7 @@ import ProjectInfo from '../ProjectInfo';
         <div className="ProjectWrapper-container ProjectWrapper-container--closed ProjectWrapper-container--hoverable" ref="projectWrapperContainer">
           <div className="ProjectWrapper-svgContainer" dangerouslySetInnerHTML={svgMarkup()}></div>
 
-          <ProjectInfo project={this.props.project} isActive={this.props.active} isLoaded={this.props.isLoaded} />
+          <ProjectInfo project={this.props.project} isActive={this.props.active} />
         </div>
 
         <ProjectImage onClick={this.handleClick.bind(this)} src={src} alt={this.props.project.name} project={this.props.project} />
