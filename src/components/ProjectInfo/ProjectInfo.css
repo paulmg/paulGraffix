@@ -2,7 +2,7 @@
 
 .ProjectInfo {
   padding: 0 1rem 1rem;
-  background: var(--gray-lighter);
+  background: var(--gray-light);
 }
 
 @media only screen and (--medium) {

@@ -26,19 +26,7 @@ import ProjectInfo from '../ProjectInfo';
 
   componentDidUpdate(prevProps, prevState) {
     if(this.props.active) {
-      TweenLite.to(this.refs.nextBtn, 0.2, {
-        x: -200,
-        ease: Power2.easeOut,
-        onComplete: () => {
-          TweenLite.to(this.refs.prevBtn, 0.2, {
-            x: 200,
-            ease: Power2.easeOut,
-            onComplete: () => {
-
-            }
-          });
-        }
-      });
+      this.moveSideBtns().bind(this);
     }
   }
 
@@ -51,19 +39,7 @@ import ProjectInfo from '../ProjectInfo';
   }
 
   handleNext() {
-    TweenLite.to(this.refs.nextBtn, 0.2, {
-      x: 200,
-      ease: Power2.easeOut,
-      onComplete: () => {
-        TweenLite.to(this.refs.prevBtn, 0.2, {
-          x: -200,
-          ease: Power2.easeOut,
-          onComplete: () => {
-            this.props.nextClick(this);
-          }
-        });
-      }
-    });
+    this.moveSideBtns.bind(this);
   }
 
   handlePrev() {
@@ -81,6 +57,35 @@ import ProjectInfo from '../ProjectInfo';
       },
       ease: Power2.easeOut
     });
+  }
+
+  moveSideBtns() {
+    console.log('test')
+    TweenLite.to(this.refs.nextBtn, 0.2, {
+      x: 200,
+      ease: Power2.easeOut,
+      onComplete: () => {
+        TweenLite.to(this.refs.prevBtn, 0.2, {
+          x: -200,
+          ease: Power2.easeOut,
+          onComplete: () => {
+            this.props.nextClick(this);
+          }
+        });
+      }
+    });
+    // let tl = new TimelineLite({paused: true, onComplete: this.props.nextClick.bind(this), onCompleteParams: [this]});
+
+    // tl.add(TweenLite.to(this.refs.nextBtn, 0.2, {
+    //   x: 200,
+    //   ease: Power2.easeOut
+    // }));
+    // tl.add(TweenLite.to(this.refs.prevBtn, 0.2, {
+    //   x: -200,
+    //   ease: Power2.easeOut
+    // }));
+
+    // tl.play();
   }
 
   render() {
