@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-class ProjectContent extends React.Component{
+class ProjectContent extends React.Component {
   static propTypes = {
     section: React.PropTypes.object.isRequired
   };
@@ -21,9 +21,6 @@ class ProjectContent extends React.Component{
     img.onload = () => {
       this.setState({loaded: true});
     };
-
-   //this.setState({ loaded: true });
-
   }
 
   render() {

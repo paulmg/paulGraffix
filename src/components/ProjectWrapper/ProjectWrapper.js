@@ -24,6 +24,24 @@ import ProjectInfo from '../ProjectInfo';
     this.wrapper = this.refs.projectWrapperContainer;
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.active) {
+      TweenLite.to(this.refs.nextBtn, 0.2, {
+        x: -200,
+        ease: Power2.easeOut,
+        onComplete: () => {
+          TweenLite.to(this.refs.prevBtn, 0.2, {
+            x: 200,
+            ease: Power2.easeOut,
+            onComplete: () => {
+
+            }
+          });
+        }
+      });
+    }
+  }
+
   handleClick() {
     this.props.onClick(this);
   }
@@ -33,7 +51,19 @@ import ProjectInfo from '../ProjectInfo';
   }
 
   handleNext() {
-    this.props.nextClick(this);
+    TweenLite.to(this.refs.nextBtn, 0.2, {
+      x: 200,
+      ease: Power2.easeOut,
+      onComplete: () => {
+        TweenLite.to(this.refs.prevBtn, 0.2, {
+          x: -200,
+          ease: Power2.easeOut,
+          onComplete: () => {
+            this.props.nextClick(this);
+          }
+        });
+      }
+    });
   }
 
   handlePrev() {
@@ -48,9 +78,6 @@ import ProjectInfo from '../ProjectInfo';
     TweenLite.to(el, 0.8, {
       scrollTo: {
         y: 0
-      },
-      onComplete: () => {
-        //itemContainer.style.overflow = 'hidden';
       },
       ease: Power2.easeOut
     });
@@ -71,10 +98,13 @@ import ProjectInfo from '../ProjectInfo';
 
     return (
       <li className={classNames(this.props.active, 'ProjectWrapper')}>
-        <a className="close button-fixed button-top button-right" onClick={this.handleClose.bind(this)}><img src={require('./svg/close.svg')}/></a>
-        <a className="prev button-fixed button-side button-left" onClick={this.handlePrev.bind(this)}><img src={require('./svg/left.svg')}/></a>
-        <a className="next button-fixed button-side button-right" onClick={this.handleNext.bind(this)}><img src={require('./svg/right.svg')}/></a>
-        <a className="up button-fixed button-bottom button-right" onClick={this.handleUp.bind(this)}><img src={require('./svg/up.svg')}/></a>
+        <a className="close button-fixed button-top button-right" onClick={this.handleClose.bind(this)} ref="closeBtn"><img
+          src={require('./svg/close.svg')} /></a>
+        <a className="prev button-fixed button-side button-left" onClick={this.handlePrev.bind(this)} ref="prevBtn"><img
+          src={require('./svg/left.svg')} /></a>
+        <a className="next button-fixed button-side button-right" onClick={this.handleNext.bind(this)} ref="nextBtn"><img
+          src={require('./svg/right.svg')} /></a>
+        <a className="up button-fixed button-bottom button-right" onClick={this.handleUp.bind(this)} ref="upBtn"><img src={require('./svg/up.svg')} /></a>
 
         <div className="ProjectWrapper-container ProjectWrapper-container--closed ProjectWrapper-container--hoverable" ref="projectWrapperContainer">
           <div className="ProjectWrapper-svgContainer" dangerouslySetInnerHTML={svgMarkup()}></div>

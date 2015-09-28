@@ -218,23 +218,31 @@ let base = Rebase.createClass(DB);
   }
 
   setNextProject(i, nextProjectID) {
-    let itemContainer = this.itemContainers[i];
-    let itemContent = this.itemContentContainers[i];
-    let imageClip = this.imageClips[i];
+    TweenLite.to(this.itemContainers[i], ANIM_TIME, {
+      scrollTo: {
+        y: 0
+      },
+      onComplete: () => {
+        let itemContainer = this.itemContainers[i];
+        let itemContent = this.itemContentContainers[i];
+        let imageClip = this.imageClips[i];
 
-    let tl = new TimelineLite({
-      paused: true,
-      onComplete: this.setNewContent.bind(this),
-      onCompleteParams: [nextProjectID, itemContainer, itemContent]
+        let tl = new TimelineLite({
+          paused: true,
+          onComplete: this.setNewContent.bind(this),
+          onCompleteParams: [nextProjectID, itemContainer, itemContent]
+        });
+
+        tl.add(animations.slideContentDown(itemContent, ANIM_TIME), 0);
+        tl.add(animations.clipImageIn(imageClip, ANIM_TIME, 0), 0);
+        tl.add(animations.hideAnim(this.items[i], 0.01));
+        tl.add(animations.clipImageOut(imageClip, 0.01));
+        //tl.add(animations.resetWrapper(itemContainer));
+
+        tl.play();
+      },
+      ease: Power2.easeOut
     });
-
-    tl.add(animations.slideContentDown(itemContent, ANIM_TIME), 0);
-    tl.add(animations.clipImageIn(imageClip, ANIM_TIME, 0), 0);
-    tl.add(animations.hideAnim(this.items[i], 0.01));
-    tl.add(animations.clipImageOut(imageClip, 0.01));
-    //tl.add(animations.resetWrapper(itemContainer));
-
-    tl.play();
   }
 
   setNewContent(i, oldItemContainer, oldItemContentContainer) {
@@ -258,7 +266,7 @@ let base = Rebase.createClass(DB);
     tl.add(animations.slideContentDown(itemContent, 0), 0);
     tl.add(animations.clipImageIn(imageClip, 0, 0), 0);
     tl.add(animations.floatNextContainer(itemContainer), 0);
-    tl.add(animations.clipImageOut(imageClip, ANIM_TIME), '-=' + ANIM_TIME * 0.3);
+    tl.add(animations.clipImageOut(imageClip, ANIM_TIME * 2), '-=' + ANIM_TIME * 0.3);
     tl.add(animations.slideContentUp(itemContent, ANIM_TIME), '-=' + ANIM_TIME * 0.6);
 
     tl.play();
@@ -271,7 +279,7 @@ let base = Rebase.createClass(DB);
                         closeClick={this.handleClose.bind(this, index)}
                         nextClick={this.handleNext.bind(this, index)} prevClick={this.handlePrev.bind(this, index)}
                         id={index} active={index === this.state.activeProjectID ? 'active' : null}
-                        project={project} ref="projectWrapper" />
+                        project={project} ref="projectWrapper" isOpen={this.isOpen} />
       )
     });
 

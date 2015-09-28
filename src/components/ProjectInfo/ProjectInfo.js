@@ -37,7 +37,7 @@ import ProjectImage from '../ProjectImage';
           return (' ' + el)
         });
 
-        stack.push(<div key={i}><span className="ProjectInfo-cardStackTitle">{keys[i]}</span>{' -' + stackItems + '.'}</div>)
+        stack.push(<p key={i}><span className="ProjectInfo-cardStackTitle">{keys[i]}</span>{' -' + stackItems + '.'}</p>)
       }
     }
 
@@ -47,7 +47,7 @@ import ProjectImage from '../ProjectImage';
         //console.log(section);
 
         return (
-          <div key={index}>{award.title} - {award.award}</div>
+          <p key={index}>{award.title} - {award.award}</p>
         )
       })
     }
@@ -58,6 +58,7 @@ import ProjectImage from '../ProjectImage';
           <div className="ProjectInfo-cardInfo">
             <h2>{this.props.project.name}</h2>
             <h4>Client: {this.props.project.client}</h4>
+
             <p>{this.props.project.description}</p>
 
             {stack ? <h4>Stack:</h4> : null}

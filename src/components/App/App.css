@@ -107,7 +107,7 @@ body.body--hidden {
   overflow-y: hidden;
 }
 
-.ContentPage, .Footer, .ProjectImage-wrapper, .Portfolio-title {
+.ContentPage, .Footer, .ProjectImage-wrapper, .Portfolio-title, .Contact, .divider {
   transition: opacity 0.7s var(--animation-swift);
 }
 
@@ -115,7 +115,7 @@ body.body--hidden .ContentPage, body.body--hidden .Footer, body.body--hidden .Co
   pointer-events: none;
 }
 
-body.body--hidden .ProjectImage-wrapper, body.body--hidden .Portfolio-title  {
+body.body--hidden .ProjectImage-wrapper, body.body--hidden .Portfolio-title, body.body--hidden .Footer, body.body--hidden .Contact, body.body--hidden .divider {
   opacity: 0;
 }
 
@@ -202,42 +202,78 @@ section {
   position: fixed;
   z-index: 1;
   width: 30px;
-  opacity: 0;
-  pointer-events: none;
   background-color: var(--white);
-
+  opacity: 0;
   transition: opacity 1.35s var(--animation-swift), transform .35s var(--animation-swift), background-color .35s var(--animation-swift);
+
+  pointer-events: none;
 }
+
 .active .button-fixed {
   opacity: 0;
 }
+
 .body--hidden .button-fixed {
   opacity: 1;
   pointer-events: all;
 }
 
 .button-fixed:hover {
-  transform: scale(1.5);
   background-color: var(--gray-light);
 }
 
 .button-side {
   /* (lh = 80 w = 30) / 2 */
-  top: calc(50vh - 55px);
-  line-height: 5;
+  top: calc(60vh - 55px);
+  line-height: 1;
 }
 
 .button-top {
   top: 1rem;
 }
+
 .button-bottom {
   bottom: 1rem;
 }
+
 .button-right {
   right: 2rem;
 }
+
 .button-left {
   left: 1rem;
+}
+
+.button-side.button-right {
+  right: -11.5rem;
+}
+
+.button-side.button-left {
+  left: -12.5rem;
+}
+
+@media only screen and (--medium) {
+  .button-fixed:hover {
+    transform: scale(1.5);
+  }
+
+  .button-side {
+    /* (lh = 80 w = 30) / 2 */
+    top: calc(50vh - 55px);
+    line-height: 5;
+  }
+
+  .button-right {
+    right: 2rem;
+  }
+
+  .button-side.button-right {
+    right: -10rem;
+  }
+
+  .button-side.button-left {
+    left: -11rem;
+  }
 }
 
 /*
