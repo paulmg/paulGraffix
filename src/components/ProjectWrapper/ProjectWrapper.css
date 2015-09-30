@@ -18,7 +18,13 @@
 
 @media only screen and (--large) {
   .ProjectWrapper {
-    padding-bottom: 20% !important;
+    padding-bottom: 19% !important;
+  }
+}
+
+@media only screen and (--xlarge) {
+  .ProjectWrapper {
+    padding-bottom: 14.5% !important;
   }
 }
 
@@ -63,8 +69,12 @@
   max-height: var(--max-height);
   height: 100%;
 
-  transition: transform .4s;
-  transform: translateX(-50%);
+  transition: transform .4s var(--animation-swift);
+  transform: translateX(-50%);;
+}
+
+.ProjectWrapper-svg image {
+  transition: opacity .4s var(--animation-swift);
 }
 
 .ProjectWrapper:hover .ProjectWrapper-container--hoverable .ProjectWrapper-svg {

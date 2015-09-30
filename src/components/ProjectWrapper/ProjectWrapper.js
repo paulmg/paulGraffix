@@ -9,6 +9,10 @@ import styles from './ProjectWrapper.css';
 import ProjectImage from '../ProjectImage';
 import ProjectInfo from '../ProjectInfo';
 
+const ANIM_TIME = 0.2;
+const LEFT_X = 200;
+const RIGHT_X = -200;
+
 @withStyles(styles) class ProjectWrapper extends React.Component {
   static propTypes = {
     project: React.PropTypes.object.isRequired,
@@ -22,11 +26,30 @@ import ProjectInfo from '../ProjectInfo';
 
   componentDidMount() {
     this.wrapper = this.refs.projectWrapperContainer;
+    this.nextBtn = this.refs.nextBtn;
+    this.prevBtn = this.refs.prevBtn;
+    this.closeBtn = this.refs.closeBtn;
+    this.upBtn = this.refs.upBtn;
+
+    this.disableButtons();
   }
 
   componentDidUpdate(prevProps, prevState) {
+    this.isLoaded = false;
+
     if(this.props.active) {
-      this.moveSideBtns().bind(this);
+      TweenLite.to(this.prevBtn, ANIM_TIME, { x: LEFT_X, ease: Power2.easeOut,
+
+        onComplete: () => {
+          TweenLite.to(this.nextBtn, ANIM_TIME, { x: RIGHT_X, ease: Power2.easeOut,
+
+            onComplete: () => {
+              this.isLoaded = true;
+              this.enableButtons();
+            }
+          });
+        }
+      });
     }
   }
 
@@ -35,15 +58,45 @@ import ProjectInfo from '../ProjectInfo';
   }
 
   handleClose() {
-    this.props.closeClick(this);
+    this.disableButtons();
+
+    TweenLite.to(this.nextBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut,
+
+      onComplete: () => {
+        TweenLite.to(this.prevBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut,
+
+          onComplete: () => {
+            this.props.closeClick(this);
+          }
+        });
+      }
+    });
   }
 
   handleNext() {
-    this.moveSideBtns.bind(this);
+    this.disableButtons();
+
+    this.props.nextClick(this);
+
+    TweenLite.to(this.nextBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut,
+
+      onComplete: () => {
+        TweenLite.to(this.prevBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut });
+      }
+    });
   }
 
   handlePrev() {
+    this.disableButtons();
+
     this.props.prevClick(this);
+
+    TweenLite.to(this.prevBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut,
+
+      onComplete: () => {
+        TweenLite.to(this.nextBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut });
+      }
+    });
   }
 
   handleUp() {
@@ -52,40 +105,23 @@ import ProjectInfo from '../ProjectInfo';
 
   scrollToTop(el) {
     TweenLite.to(el, 0.8, {
-      scrollTo: {
-        y: 0
-      },
+      scrollTo: { y: 0 },
       ease: Power2.easeOut
     });
   }
 
-  moveSideBtns() {
-    console.log('test')
-    TweenLite.to(this.refs.nextBtn, 0.2, {
-      x: 200,
-      ease: Power2.easeOut,
-      onComplete: () => {
-        TweenLite.to(this.refs.prevBtn, 0.2, {
-          x: -200,
-          ease: Power2.easeOut,
-          onComplete: () => {
-            this.props.nextClick(this);
-          }
-        });
-      }
-    });
-    // let tl = new TimelineLite({paused: true, onComplete: this.props.nextClick.bind(this), onCompleteParams: [this]});
+  enableButtons() {
+    this.nextBtn.style.pointerEvents = 'all';
+    this.prevBtn.style.pointerEvents = 'all';
+    this.closeBtn.style.pointerEvents = 'all';
+    this.upBtn.style.pointerEvents = 'all';
+  }
 
-    // tl.add(TweenLite.to(this.refs.nextBtn, 0.2, {
-    //   x: 200,
-    //   ease: Power2.easeOut
-    // }));
-    // tl.add(TweenLite.to(this.refs.prevBtn, 0.2, {
-    //   x: -200,
-    //   ease: Power2.easeOut
-    // }));
-
-    // tl.play();
+  disableButtons() {
+    this.nextBtn.style.pointerEvents = 'none';
+    this.prevBtn.style.pointerEvents = 'none';
+    this.closeBtn.style.pointerEvents = 'none';
+    this.upBtn.style.pointerEvents = 'none';
   }
 
   render() {
@@ -95,9 +131,9 @@ import ProjectInfo from '../ProjectInfo';
     function svgMarkup() {
       return {
         __html: '<svg class="ProjectWrapper-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" ' +
-        'viewBox="0 0 1920 500" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="clipPath' + id +
-        '"><circle id="clip" class="clip" cx="960" cy="250" r="992"></circle></clipPath></defs><image clip-path="url(#clipPath' + id +
-        ')" width="1920" height="500" xlink:href="' + src + '"}></image></svg>'
+        'viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="clipPath' + id +
+        '"><circle id="clip" class="clip" cx="600" cy="200" r="632"></circle></clipPath></defs><image clip-path="url(#clipPath' + id +
+        ')" width="1200" height="400" xlink:href="' + src + '"}></image></svg>'
       };
     }
 

@@ -22,8 +22,6 @@ import styles from './ContentPage.css';
     let tl = new TimelineLite({paused: true});
 
     tl.add(animations.slideContentDown(itemContent, 0), 0);
-    //tl.add(animations.clipImageIn(imageClip, ANIM_TIME, 50), 0);
-    //tl.add(animations.clipImageOut(imageClip, ANIM_TIME), '-=' + ANIM_TIME * 0.3);
     tl.add(animations.slideContentUp(itemContent, 0.8), 0.8);
 
     tl.play();

@@ -34,10 +34,10 @@ import ProjectImage from '../ProjectImage';
 
       for(let i = 0; i < keys.length; i++) {
         let stackItems = this.props.project.stack[keys[i]].map(function(el) {
-          return (' ' + el)
+          return (' ' + el);
         });
 
-        stack.push(<p key={i}><span className="ProjectInfo-cardStackTitle">{keys[i]}</span>{' -' + stackItems + '.'}</p>)
+        stack.push(<p key={i}><span className="ProjectInfo-cardStackTitle">{keys[i]}</span>{' -' + stackItems + '.'}</p>);
       }
     }
 
@@ -54,12 +54,12 @@ import ProjectImage from '../ProjectImage';
 
     return (
       <div className="ProjectInfo columns hide">
-        <div className="ProjectInfo-card columns" ref="projectInfoCard">
+        <div className="ProjectInfo-card" ref="projectInfoCard">
           <div className="ProjectInfo-cardInfo">
             <h2>{this.props.project.name}</h2>
-            <h4>Client: {this.props.project.client}</h4>
-
-            <p>{this.props.project.description}</p>
+            <h5>Client: {this.props.project.client}</h5>
+            <p>{this.props.project.long_description}</p>
+            {this.props.project.link ? <p>Link: <a href={this.props.project.link} target="_blank">{this.props.project.link}</a></p> : null}
 
             {stack ? <h4>Stack:</h4> : null}
             {stack}
@@ -71,7 +71,6 @@ import ProjectImage from '../ProjectImage';
           <div className="ProjectInfo-cardSections">
             {sections}
           </div>
-
         </div>
       </div>
     );

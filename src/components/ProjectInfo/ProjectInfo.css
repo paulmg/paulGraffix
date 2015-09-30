@@ -7,18 +7,20 @@
 
 @media only screen and (--medium) {
   .ProjectInfo {
-    padding: 0 4rem 4rem;
+    padding: 0 4rem;
   }
 }
 
 .ProjectInfo-card {
   padding: 1rem 0;
   background-color: var(--white);
+  /*max-width: 1200px;*/
+  margin: 0 auto;
 }
 
 @media only screen and (--medium) {
   .ProjectInfo-card {
-    padding: 3rem 0;
+    /*padding: 3rem 0;*/
   }
 }
 
@@ -38,6 +40,7 @@
 
 .ProjectInfo-card img {
   margin: 1rem 0;
+  width: 100%;
 }
 
 .ProjectInfo-cardInfo {

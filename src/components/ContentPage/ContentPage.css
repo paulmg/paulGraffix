@@ -4,10 +4,14 @@
   padding-bottom: 0;
 }
 
+.ContentPage-container {
+
+}
+
 .ContentPage-info {
   height: 100vh;
   background-image: url('https://res.cloudinary.com/dp1pal3mi/image/upload/v1442463714/Form_React_Wallpaper_3_-_1280x800_lcuotl.jpg');
-  background-position: center center;
+  background-position: bottom center;
   background-size: cover;
   color: var(--text-light);
 }

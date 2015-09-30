@@ -41,6 +41,7 @@ let base = Rebase.createClass(DB);
 
   componentDidUpdate(prevProps, prevState) {
     //console.log('update');
+    console.log(ANIM_TIME)
 
     if(!this.loaded) {
       this.items = this.el.children;
@@ -218,7 +219,11 @@ let base = Rebase.createClass(DB);
   }
 
   setNextProject(i, nextProjectID) {
-    TweenLite.to(this.itemContainers[i], ANIM_TIME, {
+    let animTime = 0;
+
+    animTime = this.itemContainers[i].scrollTop > 0 ? 0.8 : 0;
+
+    TweenLite.to(this.itemContainers[i], animTime, {
       scrollTo: {
         y: 0
       },
@@ -237,7 +242,6 @@ let base = Rebase.createClass(DB);
         tl.add(animations.clipImageIn(imageClip, ANIM_TIME, 0), 0);
         tl.add(animations.hideAnim(this.items[i], 0.01));
         tl.add(animations.clipImageOut(imageClip, 0.01));
-        //tl.add(animations.resetWrapper(itemContainer));
 
         tl.play();
       },
@@ -267,7 +271,7 @@ let base = Rebase.createClass(DB);
     tl.add(animations.clipImageIn(imageClip, 0, 0), 0);
     tl.add(animations.floatNextContainer(itemContainer), 0);
     tl.add(animations.clipImageOut(imageClip, ANIM_TIME * 2), '-=' + ANIM_TIME * 0.3);
-    tl.add(animations.slideContentUp(itemContent, ANIM_TIME), '-=' + ANIM_TIME * 0.6);
+    tl.add(animations.slideContentUp(itemContent, ANIM_TIME), '-=' + ANIM_TIME * 1.5);
 
     tl.play();
   }
@@ -285,15 +289,17 @@ let base = Rebase.createClass(DB);
 
     return (
       <section id="portfolio" className={classNames('Portfolio', this.state.wrapperClass)} ref="portfolio">
-        <div className="Portfolio-container row">
-          <div className="small-12 columns">
-            <h2 className="Portfolio-title section-title columns">Portfolio</h2>
-
-            <div className="columns">
-              <ul className="Portfolio-grid small-block-grid-1 medium-block-grid-2 large-block-grid-3" ref="projects">
-                {projects}
-              </ul>
+        <div className="Portfolio-container">
+          <div className="row">
+            <div className="small-12 columns">
+              <h2 className="Portfolio-title section-title columns">Portfolio</h2>
             </div>
+          </div>
+
+          <div className="">
+            <ul className="Portfolio-grid small-block-grid-1 medium-block-grid-2 large-block-grid-3 xlarge-block-grid-4" ref="projects">
+              {projects}
+            </ul>
           </div>
         </div>
       </section>

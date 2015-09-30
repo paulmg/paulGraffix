@@ -42,7 +42,9 @@ const DELTA = 80;
       }
     }, 250);
 
-    this.header.classList.remove('Header--up');
+    setTimeout(() => {
+      this.header.classList.remove('Header--up');
+    }, 500);
   }
 
   componentWillUnmount() {
