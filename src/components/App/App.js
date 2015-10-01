@@ -33,17 +33,17 @@ import Contact from '../Contact';
     return !this.props.error ? (
       <div>
         <Header />
-        
+
         {this.props.children}
-        
+
         <div className="overlay"></div>
-        
+
         <Portfolio />
-        
+
         <Contact />
-        
+
         <div className="row"><div className="columns"><div className="columns"><div className="columns divider"></div></div></div></div>
-        
+
         <Footer />
       </div>
     ) : this.props.children;

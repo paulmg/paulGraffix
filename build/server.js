@@ -46,7 +46,7 @@ module.exports =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+  /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
   
   'use strict';
   
@@ -56,29 +56,29 @@ module.exports =
   
   __webpack_require__(61);
   
-  var _lodash = __webpack_require__(69);
-  
-  var _lodash2 = _interopRequireDefault(_lodash);
-  
-  var _fs = __webpack_require__(11);
-  
-  var _fs2 = _interopRequireDefault(_fs);
-  
   var _path = __webpack_require__(12);
   
   var _path2 = _interopRequireDefault(_path);
   
-  var _express = __webpack_require__(10);
+  var _express = __webpack_require__(11);
   
   var _express2 = _interopRequireDefault(_express);
+  
+  var _react = __webpack_require__(1);
+  
+  var _react2 = _interopRequireDefault(_react);
   
   var _reactDomServer = __webpack_require__(72);
   
   var _reactDomServer2 = _interopRequireDefault(_reactDomServer);
   
-  var _Router = __webpack_require__(28);
+  var _routes = __webpack_require__(33);
   
-  var _Router2 = _interopRequireDefault(_Router);
+  var _routes2 = _interopRequireDefault(_routes);
+  
+  var _componentsHtml = __webpack_require__(23);
+  
+  var _componentsHtml2 = _interopRequireDefault(_componentsHtml);
   
   var server = global.server = (0, _express2['default'])();
   
@@ -88,16 +88,11 @@ module.exports =
   //
   // Register API middleware
   // -----------------------------------------------------------------------------
-  server.use('/api/content', __webpack_require__(29));
+  server.use('/api/content', __webpack_require__(16));
   
   //
   // Register server-side rendering middleware
   // -----------------------------------------------------------------------------
-  
-  // The top-level React component + HTML template for it
-  var templateFile = _path2['default'].join(__dirname, 'templates/index.html');
-  var template = _lodash2['default'].template(_fs2['default'].readFileSync(templateFile, 'utf8'));
-  
   server.get('*', function callee$0$0(req, res, next) {
     return regeneratorRuntime.async(function callee$0$0$(context$1$0) {
       var _this = this;
@@ -129,15 +124,15 @@ module.exports =
                     }
                   };
                   context$2$0.next = 6;
-                  return regeneratorRuntime.awrap(_Router2['default'].dispatch({ path: req.path, context: context }, function (state, component) {
+                  return regeneratorRuntime.awrap(_routes2['default'].dispatch({ path: req.path, context: context }, function (state, component) {
                     data.body = _reactDomServer2['default'].renderToString(component);
                     data.css = css.join('');
                   }));
   
                 case 6:
-                  html = template(data);
+                  html = _reactDomServer2['default'].renderToStaticMarkup(_react2['default'].createElement(_componentsHtml2['default'], data));
   
-                  res.status(statusCode).send(html);
+                  res.status(statusCode).send('<!doctype html>\n' + html);
   
                 case 8:
                 case 'end':
@@ -168,14 +163,12 @@ module.exports =
   // -----------------------------------------------------------------------------
   
   server.listen(server.get('port'), function () {
+    /* eslint-disable no-console */
+    console.log('The server is running at http://localhost:' + server.get('port'));
     if (process.send) {
       process.send('online');
-    } else {
-      console.log('The server is running at http://localhost:' + server.get('port'));
     }
   });
-  
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "server.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
 /* 1 */
@@ -185,65 +178,9 @@ module.exports =
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
-
-  /*
-  	MIT License http://www.opensource.org/licenses/mit-license.php
-  	Author Tobias Koppers @sokra
-  */
-  // css base code, injected by the css-loader
-  module.exports = function() {
-  	var list = [];
-  
-  	// return the list of modules as css string
-  	list.toString = function toString() {
-  		var result = [];
-  		for(var i = 0; i < this.length; i++) {
-  			var item = this[i];
-  			if(item[2]) {
-  				result.push("@media " + item[2] + "{" + item[1] + "}");
-  			} else {
-  				result.push(item[1]);
-  			}
-  		}
-  		return result.join("");
-  	};
-  
-  	// import a list of modules into the list
-  	list.i = function(modules, mediaQuery) {
-  		if(typeof modules === "string")
-  			modules = [[null, modules, ""]];
-  		var alreadyImportedModules = {};
-  		for(var i = 0; i < this.length; i++) {
-  			var id = this[i][0];
-  			if(typeof id === "number")
-  				alreadyImportedModules[id] = true;
-  		}
-  		for(i = 0; i < modules.length; i++) {
-  			var item = modules[i];
-  			// skip already imported module
-  			// this implementation is not 100% perfect for weird media query combinations
-  			//  when a module is imported multiple times with different media queries.
-  			//  I hope this will never occur (Hey this way we have smaller bundles)
-  			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-  				if(mediaQuery && !item[2]) {
-  					item[2] = mediaQuery;
-  				} else if(mediaQuery) {
-  					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-  				}
-  				list.push(item);
-  			}
-  		}
-  	};
-  	return list;
-  };
-
-
-/***/ },
-/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+  /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
   
   'use strict';
   
@@ -253,9 +190,13 @@ module.exports =
   
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
   
+  var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
   
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  
+  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
   
   var _react = __webpack_require__(1);
   
@@ -273,7 +214,9 @@ module.exports =
   
   function withStyles(styles) {
     return function (ComposedComponent) {
-      return (function () {
+      return (function (_Component) {
+        _inherits(WithStyles, _Component);
+  
         _createClass(WithStyles, null, [{
           key: 'contextTypes',
           value: {
@@ -285,11 +228,13 @@ module.exports =
         function WithStyles() {
           _classCallCheck(this, WithStyles);
   
+          _get(Object.getPrototypeOf(WithStyles.prototype), 'constructor', this).call(this);
           this.refCount = 0;
-          ComposedComponent.prototype.renderCss = (function (css) {
+          ComposedComponent.prototype.renderCss = (function render(css) {
             var style = undefined;
             if (_fbjsLibExecutionEnvironment.canUseDOM) {
-              if (this.styleId && (style = document.getElementById(this.styleId))) {
+              style = this.styleId && document.getElementById(this.styleId);
+              if (style) {
                 if ('textContent' in style) {
                   style.textContent = css;
                 } else {
@@ -348,21 +293,73 @@ module.exports =
         }]);
   
         return WithStyles;
-      })();
+      })(_react.Component);
     };
   }
   
   exports['default'] = withStyles;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "withStyles.js" + ": " + err.message); } }); } } })(); }
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+  /*
+  	MIT License http://www.opensource.org/licenses/mit-license.php
+  	Author Tobias Koppers @sokra
+  */
+  // css base code, injected by the css-loader
+  module.exports = function() {
+  	var list = [];
+  
+  	// return the list of modules as css string
+  	list.toString = function toString() {
+  		var result = [];
+  		for(var i = 0; i < this.length; i++) {
+  			var item = this[i];
+  			if(item[2]) {
+  				result.push("@media " + item[2] + "{" + item[1] + "}");
+  			} else {
+  				result.push(item[1]);
+  			}
+  		}
+  		return result.join("");
+  	};
+  
+  	// import a list of modules into the list
+  	list.i = function(modules, mediaQuery) {
+  		if(typeof modules === "string")
+  			modules = [[null, modules, ""]];
+  		var alreadyImportedModules = {};
+  		for(var i = 0; i < this.length; i++) {
+  			var id = this[i][0];
+  			if(typeof id === "number")
+  				alreadyImportedModules[id] = true;
+  		}
+  		for(i = 0; i < modules.length; i++) {
+  			var item = modules[i];
+  			// skip already imported module
+  			// this implementation is not 100% perfect for weird media query combinations
+  			//  when a module is imported multiple times with different media queries.
+  			//  I hope this will never occur (Hey this way we have smaller bundles)
+  			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+  				if(mediaQuery && !item[2]) {
+  					item[2] = mediaQuery;
+  				} else if(mediaQuery) {
+  					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+  				}
+  				list.push(item);
+  			}
+  		}
+  	};
+  	return list;
+  };
+
 
 /***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -385,7 +382,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _coreLocation = __webpack_require__(43);
+  var _coreLocation = __webpack_require__(30);
   
   var _coreLocation2 = _interopRequireDefault(_coreLocation);
   
@@ -460,8 +457,6 @@ module.exports =
   exports['default'] = Link;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Link.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
 /* 5 */
 /***/ function(module, exports) {
@@ -478,8 +473,6 @@ module.exports =
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -504,7 +497,7 @@ module.exports =
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
@@ -512,7 +505,7 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _ProjectImageCss = __webpack_require__(22);
+  var _ProjectImageCss = __webpack_require__(44);
   
   var _ProjectImageCss2 = _interopRequireDefault(_ProjectImageCss);
   
@@ -586,14 +579,10 @@ module.exports =
   exports['default'] = ProjectImage;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ProjectImage.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -614,7 +603,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
@@ -622,11 +611,11 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _ProjectInfoCss = __webpack_require__(23);
+  var _ProjectInfoCss = __webpack_require__(45);
   
   var _ProjectInfoCss2 = _interopRequireDefault(_ProjectInfoCss);
   
-  var _ProjectContent = __webpack_require__(39);
+  var _ProjectContent = __webpack_require__(27);
   
   var _ProjectContent2 = _interopRequireDefault(_ProjectContent);
   
@@ -767,14 +756,25 @@ module.exports =
   exports['default'] = ProjectInfo;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ProjectInfo.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+  'use strict';
   
+  Object.defineProperty(exports, '__esModule', {
+    value: true
+  });
+  exports['default'] = {
+    googleAnalyticsId: 'UA-XXXXX-X',
+    DB: 'https://luminous-heat-5784.firebaseio.com/'
+  };
+  module.exports = exports['default'];
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -959,19 +959,11 @@ module.exports =
   };
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "animations.js" + ": " + err.message); } }); } } })(); }
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-  module.exports = require("express");
-
 /***/ },
 /* 11 */
 /***/ function(module, exports) {
 
-  module.exports = require("fs");
+  module.exports = require("express");
 
 /***/ },
 /* 12 */
@@ -981,178 +973,8 @@ module.exports =
 
 /***/ },
 /* 13 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n/*\n * Base styles\n * ========================================================================== */\n\nhtml {\n  color: #222;\n  font-weight: 100;\n  font-size: 1em; /* ~16px; */\n  font-family: 'Noto Sans', sans-serif;\n  line-height: 1.375; /* ~22px */\n}\n\n/*\n * Remove text-shadow in selection highlight:\n * https://twitter.com/miketaylr/status/12228805301\n *\n * These selection rule sets have to be separate.\n * Customize the background color to match your design.\n */\n\n::-moz-selection {\n  background: #b3d4fc;\n  text-shadow: none;\n}\n\n::selection {\n  background: #b3d4fc;\n  text-shadow: none;\n}\n\n/*\n * A better looking default horizontal rule\n */\n\nhr {\n  display: block;\n  margin: 1em 0;\n  padding: 0;\n  height: 1px;\n  border: 0;\n  border-top: 1px solid #ccc;\n}\n\n/*\n * Remove the gap between audio, canvas, iframes,\n * images, videos and the bottom of their containers:\n * https://github.com/h5bp/html5-boilerplate/issues/440\n */\n\naudio,\ncanvas,\niframe,\nimg,\nsvg,\nvideo {\n  vertical-align: middle;\n}\n\n/*\n * Remove default fieldset styles.\n */\n\nfieldset {\n  margin: 0;\n  padding: 0;\n  border: 0;\n}\n\n/*\n * Allow only vertical resizing of textareas.\n */\n\ntextarea {\n  resize: vertical;\n}\n\nfigure {\n  margin: 1em 0;\n}\n\n/*\n * Browser upgrade prompt\n * ========================================================================== */\n\n.browserupgrade {\n  margin: 0.2em 0;\n  padding: 0.2em 0;\n  background: #ccc;\n  color: #000;\n}\n\nbody {\n  padding-top: -webkit-calc(82px - 3rem);\n  padding-top: calc(82px - 3rem);\n  background-color: rgb(0, 0, 0);\n  font-family: 'Noto Sans', sans-serif;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  body {\n\n  }\n}\n\nbody.body--hidden {\n  overflow-y: hidden;\n}\n\n.ContentPage, .Footer, .ProjectImage-wrapper, .Portfolio-title, .Contact, .divider {\n  -webkit-transition: opacity 0.7s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n               -o-transition: opacity 0.7s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n          transition: opacity 0.7s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\nbody.body--hidden .ContentPage, body.body--hidden .Footer, body.body--hidden .Contact, body.body--hidden .ProjectImage-wrapper {\n  pointer-events: none;\n}\n\nbody.body--hidden .ProjectImage-wrapper, body.body--hidden .Portfolio-title, body.body--hidden .Footer, body.body--hidden .Contact, body.body--hidden .divider {\n  opacity: 0;\n}\n\nh1, h2, h3, h4 {\n  font-family: 'Oxygen', sans-serif\n}\n\nsection {\n  padding: 32px 0;\n  padding: 2rem 0;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  section {\n    padding: 3rem 0;\n  }\n}\n\n.divider {\n  height: 1px;\n  background-color: rgb(196, 196, 196);\n}\n\n.overlay {\n  position: fixed;\n  top: 0;\n  width: 100vw;\n  height: 100vh;\n  background-color: rgb(0, 0, 0);\n  opacity: 0;\n\n  -webkit-transition: opacity 1.2s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n               -o-transition: opacity 1.2s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: opacity 1.2s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n  pointer-events: none;\n}\n\n.body--hidden .overlay {\n  opacity: 1;\n}\n\n.section-title {\n  text-align: center;\n  margin: 0 0 32px 0;\n  margin: 0 0 2rem 0;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .section-title {\n    text-align: left;\n  }\n}\n\n.text-link,\n.text-link:active,\n.text-link:visited {\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.7000000000000001);\n\n  -webkit-transition: color 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n               -o-transition: color 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: color 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n.text-link:hover {\n  color: rgb(255, 255, 255);\n}\n\n.text-link:hover .icon-social {\n  opacity: 1;\n}\n\n.text-link--active {\n  color: rgb(255, 255, 255);\n}\n\n.text-link-icon {\n  display: inline-block;\n}\n\n.icon-social, .icon-arrow {\n  display: inline-block;\n  margin: 0 8px;\n  width: 20px;\n  vertical-align: text-bottom;\n  opacity: 0.8;\n\n  -webkit-transition: opacity 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n               -o-transition: opacity 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: opacity 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n.button-fixed {\n  position: fixed;\n  z-index: 1;\n  width: 30px;\n  background-color: rgb(255, 255, 255);\n  -webkit-box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.4);\n          box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.4);\n  opacity: 0;\n\n  -webkit-transition: opacity 1.35s cubic-bezier(0.455, 0.030, 0.515, 0.955), background-color .35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n               -o-transition: opacity 1.35s cubic-bezier(0.455, 0.030, 0.515, 0.955), background-color .35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: opacity 1.35s cubic-bezier(0.455, 0.030, 0.515, 0.955), background-color .35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n  pointer-events: none;\n}\n\n.button-fixed img {\n  -webkit-transition: -webkit-transform .25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n               -o-transition: -o-transform .25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n          transition: transform .25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n.active .button-fixed {\n  opacity: 0;\n}\n\n.body--hidden .button-fixed {\n  opacity: 1;\n  pointer-events: all;\n}\n\n.button-fixed:hover {\n  background-color: rgb(196, 196, 196);\n}\n\n.button-fixed:active {\n  background-color: rgb(87, 87, 87);\n}\n\n.button-fixed:active img {\n  -webkit-transform: scale(0.8);\n      -ms-transform: scale(0.8);\n               -o-transform: scale(0.8);\n          transform: scale(0.8);\n}\n\n.button-side {\n  /* (lh = 80 w = 30) / 2 */\n  top: -webkit-calc(60vh - 55px);\n  top: calc(60vh - 55px);\n  line-height: 1;\n  opacity: 1;\n}\n\n.button-top {\n  top: 16px;\n  top: 1rem;\n}\n\n.button-bottom {\n  bottom: 16px;\n  bottom: 1rem;\n}\n\n.button-right {\n  right: 32px;\n  right: 2rem;\n}\n\n.button-left {\n  left: 16px;\n  left: 1rem;\n}\n\n.button-side.button-right {\n  right: -184px;\n  right: -11.5rem;\n}\n\n.button-side.button-left {\n  left: -200px;\n  left: -12.5rem;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .button-fixed:hover img {\n    -webkit-transform: scale(1.4);\n        -ms-transform: scale(1.4);\n                 -o-transform: scale(1.4);\n            transform: scale(1.4);\n  }\n\n  .button-side {\n    /* (lh = 80 w = 30) / 2 */\n    top: -webkit-calc(50vh - 55px);\n    top: calc(50vh - 55px);\n    line-height: 5;\n  }\n\n  .button-right {\n    right: 2rem;\n  }\n\n  .button-side.button-right {\n    right: -10.5rem;\n  }\n\n  .button-side.button-left {\n    left: -11.5rem;\n  }\n}\n\n/*\n * Overrides\n * ========================================================================== */\n.row {\n  max-width: 75em;\n}\n\n.column,\n.columns {\n  padding-right: 13px;\n  padding-right: 0.83333rem;\n  padding-left: 13px;\n  padding-left: 0.83333rem;\n}\n\nbutton:hover, button:focus, .button:hover, .button:focus {\n  background-color: #FFFFFF;\n  background-color: rgba(255, 255, 255, 0.85);\n  color: #000000;\n  color: rgba(0, 0, 0, 0.85);\n}\n\nbutton, .button {\n  margin: 0;\n  border: 1px solid #FFFFFF;\n  border: 1px solid rgba(255, 255, 255, 0.85);\n  background-color: transparent;\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n  text-transform: uppercase;\n  font-family: 'Noto Sans', sans-serif;\n\n  -webkit-transition: background-color 300ms cubic-bezier(0.455, 0.030, 0.515, 0.955), color 300ms cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n               -o-transition: background-color 300ms cubic-bezier(0.455, 0.030, 0.515, 0.955), color 300ms cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: background-color 300ms cubic-bezier(0.455, 0.030, 0.515, 0.955), color 300ms cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n\n@media only screen and (min-width: 90.063em) {\n  .xlarge-block-grid-1 > li {\n    width: 100%;\n    list-style: none;\n  }\n\n  .xlarge-block-grid-1 > li:nth-of-type(n) {\n    clear: none;\n  }\n\n  .xlarge-block-grid-1 > li:nth-of-type(1n+1) {\n    clear: both;\n  }\n\n  .xlarge-block-grid-2 > li {\n    width: 50%;\n    list-style: none;\n  }\n\n  .xlarge-block-grid-2 > li:nth-of-type(n) {\n    clear: none;\n  }\n\n  .xlarge-block-grid-2 > li:nth-of-type(2n+1) {\n    clear: both;\n  }\n\n  .xlarge-block-grid-3 > li {\n    width: 33.33333%;\n    list-style: none;\n  }\n\n  .xlarge-block-grid-3 > li:nth-of-type(n) {\n    clear: none;\n  }\n\n  .xlarge-block-grid-3 > li:nth-of-type(3n+1) {\n    clear: both;\n  }\n\n  .xlarge-block-grid-4 > li {\n    width: 25%;\n    list-style: none;\n  }\n\n  .xlarge-block-grid-4 > li:nth-of-type(n) {\n    clear: none;\n  }\n\n  .xlarge-block-grid-4 > li:nth-of-type(4n+1) {\n    clear: both;\n  }\n}\n/*\n * Print styles\n * Inlined to avoid the additional HTTP request:\n * http://www.phpied.com/delay-loading-your-print-css/\n * ========================================================================== */\n\n@media print {\n  *,\n  *:before,\n  *:after {\n    background: transparent !important;\n    -webkit-box-shadow: none !important;\n            box-shadow: none !important; /* Black prints faster: http://www.sanbeiji.com/archives/953 */\n    color: #000 !important;\n    text-shadow: none !important;\n  }\n\n  a,\n  a:visited {\n    text-decoration: underline;\n  }\n\n  a[href]:after {\n    content: \" (\" attr(href) \")\";\n  }\n\n  abbr[title]:after {\n    content: \" (\" attr(title) \")\";\n  }\n\n  /*\n   * Don't show links that are fragment identifiers,\n   * or use the `javascript:` pseudo protocol\n   */\n  a[href^=\"#\"]:after,\n  a[href^=\"javascript:\"]:after {\n    content: \"\";\n  }\n\n  pre,\n  blockquote {\n    border: 1px solid #999;\n    page-break-inside: avoid;\n  }\n\n  /*\n   * Printing Tables:\n   * http://css-discuss.incutio.com/wiki/Printing_Tables\n   */\n  thead {\n    display: table-header-group;\n  }\n\n  tr,\n  img {\n    page-break-inside: avoid;\n  }\n\n  img {\n    max-width: 100% !important;\n  }\n\n  p,\n  h2,\n  h3 {\n    orphans: 3;\n    widows: 3;\n  }\n\n  h2,\n  h3 {\n    page-break-after: avoid;\n  }\n}\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\r\n\r\n.Contact {\r\n  text-align: center;\r\n  padding-bottom: 32px;\r\n  padding-bottom: 2rem;\r\n}\r\n\r\n@media only screen and (min-width: 40.0625em) {\r\n  .Contact {\r\n    text-align: left;\r\n  }\r\n}\r\n\r\n.Contact h2 {\r\n  color: #FFFFFF;\r\n  color: rgba(255, 255, 255, 0.85);\r\n}\r\n\r\n.Contact-leftSection .icon-social {\r\n  margin-left: 0;\r\n}\r\n\r\n.Contact-rightSection {\r\n  margin: 32px 0 0;\r\n  margin: 2rem 0 0;\r\n  text-align: center;\r\n}\r\n\r\n@media only screen and (min-width: 40.0625em) {\r\n  .Contact-rightSection {\r\n    margin: 0;\r\n    text-align: right;\r\n  }\r\n}\r\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n.ContentPage {\n  padding-bottom: 0;\n}\n\n.ContentPage-container {\n\n}\n\n.ContentPage-info {\n  height: 100vh;\n  background-image: url('https://res.cloudinary.com/dp1pal3mi/image/upload/v1442463714/Form_React_Wallpaper_3_-_1280x800_lcuotl.jpg');\n  background-position: bottom center;\n  -webkit-background-size: cover;\n          background-size: cover;\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.ContentPage-info h1 {\n  margin: 16px 0 10px;\n  margin: 1rem 0 10px;\n  color: rgb(255, 255, 255);\n  text-transform: uppercase;\n  font-weight: 500;\n  font-size: 3em;\n  line-height: 1;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .ContentPage-info h1 {\n    font-size: 5.2em;\n  }\n}\n\n.ContentPage-info h2 {\n  margin: 0 0 10vh;\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n  text-transform: uppercase;\n  letter-spacing: 4px;\n  font-weight: 500;\n  line-height: 1.2;\n}\n\n.ContentPage-info img {\n  width: 200px;\n}\n\n.ContentPage-skills {\n  text-align: center;\n  background: -webkit-linear-gradient(top, #000 0, #034060 100%);\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #000), to(#034060));\n  background: -o-linear-gradient(top, #000 0, #034060 100%);\n  background: linear-gradient(to bottom, #000 0, #034060 100%);\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .ContentPage-skills {\n    text-align: left;\n  }\n}\n\n.ContentPage-skills h2, h3 {\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.ContentPage-skills .ContentPage-skillsContainerItem > ul {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  font-weight: bold;\n}\n\n.ContentPage-skills .ContentPage-skillsContainerItem > ul > li {\n  margin-top: 0.25em;\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.ContentPage-skills .ContentPage-skillsContainerItem > ul li > ul {\n  margin-left: 0;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .ContentPage-skills .ContentPage-skillsContainerItem > ul li > ul {\n    margin-left: 1.25rem;\n  }\n}\n\n.ContentPage-skills .ContentPage-skillsContainerItem > ul li > ul li {\n  list-style: none;\n  font-weight: normal;\n  font-size: 0.85em;\n}\n\n.ContentPage-skillsContainer {\n  margin-bottom: 32px;\n  margin-bottom: 2rem;\n}\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, "* {\n  margin: 0;\n  line-height: 1.2;\n}\n\nhtml {\n  display: table;\n  width: 100%;\n  height: 100%;\n  color: #888;\n  text-align: center;\n  font-family: sans-serif;\n}\n\nbody {\n  display: table-cell;\n  margin: 2em auto;\n  vertical-align: middle;\n}\n\nh1 {\n  color: #555;\n  font-weight: 400;\n  font-size: 2em;\n}\n\np {\n  margin: 0 auto;\n  width: 280px;\n}\n\n@media only screen and (max-width: 280px) {\n  body, p {\n    width: 95%;\n  }\n\n  h1 {\n    font-size: 1.5em;\n    margin: 0 0 0.3em;\n\n  }\n}\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n.Footer {\n  background: rgb(0, 0, 0);\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.Footer-container {\n  padding: 32px 0;\n  padding: 2rem 0;\n}\n\n.Footer-text {\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.Footer-text--muted {\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.33);\n}\n\n.Footer-spacer {\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.75);\n}\n\n.Footer-text {\n  padding: 2px 5px;\n  font-size: 1em;\n}\n\n.Footer-text:first-child {\n  padding-left: 0;\n}\n\n.Footer-link:first-child {\n  padding-right: 0;\n}\n\n.Footer-link .icon-arrow {\n  margin-right: 0;\n  margin-left: 0.2em;\n}\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n.Header {\n  position: fixed;\n  top: 0;\n  z-index: 1000;\n  width: 100%;\n  background: rgb(0, 0, 0);\n  -webkit-box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);\n          box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);\n\n  -webkit-transition: top 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n               -o-transition: top 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: top 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n.Header.Header--up {\n  top: -82px;\n}\n\n.Header-container {\n  padding: 20px 0;\n}\n\n.Header-brand {\n  color: rgb(146, 229, 252);\n  text-decoration: none;\n  font-size: 1.75em; /* ~28px */\n}\n\n.Header-brandTxt {\n  margin-left: 10px;\n}\n\n.Header-nav {\n  float: right;\n  margin-top: 6px;\n}\n\n.Header-banner {\n  text-align: center;\n}\n\n.Header-bannerTitle {\n  margin: 0;\n  padding: 10px;\n  font-weight: normal;\n  font-size: 4em;\n  line-height: 1em;\n}\n\n.Header-bannerDesc {\n  margin: 0;\n  padding: 0;\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, .5);\n  font-size: 1.25em;\n}\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n.Navigation-link {\n  display: inline-block;\n  padding: 3px 12px;\n  text-decoration: none;\n  text-transform: uppercase; /* ~18px */\n  font-size: 1.125em;\n}\n\n@media (min-width: 40.0625em) {\n  .Navigation-link:last-child {\n    padding-right: 0;\n  }\n}\n\n.Navigation-link--highlight {\n  margin-right: 8px;\n  margin-left: 8px;\n  border-radius: 3px;\n  background: #000000;\n  background: rgba(0, 0, 0, .15);\n  color: rgb(255, 255, 255);\n}\n\n.Navigation-link--highlight:hover {\n  background: #000000;\n  background: rgba(0, 0, 0, .3);\n}\n\n.Navigation-desktop {\n  position: absolute;\n  top: -200px;\n  left: 0;\n  width: 100%;\n  background-color: rgb(0, 0, 0);\n  text-align: center;\n\n  -webkit-transition: top 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n               -o-transition: top 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: top 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n@media (min-width: 40.0625em) {\n  .Navigation-desktop {\n    position: static;\n    margin-top: 0;\n    text-align: right;\n  }\n}\n\n.Navigation-mobile .Navigation-link {\n  padding: 2px 0 8px 8px;\n}\n\n.Navigation-mobile .Navigation-link .icon-social {\n  margin: 0;\n}\n\n.Navigation--down {\n  top: 45px;\n}\n\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, "\n\n* {\n  margin: 0;\n  line-height: 1.2;\n}\n\nhtml {\n  display: table;\n  width: 100%;\n  height: 100%;\n  color: #888;\n  text-align: center;\n  font-family: sans-serif;\n}\n\nbody {\n  display: table-cell;\n  margin: 2em auto;\n  vertical-align: middle;\n}\n\nh1 {\n  color: #555;\n  font-weight: 400;\n  font-size: 2em;\n}\n\np {\n  margin: 0 auto;\n  width: 280px;\n}\n\n@media only screen and (max-width: 280px) {\n\n  body, p {\n    width: 95%;\n  }\n\n  h1 {\n    font-size: 1.5em;\n    margin: 0 0 0.3em;\n  }\n\n}\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\r\n\r\n.Portfolio {\r\n  background: -webkit-linear-gradient(top, #034060 0, rgb(196, 196, 196) 100%);\r\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #034060), to(rgb(196, 196, 196)));\r\n  background: -o-linear-gradient(top, #034060 0, rgb(196, 196, 196) 100%);\r\n  background: linear-gradient(to bottom, #034060 0, rgb(196, 196, 196) 100%);\r\n}\r\n\r\n.Portfolio h2 {\r\n  color: #FFFFFF;\r\n  color: rgba(255, 255, 255, 0.85);\r\n}\r\n\r\n.Portfolio-grid {\r\n  margin: 0;\r\n}\r\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\r\n\r\nfigure.ProjectImage-wrapper {\r\n  position: absolute;\r\n  top: 0;\r\n  /*background: var(--black);*/\r\n  left: 0;\r\n  overflow: hidden;\r\n  margin: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  /*box-shadow: 0px 0px 70px rgba(0, 0, 0, 0.7) inset;*/\r\n  text-align: center;\r\n  cursor: pointer;\r\n\r\n  -webkit-transform: translate3d(0, 0, 0);\r\n\r\n          transform: translate3d(0, 0, 0);\r\n  -webkit-backface-visibility: hidden;\r\n          backface-visibility: hidden;\r\n}\r\n\r\nfigure.ProjectImage-wrapper img {\r\n  position: relative;\r\n  opacity: 0.8;\r\n\r\n  -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955), opacity 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n               -o-transition: -o-transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955), opacity 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n          transition: transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955), opacity 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n}\r\n\r\nfigure.ProjectImage-wrapper:hover img {\r\n  opacity: 0.4;\r\n\r\n  -webkit-transform: translate3d(0, -20%, 0);\r\n\r\n          transform: translate3d(0, -20%, 0);\r\n}\r\n\r\nfigure.ProjectImage-wrapper figcaption {\r\n  position: absolute;\r\n  top: auto;\r\n  bottom: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 3em;\r\n  background: rgb(0, 0, 0);\r\n  text-transform: uppercase;\r\n\r\n  -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n               -o-transition: -o-transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n          transition: transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n  -webkit-transform: translate3d(0, 100%, 0);\r\n          transform: translate3d(0, 100%, 0);\r\n  -webkit-backface-visibility: hidden;\r\n          backface-visibility: hidden;\r\n}\r\n\r\nfigure.ProjectImage-wrapper h2 {\r\n  display: inline-block;\r\n  float: left;\r\n  margin: 0;\r\n  padding: 12px 32px;\r\n  padding: 0.75rem 2rem;\r\n  color: rgb(255, 255, 255);\r\n  text-align: left;\r\n  font-weight: 700;\r\n  font-size: 1em;\r\n}\r\n\r\nfigure.ProjectImage-wrapper p.description {\r\n  position: absolute;\r\n  bottom: 48px;\r\n  bottom: 3rem;\r\n  padding: 32px;\r\n  padding: 2rem;\r\n  width: 100%;\r\n  color: rgb(255, 255, 255);\r\n  text-transform: none;\r\n  text-shadow: 0 1px 2px rgb(0, 0, 0);\r\n  font-size: 90%;\r\n  opacity: 0;\r\n\r\n  -webkit-transition: opacity 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n               -o-transition: opacity 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n          transition: opacity 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n  -webkit-backface-visibility: hidden;\r\n          backface-visibility: hidden;\r\n}\r\n\r\nfigure.ProjectImage-wrapper:hover p.description {\r\n  opacity: 1;\r\n}\r\n\r\nfigure.ProjectImage-wrapper h2 {\r\n  -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n               -o-transition: -o-transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n          transition: transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n  -webkit-transform: translate3d(0, 200%, 0);\r\n          transform: translate3d(0, 200%, 0);\r\n}\r\n\r\nfigure.ProjectImage-wrapper:hover figcaption,\r\nfigure.ProjectImage-wrapper:hover h2 {\r\n  -webkit-transform: translate3d(0, 0, 0);\r\n          transform: translate3d(0, 0, 0);\r\n}\r\n\r\nfigure.ProjectImage-wrapper:hover h2 {\r\n  -webkit-transition-delay: 0.05s;\r\n               -o-transition-delay: 0.05s;\r\n          transition-delay: 0.05s;\r\n}\r\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n.ProjectInfo {\n  padding: 0 16px 16px;\n  padding: 0 1rem 1rem;\n  background: rgb(196, 196, 196);\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .ProjectInfo {\n    padding: 0 4rem;\n  }\n}\n\n.ProjectInfo-card {\n  padding: 16px 0;\n  padding: 1rem 0;\n  background-color: rgb(255, 255, 255);\n  /*max-width: 1200px;*/\n  margin: 0 auto;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .ProjectInfo-card {\n    /*padding: 3rem 0;*/\n  }\n}\n\n.ProjectInfo-card h2, .ProjectInfo-card h3, .ProjectInfo-card h4, .ProjectInfo-card p {\n  margin: 0;\n  color: #000000;\n  color: rgba(0, 0, 0, 0.85);\n}\n\n.ProjectInfo-card p {\n  margin: 0;\n}\n\n.ProjectInfo-card h4 {\n  margin: 4px 0 0;\n  margin: 0.3rem 0 0;\n  font-weight: 700;\n}\n\n.ProjectInfo-card img {\n  margin: 16px 0;\n  margin: 1rem 0;\n  width: 100%;\n}\n\n.ProjectInfo-cardInfo {\n  margin: 0 auto;\n  padding: 16px 0;\n  padding: 1rem 0;\n  max-width: 1200px;\n  width: 90%;\n}\n\n.ProjectInfo-cardStackTitle {\n  text-transform: capitalize;\n}\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-  exports = module.exports = __webpack_require__(2)();
-  // imports
-  
-  
-  // module
-  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\r\n\r\n.ProjectWrapper {\r\n  position: relative;\r\n  overflow: hidden;\r\n  padding-bottom: 56% !important;\r\n}\r\n\r\n@media only screen and (min-width: 40.0625em) {\r\n  .ProjectWrapper {\r\n    padding-bottom: 30% !important;\r\n  }\r\n}\r\n\r\n@media only screen and (min-width: 64.0625em) {\r\n  .ProjectWrapper {\r\n    padding-bottom: 19% !important;\r\n  }\r\n}\r\n\r\n@media only screen and (min-width: 90.063em) {\r\n  .ProjectWrapper {\r\n    padding-bottom: 14.5% !important;\r\n  }\r\n}\r\n\r\n.ProjectWrapper-container {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  overflow-x: hidden;\r\n  overflow-y: auto;\r\n  width: 100%;\r\n  height: 100%;\r\n  background-color: transparent;\r\n\r\n  -webkit-transform: translate3d(0, 0, 0);\r\n\r\n          transform: translate3d(0, 0, 0);\r\n  -webkit-overflow-scrolling: touch;\r\n}\r\n\r\n.ProjectWrapper-container--closed {\r\n  position: absolute;\r\n  overflow: hidden;\r\n}\r\n\r\n.ProjectWrapper-container--hoverable {\r\n  background-color: rgb(0, 0, 0);\r\n}\r\n\r\n.ProjectWrapper-container--closed .ProjectWrapper-svgContainer {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.ProjectWrapper-svgContainer {\r\n  max-height: 400px;\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.ProjectWrapper-svg {\r\n  position: relative;\r\n  left: 50%;\r\n  display: block;\r\n  max-height: 400px;\r\n  height: 100%;\r\n\r\n  -webkit-transition: -webkit-transform .4s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n               -o-transition: -o-transform .4s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n          transition: transform .4s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n  -webkit-transform: translateX(-50%);\r\n      -ms-transform: translateX(-50%);\r\n               -o-transform: translateX(-50%);\r\n          transform: translateX(-50%);;\r\n}\r\n\r\n.ProjectWrapper-svg image {\r\n  -webkit-transition: opacity .4s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n               -o-transition: opacity .4s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n          transition: opacity .4s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n}\r\n\r\n.ProjectWrapper:hover .ProjectWrapper-container--hoverable .ProjectWrapper-svg {\r\n  -webkit-transform: translateX(-50%) translateY(-10%);\r\n      -ms-transform: translateX(-50%) translateY(-10%);\r\n               -o-transform: translateX(-50%) translateY(-10%);\r\n          transform: translateX(-50%) translateY(-10%);\r\n}\r\n\r\n.ProjectWrapper:hover .ProjectWrapper-container--hoverable .ProjectWrapper-svg image {\r\n  opacity: 0.5;\r\n}\r\n", ""]);
-  
-  // exports
-
-
-/***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
-
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   /**
    * React Routing | http://www.kriasoft.com/react-routing
    * Copyright (c) Konstantin Tarkus <hello@tarkus.me> | The MIT License
@@ -1194,14 +1016,10 @@ module.exports =
   exports['default'] = Match;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Match.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 26 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   /**
    * React Routing | http://www.kriasoft.com/react-routing
    * Copyright (c) Konstantin Tarkus <hello@tarkus.me> | The MIT License
@@ -1223,7 +1041,7 @@ module.exports =
   
   var _pathToRegexp2 = _interopRequireDefault(_pathToRegexp);
   
-  var _Match = __webpack_require__(25);
+  var _Match = __webpack_require__(13);
   
   var _Match2 = _interopRequireDefault(_Match);
   
@@ -1250,14 +1068,10 @@ module.exports =
   exports['default'] = Route;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Route.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 27 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   /**
    * React Routing | http://www.kriasoft.com/react-routing
    * Copyright (c) Konstantin Tarkus <hello@tarkus.me> | The MIT License
@@ -1277,7 +1091,7 @@ module.exports =
   
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
   
-  var _Route = __webpack_require__(26);
+  var _Route = __webpack_require__(14);
   
   var _Route2 = _interopRequireDefault(_Route);
   
@@ -1581,120 +1395,11 @@ module.exports =
   exports['default'] = Router;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Router.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 28 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
-  'use strict';
-  
-  Object.defineProperty(exports, '__esModule', {
-    value: true
-  });
-  
-  var _this = this;
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-  
-  var _react = __webpack_require__(1);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  var _reactRoutingSrcRouter = __webpack_require__(27);
-  
-  var _reactRoutingSrcRouter2 = _interopRequireDefault(_reactRoutingSrcRouter);
-  
-  var _coreHttpClient = __webpack_require__(42);
-  
-  var _coreHttpClient2 = _interopRequireDefault(_coreHttpClient);
-  
-  var _componentsApp = __webpack_require__(30);
-  
-  var _componentsApp2 = _interopRequireDefault(_componentsApp);
-  
-  var _componentsContentPage = __webpack_require__(32);
-  
-  var _componentsContentPage2 = _interopRequireDefault(_componentsContentPage);
-  
-  var _componentsNotFoundPage = __webpack_require__(37);
-  
-  var _componentsNotFoundPage2 = _interopRequireDefault(_componentsNotFoundPage);
-  
-  var _componentsErrorPage = __webpack_require__(33);
-  
-  var _componentsErrorPage2 = _interopRequireDefault(_componentsErrorPage);
-  
-  var router = new _reactRoutingSrcRouter2['default'](function (on) {
-    on('*', function callee$1$0(state, next) {
-      var component;
-      return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-        while (1) switch (context$2$0.prev = context$2$0.next) {
-          case 0:
-            context$2$0.next = 2;
-            return regeneratorRuntime.awrap(next());
-  
-          case 2:
-            component = context$2$0.sent;
-            return context$2$0.abrupt('return', component && _react2['default'].createElement(
-              _componentsApp2['default'],
-              { context: state.context },
-              component
-            ));
-  
-          case 4:
-          case 'end':
-            return context$2$0.stop();
-        }
-      }, null, _this);
-    });
-  
-    //on('/contact', async () => <ContactPage />);
-  
-    on('*', function callee$1$0(state) {
-      var content;
-      return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
-        while (1) switch (context$2$0.prev = context$2$0.next) {
-          case 0:
-            context$2$0.next = 2;
-            return regeneratorRuntime.awrap(_coreHttpClient2['default'].get('/api/content?path=' + state.path));
-  
-          case 2:
-            content = context$2$0.sent;
-            return context$2$0.abrupt('return', content && _react2['default'].createElement(_componentsContentPage2['default'], content));
-  
-          case 4:
-          case 'end':
-            return context$2$0.stop();
-        }
-      }, null, _this);
-    });
-  
-    on('error', function (state, error) {
-      return state.statusCode === 404 ? _react2['default'].createElement(
-        _componentsApp2['default'],
-        { context: state.context, error: error },
-        _react2['default'].createElement(_componentsNotFoundPage2['default'], null)
-      ) : _react2['default'].createElement(
-        _componentsApp2['default'],
-        { context: state.context, error: error },
-        _react2['default'].createElement(_componentsErrorPage2['default'], null)
-      );
-    });
-  });
-  
-  exports['default'] = router;
-  module.exports = exports['default'];
-
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Router.js" + ": " + err.message); } }); } } })(); }
-
-/***/ },
-/* 29 */
-/***/ function(module, exports, __webpack_require__) {
-
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+  /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
   
   'use strict';
   
@@ -1708,9 +1413,9 @@ module.exports =
   
   var _path = __webpack_require__(12);
   
-  var _express = __webpack_require__(10);
+  var _express = __webpack_require__(11);
   
-  var _jade = __webpack_require__(68);
+  var _jade = __webpack_require__(69);
   
   var _jade2 = _interopRequireDefault(_jade);
   
@@ -1718,7 +1423,7 @@ module.exports =
   
   var _frontMatter2 = _interopRequireDefault(_frontMatter);
   
-  var _utilsFs = __webpack_require__(46);
+  var _utilsFs = __webpack_require__(34);
   
   var _utilsFs2 = _interopRequireDefault(_utilsFs);
   
@@ -1727,10 +1432,9 @@ module.exports =
   
   // Extract 'front matter' metadata and generate HTML
   var parseJade = function parseJade(path, jadeContent) {
-    var content = (0, _frontMatter2['default'])(jadeContent);
-    var html = _jade2['default'].render(content.body, null, '  ');
-    var page = Object.assign({ path: path, content: html }, content.attributes);
-    return page;
+    var fmContent = (0, _frontMatter2['default'])(jadeContent);
+    var htmlContent = _jade2['default'].render(fmContent.body);
+    return Object.assign({ path: path, content: htmlContent }, fmContent.attributes);
   };
   
   var router = new _express.Router();
@@ -1808,14 +1512,10 @@ module.exports =
   exports['default'] = router;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "content.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 30 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -1840,31 +1540,31 @@ module.exports =
   
   var _smoothScroll2 = _interopRequireDefault(_smoothScroll);
   
-  var _decoratorsWithContext = __webpack_require__(44);
+  var _decoratorsWithContext = __webpack_require__(31);
   
   var _decoratorsWithContext2 = _interopRequireDefault(_decoratorsWithContext);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
-  var _AppCss = __webpack_require__(13);
+  var _AppCss = __webpack_require__(35);
   
   var _AppCss2 = _interopRequireDefault(_AppCss);
   
-  var _Header = __webpack_require__(35);
+  var _Header = __webpack_require__(22);
   
   var _Header2 = _interopRequireDefault(_Header);
   
-  var _Footer = __webpack_require__(34);
+  var _Footer = __webpack_require__(21);
   
   var _Footer2 = _interopRequireDefault(_Footer);
   
-  var _Portfolio = __webpack_require__(38);
+  var _Portfolio = __webpack_require__(26);
   
   var _Portfolio2 = _interopRequireDefault(_Portfolio);
   
-  var _Contact = __webpack_require__(31);
+  var _Contact = __webpack_require__(18);
   
   var _Contact2 = _interopRequireDefault(_Contact);
   
@@ -1936,14 +1636,10 @@ module.exports =
   exports['default'] = App;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "App.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 31 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -1952,25 +1648,33 @@ module.exports =
   
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
   
+  var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
   
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  
+  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
   
   var _react = __webpack_require__(1);
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
-  var _ContactCss = __webpack_require__(14);
+  var _ContactCss = __webpack_require__(36);
   
   var _ContactCss2 = _interopRequireDefault(_ContactCss);
   
-  var Contact = (function () {
+  var Contact = (function (_React$Component) {
+    _inherits(Contact, _React$Component);
+  
     function Contact() {
       _classCallCheck(this, _Contact);
+  
+      _get(Object.getPrototypeOf(_Contact.prototype), 'constructor', this).apply(this, arguments);
     }
   
     _createClass(Contact, [{
@@ -2000,7 +1704,7 @@ module.exports =
                     'span',
                     {
                       className: 'icon-social' },
-                    _react2['default'].createElement('img', { src: __webpack_require__(50) })
+                    _react2['default'].createElement('img', { src: __webpack_require__(49) })
                   ),
                   'paulgraffix@gmail.com'
                 )
@@ -2020,7 +1724,7 @@ module.exports =
                     'span',
                     {
                       className: 'icon-social' },
-                    _react2['default'].createElement('img', { src: __webpack_require__(52) })
+                    _react2['default'].createElement('img', { src: __webpack_require__(51) })
                   ),
                   'Github'
                 ),
@@ -2031,7 +1735,7 @@ module.exports =
                   _react2['default'].createElement(
                     'span',
                     { className: 'icon-social' },
-                    _react2['default'].createElement('img', { src: __webpack_require__(54) })
+                    _react2['default'].createElement('img', { src: __webpack_require__(53) })
                   ),
                   'StackOverflow'
                 ),
@@ -2042,7 +1746,7 @@ module.exports =
                   _react2['default'].createElement(
                     'span',
                     { className: 'icon-social' },
-                    _react2['default'].createElement('img', { src: __webpack_require__(53) })
+                    _react2['default'].createElement('img', { src: __webpack_require__(52) })
                   ),
                   'LinkedIn'
                 ),
@@ -2053,7 +1757,7 @@ module.exports =
                     'span',
                     {
                       className: 'icon-social' },
-                    _react2['default'].createElement('img', { src: __webpack_require__(51) })
+                    _react2['default'].createElement('img', { src: __webpack_require__(50) })
                   ),
                   'Flickr'
                 )
@@ -2071,19 +1775,15 @@ module.exports =
     var _Contact = Contact;
     Contact = (0, _decoratorsWithStyles2['default'])(_ContactCss2['default'])(Contact) || Contact;
     return Contact;
-  })();
+  })(_react2['default'].Component);
   
   exports['default'] = Contact;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Contact.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 32 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -2104,15 +1804,15 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
-  var _utilsAnimations = __webpack_require__(9);
+  var _utilsAnimations = __webpack_require__(10);
   
   var _utilsAnimations2 = _interopRequireDefault(_utilsAnimations);
   
-  var _ContentPageCss = __webpack_require__(15);
+  var _ContentPageCss = __webpack_require__(37);
   
   var _ContentPageCss2 = _interopRequireDefault(_ContentPageCss);
   
@@ -2180,14 +1880,10 @@ module.exports =
   exports['default'] = ContentPage;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ContentPage.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 33 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -2204,11 +1900,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
-  var _ErrorPageCss = __webpack_require__(16);
+  var _ErrorPageCss = __webpack_require__(38);
   
   var _ErrorPageCss2 = _interopRequireDefault(_ErrorPageCss);
   
@@ -2254,14 +1950,10 @@ module.exports =
   exports['default'] = ErrorPage;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ErrorPage.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 34 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -2282,11 +1974,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _decoratorsWithViewport = __webpack_require__(45);
+  var _decoratorsWithViewport = __webpack_require__(32);
   
   var _decoratorsWithViewport2 = _interopRequireDefault(_decoratorsWithViewport);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
@@ -2294,7 +1986,7 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _FooterCss = __webpack_require__(17);
+  var _FooterCss = __webpack_require__(39);
   
   var _FooterCss2 = _interopRequireDefault(_FooterCss);
   
@@ -2353,7 +2045,7 @@ module.exports =
                     'span',
                     { className: 'icon-arrow arrow-up' },
                     _react2['default'].createElement('img', {
-                      src: __webpack_require__(55) })
+                      src: __webpack_require__(54) })
                   )
                 )
               )
@@ -2381,14 +2073,10 @@ module.exports =
   exports['default'] = Footer;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Footer.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 35 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -2409,7 +2097,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
@@ -2417,11 +2105,11 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _Navigation = __webpack_require__(36);
+  var _Navigation = __webpack_require__(24);
   
   var _Navigation2 = _interopRequireDefault(_Navigation);
   
-  var _HeaderCss = __webpack_require__(18);
+  var _HeaderCss = __webpack_require__(40);
   
   var _HeaderCss2 = _interopRequireDefault(_HeaderCss);
   
@@ -2522,7 +2210,7 @@ module.exports =
                 _react2['default'].createElement(
                   'a',
                   { className: '', href: '/', onClick: _Link2['default'].handleClick },
-                  _react2['default'].createElement('img', { className: 'Header-brandImg', src: __webpack_require__(49), width: '205', height: '27',
+                  _react2['default'].createElement('img', { className: 'Header-brandImg', src: __webpack_require__(55), width: '205', height: '27',
                     alt: 'PaulGraffix' })
                 )
               ),
@@ -2542,14 +2230,123 @@ module.exports =
   module.exports = exports['default'];
   /*<span className="Header-brandTxt">PaulGraffix</span>*/
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Header.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 36 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+  /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
   
+  'use strict';
+  
+  Object.defineProperty(exports, '__esModule', {
+    value: true
+  });
+  
+  var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+  
+  var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  
+  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+  
+  var _react = __webpack_require__(1);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _config = __webpack_require__(9);
+  
+  var Html = (function (_Component) {
+    _inherits(Html, _Component);
+  
+    function Html() {
+      _classCallCheck(this, Html);
+  
+      _get(Object.getPrototypeOf(Html.prototype), 'constructor', this).apply(this, arguments);
+    }
+  
+    _createClass(Html, [{
+      key: 'trackingCode',
+      value: function trackingCode() {
+        return { __html: '(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=' + 'function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;' + 'e=o.createElement(i);r=o.getElementsByTagName(i)[0];' + 'e.src=\'https://www.google-analytics.com/analytics.js\';' + 'r.parentNode.insertBefore(e,r)}(window,document,\'script\',\'ga\'));' + ('ga(\'create\',\'' + _config.googleAnalyticsId + '\',\'auto\');ga(\'send\',\'pageview\');')
+        };
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        return _react2['default'].createElement(
+          'html',
+          { className: 'no-js', lang: '' },
+          _react2['default'].createElement(
+            'head',
+            null,
+            _react2['default'].createElement('meta', { charSet: 'utf-8' }),
+            _react2['default'].createElement('meta', { httpEquiv: 'X-UA-Compatible', content: 'IE=edge' }),
+            _react2['default'].createElement(
+              'title',
+              null,
+              this.props.title
+            ),
+            _react2['default'].createElement('meta', { name: 'description', content: this.props.description }),
+            _react2['default'].createElement('meta', { name: 'viewport', content: 'width=device-width, initial-scale=1' }),
+            _react2['default'].createElement('link', { rel: 'apple-touch-icon', href: 'apple-touch-icon.png' }),
+            _react2['default'].createElement('link', { href: 'https://fonts.googleapis.com/css?family=Oxygen:300,400,700', rel: 'stylesheet', type: 'text/css' }),
+            _react2['default'].createElement('link', { href: 'https://fonts.googleapis.com/css?family=Noto+Sans:400,700', rel: 'stylesheet', type: 'text/css' }),
+            _react2['default'].createElement('link', { href: 'foundation.min.css', rel: 'stylesheet', type: 'text/css' }),
+            _react2['default'].createElement('style', { id: 'css', dangerouslySetInnerHTML: { __html: this.props.css } }),
+            _react2['default'].createElement('script', { src: 'https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js' })
+          ),
+          _react2['default'].createElement(
+            'body',
+            null,
+            _react2['default'].createElement('div', { id: 'app', dangerouslySetInnerHTML: { __html: this.props.body } }),
+            _react2['default'].createElement('script', { src: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js' }),
+            _react2['default'].createElement('script', { src: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/plugins/ScrollToPlugin.min.js' }),
+            _react2['default'].createElement('script', { src: '/app.js' }),
+            _react2['default'].createElement('script', { dangerouslySetInnerHTML: this.trackingCode() })
+          )
+        );
+      }
+    }], [{
+      key: 'propTypes',
+      value: {
+        title: _react.PropTypes.string,
+        description: _react.PropTypes.string,
+        css: _react.PropTypes.string,
+        body: _react.PropTypes.string.isRequired
+      },
+      enumerable: true
+    }, {
+      key: 'defaultProps',
+      value: {
+        title: '',
+        description: ''
+      },
+      enumerable: true
+    }]);
+  
+    return Html;
+  })(_react.Component);
+  
+  exports['default'] = Html;
+  module.exports = exports['default'];
+  /*
+  8888888b.                   888       .d8888b.                   .d888  .d888 d8b
+  888   Y88b                  888      d88P  Y88b                 d88P"  d88P"  Y8P
+  888    888                  888      888    888                 888    888
+  888   d88P 8888b.  888  888 888      888        888d888 8888b.  888888 888888 888 888  888
+  8888888P"     "88b 888  888 888      888  88888 888P"      "88b 888    888    888 `Y8bd8P'
+  888       .d888888 888  888 888      888    888 888    .d888888 888    888    888   X88K
+  888       888  888 Y88b 888 888      Y88b  d88P 888    888  888 888    888    888 .d8""8b.
+  888       "Y888888  "Y88888 888       "Y8888P88 888    "Y888888 888    888    888 888  888
+  */
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -2574,7 +2371,7 @@ module.exports =
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
@@ -2582,7 +2379,7 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _NavigationCss = __webpack_require__(19);
+  var _NavigationCss = __webpack_require__(41);
   
   var _NavigationCss2 = _interopRequireDefault(_NavigationCss);
   
@@ -2658,14 +2455,10 @@ module.exports =
   exports['default'] = Navigation;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Navigation.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 37 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -2682,11 +2475,11 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
-  var _NotFoundPageCss = __webpack_require__(20);
+  var _NotFoundPageCss = __webpack_require__(42);
   
   var _NotFoundPageCss2 = _interopRequireDefault(_NotFoundPageCss);
   
@@ -2733,14 +2526,10 @@ module.exports =
   exports['default'] = NotFoundPage;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "NotFoundPage.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 38 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -2773,25 +2562,25 @@ module.exports =
   
   var _reactLoader2 = _interopRequireDefault(_reactLoader);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
-  var _utilsAnimations = __webpack_require__(9);
+  var _utilsAnimations = __webpack_require__(10);
   
   var _utilsAnimations2 = _interopRequireDefault(_utilsAnimations);
   
-  var _configJs = __webpack_require__(41);
+  var _configJs = __webpack_require__(9);
   
   var _ProjectInfo = __webpack_require__(8);
   
   var _ProjectInfo2 = _interopRequireDefault(_ProjectInfo);
   
-  var _ProjectWrapper = __webpack_require__(40);
+  var _ProjectWrapper = __webpack_require__(28);
   
   var _ProjectWrapper2 = _interopRequireDefault(_ProjectWrapper);
   
-  var _PortfolioCss = __webpack_require__(21);
+  var _PortfolioCss = __webpack_require__(43);
   
   var _PortfolioCss2 = _interopRequireDefault(_PortfolioCss);
   
@@ -3179,14 +2968,10 @@ module.exports =
   exports['default'] = Portfolio;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Portfolio.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 39 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -3280,14 +3065,10 @@ module.exports =
   exports['default'] = ProjectContent;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ProjectContent.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 40 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -3316,7 +3097,7 @@ module.exports =
   
   var _classnames2 = _interopRequireDefault(_classnames);
   
-  var _decoratorsWithStyles = __webpack_require__(3);
+  var _decoratorsWithStyles = __webpack_require__(2);
   
   var _decoratorsWithStyles2 = _interopRequireDefault(_decoratorsWithStyles);
   
@@ -3324,7 +3105,7 @@ module.exports =
   
   var _Link2 = _interopRequireDefault(_Link);
   
-  var _ProjectWrapperCss = __webpack_require__(24);
+  var _ProjectWrapperCss = __webpack_require__(46);
   
   var _ProjectWrapperCss2 = _interopRequireDefault(_ProjectWrapperCss);
   
@@ -3536,30 +3317,11 @@ module.exports =
   exports['default'] = ProjectWrapper;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ProjectWrapper.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 41 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
-  'use strict';
-  
-  Object.defineProperty(exports, '__esModule', {
-    value: true
-  });
-  var DB = 'https://luminous-heat-5784.firebaseio.com/';
-  
-  exports.DB = DB;
-  
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "config.js" + ": " + err.message); } }); } } })(); }
-
-/***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+  /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
   
   'use strict';
   
@@ -3575,13 +3337,16 @@ module.exports =
   
   var _fbjsLibExecutionEnvironment = __webpack_require__(6);
   
-  var _fbjsLibExecutionEnvironment2 = _interopRequireDefault(_fbjsLibExecutionEnvironment);
+  function getUrl(path) {
+    if (path.startsWith('http') || _fbjsLibExecutionEnvironment.canUseDOM) {
+      return path;
+    }
   
-  var getUrl = function getUrl(path) {
-    return path.startsWith('http') ? path : _fbjsLibExecutionEnvironment2['default'].canUseDOM ? path : process.env.WEBSITE_HOSTNAME ? 'http://' + process.env.WEBSITE_HOSTNAME + path : 'http://127.0.0.1:' + global.server.get('port') + path;
-  };
+    return process.env.WEBSITE_HOSTNAME ? 'http://' + process.env.WEBSITE_HOSTNAME + path : 'http://127.0.0.1:' + global.server.get('port') + path;
+  }
   
   var HttpClient = {
+  
     get: function get(path) {
       return new Promise(function (resolve, reject) {
         _superagent2['default'].get(getUrl(path)).accept('application/json').end(function (err, res) {
@@ -3597,19 +3362,16 @@ module.exports =
         });
       });
     }
+  
   };
   
   exports['default'] = HttpClient;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "HttpClient.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 43 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
-  
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -3620,11 +3382,11 @@ module.exports =
   
   var _fbjsLibExecutionEnvironment = __webpack_require__(6);
   
-  var _historyLibCreateBrowserHistory = __webpack_require__(66);
+  var _historyLibCreateBrowserHistory = __webpack_require__(67);
   
   var _historyLibCreateBrowserHistory2 = _interopRequireDefault(_historyLibCreateBrowserHistory);
   
-  var _historyLibUseQueries = __webpack_require__(67);
+  var _historyLibUseQueries = __webpack_require__(68);
   
   var _historyLibUseQueries2 = _interopRequireDefault(_historyLibUseQueries);
   
@@ -3633,13 +3395,11 @@ module.exports =
   exports['default'] = location;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "Location.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 44 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+  /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
   
   'use strict';
   
@@ -3649,11 +3409,15 @@ module.exports =
   
   var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
   
+  var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
   
   function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
   
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+  
+  function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
   
   var _react = __webpack_require__(1);
   
@@ -3666,9 +3430,13 @@ module.exports =
   var _fbjsLibEmptyFunction2 = _interopRequireDefault(_fbjsLibEmptyFunction);
   
   function withContext(ComposedComponent) {
-    return (function () {
+    return (function (_Component) {
+      _inherits(WithContext, _Component);
+  
       function WithContext() {
         _classCallCheck(this, WithContext);
+  
+        _get(Object.getPrototypeOf(WithContext.prototype), 'constructor', this).apply(this, arguments);
       }
   
       _createClass(WithContext, [{
@@ -3716,19 +3484,17 @@ module.exports =
       }]);
   
       return WithContext;
-    })();
+    })(_react.Component);
   }
   
   exports['default'] = withContext;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "withContext.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 45 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+  /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
   
   'use strict';
   
@@ -3793,6 +3559,7 @@ module.exports =
             window.addEventListener('resize', handleWindowResize);
             window.addEventListener('orientationchange', handleWindowResize);
           }
+  
           EE.on(RESIZE_EVENT, this.handleResize, this);
         }
       }, {
@@ -3813,7 +3580,7 @@ module.exports =
       }, {
         key: 'handleResize',
         value: function handleResize(value) {
-          this.setState({ viewport: value });
+          this.setState({ viewport: value }); // eslint-disable-line react/no-set-state
         }
       }]);
   
@@ -3824,14 +3591,115 @@ module.exports =
   exports['default'] = withViewport;
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "withViewport.js" + ": " + err.message); } }); } } })(); }
-
 /***/ },
-/* 46 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-  /* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\node_modules\\react-hot-api\\modules\\index.js"), RootInstanceProvider = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
+  /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
   
+  'use strict';
+  
+  Object.defineProperty(exports, '__esModule', {
+    value: true
+  });
+  
+  var _this = this;
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+  
+  var _react = __webpack_require__(1);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  var _reactRoutingSrcRouter = __webpack_require__(15);
+  
+  var _reactRoutingSrcRouter2 = _interopRequireDefault(_reactRoutingSrcRouter);
+  
+  var _coreHttpClient = __webpack_require__(29);
+  
+  var _coreHttpClient2 = _interopRequireDefault(_coreHttpClient);
+  
+  var _componentsApp = __webpack_require__(17);
+  
+  var _componentsApp2 = _interopRequireDefault(_componentsApp);
+  
+  var _componentsContentPage = __webpack_require__(19);
+  
+  var _componentsContentPage2 = _interopRequireDefault(_componentsContentPage);
+  
+  var _componentsNotFoundPage = __webpack_require__(25);
+  
+  var _componentsNotFoundPage2 = _interopRequireDefault(_componentsNotFoundPage);
+  
+  var _componentsErrorPage = __webpack_require__(20);
+  
+  var _componentsErrorPage2 = _interopRequireDefault(_componentsErrorPage);
+  
+  var router = new _reactRoutingSrcRouter2['default'](function (on) {
+    on('*', function callee$1$0(state, next) {
+      var component;
+      return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+        while (1) switch (context$2$0.prev = context$2$0.next) {
+          case 0:
+            context$2$0.next = 2;
+            return regeneratorRuntime.awrap(next());
+  
+          case 2:
+            component = context$2$0.sent;
+            return context$2$0.abrupt('return', component && _react2['default'].createElement(
+              _componentsApp2['default'],
+              { context: state.context },
+              component
+            ));
+  
+          case 4:
+          case 'end':
+            return context$2$0.stop();
+        }
+      }, null, _this);
+    });
+  
+    //on('/contact', async () => <ContactPage />);
+  
+    on('*', function callee$1$0(state) {
+      var content;
+      return regeneratorRuntime.async(function callee$1$0$(context$2$0) {
+        while (1) switch (context$2$0.prev = context$2$0.next) {
+          case 0:
+            context$2$0.next = 2;
+            return regeneratorRuntime.awrap(_coreHttpClient2['default'].get('/api/content?path=' + state.path));
+  
+          case 2:
+            content = context$2$0.sent;
+            return context$2$0.abrupt('return', content && _react2['default'].createElement(_componentsContentPage2['default'], content));
+  
+          case 4:
+          case 'end':
+            return context$2$0.stop();
+        }
+      }, null, _this);
+    });
+  
+    on('error', function (state, error) {
+      return state.statusCode === 404 ? _react2['default'].createElement(
+        _componentsApp2['default'],
+        { context: state.context, error: error },
+        _react2['default'].createElement(_componentsNotFoundPage2['default'], null)
+      ) : _react2['default'].createElement(
+        _componentsApp2['default'],
+        { context: state.context, error: error },
+        _react2['default'].createElement(_componentsErrorPage2['default'], null)
+      );
+    });
+  });
+  
+  exports['default'] = router;
+  module.exports = exports['default'];
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
   'use strict';
   
   Object.defineProperty(exports, '__esModule', {
@@ -3840,7 +3708,7 @@ module.exports =
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
   
-  var _fs = __webpack_require__(11);
+  var _fs = __webpack_require__(66);
   
   var _fs2 = _interopRequireDefault(_fs);
   
@@ -3865,7 +3733,173 @@ module.exports =
   exports['default'] = { exists: exists, readFile: readFile };
   module.exports = exports['default'];
 
-  /* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("H:\\Web Projects\\paulGraffix\\node_modules\\react-hot-loader\\makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "fs.js" + ": " + err.message); } }); } } })(); }
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n/*\n * Base styles\n * ========================================================================== */\n\nhtml {\n  color: #222;\n  font-weight: 100;\n  font-size: 1em; /* ~16px; */\n  font-family: 'Noto Sans', sans-serif;\n  line-height: 1.375; /* ~22px */\n}\n\n/*\n * Remove text-shadow in selection highlight:\n * https://twitter.com/miketaylr/status/12228805301\n *\n * These selection rule sets have to be separate.\n * Customize the background color to match your design.\n */\n\n::-moz-selection {\n  background: #b3d4fc;\n  text-shadow: none;\n}\n\n::selection {\n  background: #b3d4fc;\n  text-shadow: none;\n}\n\n/*\n * A better looking default horizontal rule\n */\n\nhr {\n  display: block;\n  margin: 1em 0;\n  padding: 0;\n  height: 1px;\n  border: 0;\n  border-top: 1px solid #ccc;\n}\n\n/*\n * Remove the gap between audio, canvas, iframes,\n * images, videos and the bottom of their containers:\n * https://github.com/h5bp/html5-boilerplate/issues/440\n */\n\naudio,\ncanvas,\niframe,\nimg,\nsvg,\nvideo {\n  vertical-align: middle;\n}\n\n/*\n * Remove default fieldset styles.\n */\n\nfieldset {\n  margin: 0;\n  padding: 0;\n  border: 0;\n}\n\n/*\n * Allow only vertical resizing of textareas.\n */\n\ntextarea {\n  resize: vertical;\n}\n\nfigure {\n  margin: 1em 0;\n}\n\n/*\n * Browser upgrade prompt\n * ========================================================================== */\n\n.browserupgrade {\n  margin: 0.2em 0;\n  padding: 0.2em 0;\n  background: #ccc;\n  color: #000;\n}\n\nbody {\n  padding-top: calc(82px - 3rem);\n  background-color: rgb(0, 0, 0);\n  font-family: 'Noto Sans', sans-serif;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  body {\n\n  }\n}\n\nbody.body--hidden {\n  overflow-y: hidden;\n}\n\n.ContentPage, .Footer, .ProjectImage-wrapper, .Portfolio-title, .Contact, .divider {\n  -webkit-transition: opacity 0.7s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n          transition: opacity 0.7s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\nbody.body--hidden .ContentPage, body.body--hidden .Footer, body.body--hidden .Contact, body.body--hidden .ProjectImage-wrapper {\n  pointer-events: none;\n}\n\nbody.body--hidden .ProjectImage-wrapper, body.body--hidden .Portfolio-title, body.body--hidden .Footer, body.body--hidden .Contact, body.body--hidden .divider {\n  opacity: 0;\n}\n\nh1, h2, h3, h4 {\n  font-family: 'Oxygen', sans-serif\n}\n\nsection {\n  padding: 32px 0;\n  padding: 2rem 0;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  section {\n    padding: 3rem 0;\n  }\n}\n\n.divider {\n  height: 1px;\n  background-color: rgb(196, 196, 196);\n}\n\n.overlay {\n  position: fixed;\n  top: 0;\n  width: 100vw;\n  height: 100vh;\n  background-color: rgb(0, 0, 0);\n  opacity: 0;\n\n  -webkit-transition: opacity 1.2s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: opacity 1.2s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n  pointer-events: none;\n}\n\n.body--hidden .overlay {\n  opacity: 1;\n}\n\n.section-title {\n  text-align: center;\n  margin: 0 0 32px 0;\n  margin: 0 0 2rem 0;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .section-title {\n    text-align: left;\n  }\n}\n\n.text-link,\n.text-link:active,\n.text-link:visited {\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.7000000000000001);\n\n  -webkit-transition: color 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: color 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n.text-link:hover {\n  color: rgb(255, 255, 255);\n}\n\n.text-link:hover .icon-social {\n  opacity: 1;\n}\n\n.text-link--active {\n  color: rgb(255, 255, 255);\n}\n\n.text-link-icon {\n  display: inline-block;\n}\n\n.icon-social, .icon-arrow {\n  display: inline-block;\n  margin: 0 8px;\n  width: 20px;\n  vertical-align: text-bottom;\n  opacity: 0.8;\n\n  -webkit-transition: opacity 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: opacity 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n.button-fixed {\n  position: fixed;\n  z-index: 1;\n  width: 30px;\n  background-color: rgb(255, 255, 255);\n  box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.4);\n  opacity: 0;\n\n  -webkit-transition: opacity 1.35s cubic-bezier(0.455, 0.030, 0.515, 0.955), background-color .35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: opacity 1.35s cubic-bezier(0.455, 0.030, 0.515, 0.955), background-color .35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n  pointer-events: none;\n}\n\n.button-fixed img {\n  -webkit-transition: -webkit-transform .25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n          transition: transform .25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n.active .button-fixed {\n  opacity: 0;\n}\n\n.body--hidden .button-fixed {\n  opacity: 1;\n  pointer-events: all;\n}\n\n.button-fixed:hover {\n  background-color: rgb(196, 196, 196);\n}\n\n.button-fixed:active {\n  background-color: rgb(87, 87, 87);\n}\n\n.button-fixed:active img {\n  -webkit-transform: scale(0.8);\n      -ms-transform: scale(0.8);\n          transform: scale(0.8);\n}\n\n.button-side {\n  /* (lh = 80 w = 30) / 2 */\n  top: calc(60vh - 55px);\n  line-height: 1;\n  opacity: 1;\n}\n\n.button-top {\n  top: 16px;\n  top: 1rem;\n}\n\n.button-bottom {\n  bottom: 16px;\n  bottom: 1rem;\n}\n\n.button-right {\n  right: 32px;\n  right: 2rem;\n}\n\n.button-left {\n  left: 16px;\n  left: 1rem;\n}\n\n.button-side.button-right {\n  right: -184px;\n  right: -11.5rem;\n}\n\n.button-side.button-left {\n  left: -200px;\n  left: -12.5rem;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .button-fixed:hover img {\n    -webkit-transform: scale(1.4);\n        -ms-transform: scale(1.4);\n            transform: scale(1.4);\n  }\n\n  .button-side {\n    /* (lh = 80 w = 30) / 2 */\n    top: calc(50vh - 55px);\n    line-height: 5;\n  }\n\n  .button-right {\n    right: 2rem;\n  }\n\n  .button-side.button-right {\n    right: -10.5rem;\n  }\n\n  .button-side.button-left {\n    left: -11.5rem;\n  }\n}\n\n/*\n * Overrides\n * ========================================================================== */\n.row {\n  max-width: 75em;\n}\n\n.column,\n.columns {\n  padding-right: 13px;\n  padding-right: 0.83333rem;\n  padding-left: 13px;\n  padding-left: 0.83333rem;\n}\n\nbutton:hover, button:focus, .button:hover, .button:focus {\n  background-color: #FFFFFF;\n  background-color: rgba(255, 255, 255, 0.85);\n  color: #000000;\n  color: rgba(0, 0, 0, 0.85);\n}\n\nbutton, .button {\n  margin: 0;\n  border: 1px solid #FFFFFF;\n  border: 1px solid rgba(255, 255, 255, 0.85);\n  background-color: transparent;\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n  text-transform: uppercase;\n  font-family: 'Noto Sans', sans-serif;\n\n  -webkit-transition: background-color 300ms cubic-bezier(0.455, 0.030, 0.515, 0.955), color 300ms cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: background-color 300ms cubic-bezier(0.455, 0.030, 0.515, 0.955), color 300ms cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n\n@media only screen and (min-width: 90.063em) {\n  .xlarge-block-grid-1 > li {\n    width: 100%;\n    list-style: none;\n  }\n\n  .xlarge-block-grid-1 > li:nth-of-type(n) {\n    clear: none;\n  }\n\n  .xlarge-block-grid-1 > li:nth-of-type(1n+1) {\n    clear: both;\n  }\n\n  .xlarge-block-grid-2 > li {\n    width: 50%;\n    list-style: none;\n  }\n\n  .xlarge-block-grid-2 > li:nth-of-type(n) {\n    clear: none;\n  }\n\n  .xlarge-block-grid-2 > li:nth-of-type(2n+1) {\n    clear: both;\n  }\n\n  .xlarge-block-grid-3 > li {\n    width: 33.33333%;\n    list-style: none;\n  }\n\n  .xlarge-block-grid-3 > li:nth-of-type(n) {\n    clear: none;\n  }\n\n  .xlarge-block-grid-3 > li:nth-of-type(3n+1) {\n    clear: both;\n  }\n\n  .xlarge-block-grid-4 > li {\n    width: 25%;\n    list-style: none;\n  }\n\n  .xlarge-block-grid-4 > li:nth-of-type(n) {\n    clear: none;\n  }\n\n  .xlarge-block-grid-4 > li:nth-of-type(4n+1) {\n    clear: both;\n  }\n}\n/*\n * Print styles\n * Inlined to avoid the additional HTTP request:\n * http://www.phpied.com/delay-loading-your-print-css/\n * ========================================================================== */\n\n@media print {\n  *,\n  *:before,\n  *:after {\n    background: transparent !important;\n    box-shadow: none !important; /* Black prints faster: http://www.sanbeiji.com/archives/953 */\n    color: #000 !important;\n    text-shadow: none !important;\n  }\n\n  a,\n  a:visited {\n    text-decoration: underline;\n  }\n\n  a[href]:after {\n    content: \" (\" attr(href) \")\";\n  }\n\n  abbr[title]:after {\n    content: \" (\" attr(title) \")\";\n  }\n\n  /*\n   * Don't show links that are fragment identifiers,\n   * or use the `javascript:` pseudo protocol\n   */\n  a[href^=\"#\"]:after,\n  a[href^=\"javascript:\"]:after {\n    content: \"\";\n  }\n\n  pre,\n  blockquote {\n    border: 1px solid #999;\n    page-break-inside: avoid;\n  }\n\n  /*\n   * Printing Tables:\n   * http://css-discuss.incutio.com/wiki/Printing_Tables\n   */\n  thead {\n    display: table-header-group;\n  }\n\n  tr,\n  img {\n    page-break-inside: avoid;\n  }\n\n  img {\n    max-width: 100% !important;\n  }\n\n  p,\n  h2,\n  h3 {\n    orphans: 3;\n    widows: 3;\n  }\n\n  h2,\n  h3 {\n    page-break-after: avoid;\n  }\n}\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\r\n\r\n.Contact {\r\n  text-align: center;\r\n  padding-bottom: 32px;\r\n  padding-bottom: 2rem;\r\n}\r\n\r\n@media only screen and (min-width: 40.0625em) {\r\n  .Contact {\r\n    text-align: left;\r\n  }\r\n}\r\n\r\n.Contact h2 {\r\n  color: #FFFFFF;\r\n  color: rgba(255, 255, 255, 0.85);\r\n}\r\n\r\n.Contact-leftSection .icon-social {\r\n  margin-left: 0;\r\n}\r\n\r\n.Contact-rightSection {\r\n  margin: 32px 0 0;\r\n  margin: 2rem 0 0;\r\n  text-align: center;\r\n}\r\n\r\n@media only screen and (min-width: 40.0625em) {\r\n  .Contact-rightSection {\r\n    margin: 0;\r\n    text-align: right;\r\n  }\r\n}\r\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n.ContentPage {\n  padding-bottom: 0;\n}\n\n.ContentPage-container {\n\n}\n\n.ContentPage-info {\n  height: 100vh;\n  background-image: url('https://res.cloudinary.com/dp1pal3mi/image/upload/v1442463714/Form_React_Wallpaper_3_-_1280x800_lcuotl.jpg');\n  background-position: bottom center;\n  background-size: cover;\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.ContentPage-info h1 {\n  margin: 16px 0 10px;\n  margin: 1rem 0 10px;\n  color: rgb(255, 255, 255);\n  text-transform: uppercase;\n  font-weight: 500;\n  font-size: 3em;\n  line-height: 1;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .ContentPage-info h1 {\n    font-size: 5.2em;\n  }\n}\n\n.ContentPage-info h2 {\n  margin: 0 0 10vh;\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n  text-transform: uppercase;\n  letter-spacing: 4px;\n  font-weight: 500;\n  line-height: 1.2;\n}\n\n.ContentPage-info img {\n  width: 200px;\n}\n\n.ContentPage-skills {\n  text-align: center;\n  background: -webkit-linear-gradient(top, #000 0, #034060 100%);\n  background: linear-gradient(to bottom, #000 0, #034060 100%);\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .ContentPage-skills {\n    text-align: left;\n  }\n}\n\n.ContentPage-skills h2, h3 {\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.ContentPage-skills .ContentPage-skillsContainerItem > ul {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  font-weight: bold;\n}\n\n.ContentPage-skills .ContentPage-skillsContainerItem > ul > li {\n  margin-top: 0.25em;\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.ContentPage-skills .ContentPage-skillsContainerItem > ul li > ul {\n  margin-left: 0;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .ContentPage-skills .ContentPage-skillsContainerItem > ul li > ul {\n    margin-left: 1.25rem;\n  }\n}\n\n.ContentPage-skills .ContentPage-skillsContainerItem > ul li > ul li {\n  list-style: none;\n  font-weight: normal;\n  font-size: 0.85em;\n}\n\n.ContentPage-skillsContainer {\n  margin-bottom: 32px;\n  margin-bottom: 2rem;\n}\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, "* {\n  margin: 0;\n  line-height: 1.2;\n}\n\nhtml {\n  display: table;\n  width: 100%;\n  height: 100%;\n  color: #888;\n  text-align: center;\n  font-family: sans-serif;\n}\n\nbody {\n  display: table-cell;\n  margin: 2em auto;\n  vertical-align: middle;\n}\n\nh1 {\n  color: #555;\n  font-weight: 400;\n  font-size: 2em;\n}\n\np {\n  margin: 0 auto;\n  width: 280px;\n}\n\n@media only screen and (max-width: 280px) {\n  body, p {\n    width: 95%;\n  }\n\n  h1 {\n    font-size: 1.5em;\n    margin: 0 0 0.3em;\n\n  }\n}\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n.Footer {\n  background: rgb(0, 0, 0);\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.Footer-container {\n  padding: 32px 0;\n  padding: 2rem 0;\n}\n\n.Footer-text {\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.Footer-text--muted {\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.33);\n}\n\n.Footer-spacer {\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, 0.75);\n}\n\n.Footer-text {\n  padding: 2px 5px;\n  font-size: 1em;\n}\n\n.Footer-text:first-child {\n  padding-left: 0;\n}\n\n.Footer-link:first-child {\n  padding-right: 0;\n}\n\n.Footer-link .icon-arrow {\n  margin-right: 0;\n  margin-left: 0.2em;\n}\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n.Header {\n  position: fixed;\n  top: 0;\n  z-index: 1000;\n  width: 100%;\n  background: rgb(0, 0, 0);\n  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);\n\n  -webkit-transition: top 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: top 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n.Header.Header--up {\n  top: -82px;\n}\n\n.Header-container {\n  padding: 20px 0;\n}\n\n.Header-brand {\n  color: rgb(146, 229, 252);\n  text-decoration: none;\n  font-size: 1.75em; /* ~28px */\n}\n\n.Header-brandTxt {\n  margin-left: 10px;\n}\n\n.Header-nav {\n  float: right;\n  margin-top: 6px;\n}\n\n.Header-banner {\n  text-align: center;\n}\n\n.Header-bannerTitle {\n  margin: 0;\n  padding: 10px;\n  font-weight: normal;\n  font-size: 4em;\n  line-height: 1em;\n}\n\n.Header-bannerDesc {\n  margin: 0;\n  padding: 0;\n  color: #FFFFFF;\n  color: rgba(255, 255, 255, .5);\n  font-size: 1.25em;\n}\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n.Navigation-link {\n  display: inline-block;\n  padding: 3px 12px;\n  text-decoration: none;\n  text-transform: uppercase; /* ~18px */\n  font-size: 1.125em;\n}\n\n@media (min-width: 40.0625em) {\n  .Navigation-link:last-child {\n    padding-right: 0;\n  }\n}\n\n.Navigation-link--highlight {\n  margin-right: 8px;\n  margin-left: 8px;\n  border-radius: 3px;\n  background: #000000;\n  background: rgba(0, 0, 0, .15);\n  color: rgb(255, 255, 255);\n}\n\n.Navigation-link--highlight:hover {\n  background: #000000;\n  background: rgba(0, 0, 0, .3);\n}\n\n.Navigation-desktop {\n  position: absolute;\n  top: -200px;\n  left: 0;\n  width: 100%;\n  background-color: rgb(0, 0, 0);\n  text-align: center;\n\n  -webkit-transition: top 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n\n          transition: top 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\n}\n\n@media (min-width: 40.0625em) {\n  .Navigation-desktop {\n    position: static;\n    margin-top: 0;\n    text-align: right;\n  }\n}\n\n.Navigation-mobile .Navigation-link {\n  padding: 2px 0 8px 8px;\n}\n\n.Navigation-mobile .Navigation-link .icon-social {\n  margin: 0;\n}\n\n.Navigation--down {\n  top: 45px;\n}\n\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, "\n\n* {\n  margin: 0;\n  line-height: 1.2;\n}\n\nhtml {\n  display: table;\n  width: 100%;\n  height: 100%;\n  color: #888;\n  text-align: center;\n  font-family: sans-serif;\n}\n\nbody {\n  display: table-cell;\n  margin: 2em auto;\n  vertical-align: middle;\n}\n\nh1 {\n  color: #555;\n  font-weight: 400;\n  font-size: 2em;\n}\n\np {\n  margin: 0 auto;\n  width: 280px;\n}\n\n@media only screen and (max-width: 280px) {\n\n  body, p {\n    width: 95%;\n  }\n\n  h1 {\n    font-size: 1.5em;\n    margin: 0 0 0.3em;\n  }\n\n}\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\r\n\r\n.Portfolio {\r\n  background: -webkit-linear-gradient(top, #034060 0, rgb(196, 196, 196) 100%);\r\n  background: linear-gradient(to bottom, #034060 0, rgb(196, 196, 196) 100%);\r\n}\r\n\r\n.Portfolio h2 {\r\n  color: #FFFFFF;\r\n  color: rgba(255, 255, 255, 0.85);\r\n}\r\n\r\n.Portfolio-grid {\r\n  margin: 0;\r\n}\r\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\r\n\r\nfigure.ProjectImage-wrapper {\r\n  position: absolute;\r\n  top: 0;\r\n  /*background: var(--black);*/\r\n  left: 0;\r\n  overflow: hidden;\r\n  margin: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  /*box-shadow: 0px 0px 70px rgba(0, 0, 0, 0.7) inset;*/\r\n  text-align: center;\r\n  cursor: pointer;\r\n\r\n  -webkit-transform: translate3d(0, 0, 0);\r\n\r\n          transform: translate3d(0, 0, 0);\r\n  -webkit-backface-visibility: hidden;\r\n          backface-visibility: hidden;\r\n}\r\n\r\nfigure.ProjectImage-wrapper img {\r\n  position: relative;\r\n  opacity: 0.8;\r\n\r\n  -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955), opacity 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n          transition: transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955), opacity 0.25s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n}\r\n\r\nfigure.ProjectImage-wrapper:hover img {\r\n  opacity: 0.4;\r\n\r\n  -webkit-transform: translate3d(0, -20%, 0);\r\n\r\n          transform: translate3d(0, -20%, 0);\r\n}\r\n\r\nfigure.ProjectImage-wrapper figcaption {\r\n  position: absolute;\r\n  top: auto;\r\n  bottom: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  height: 3em;\r\n  background: rgb(0, 0, 0);\r\n  text-transform: uppercase;\r\n\r\n  -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n          transition: transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n  -webkit-transform: translate3d(0, 100%, 0);\r\n          transform: translate3d(0, 100%, 0);\r\n  -webkit-backface-visibility: hidden;\r\n          backface-visibility: hidden;\r\n}\r\n\r\nfigure.ProjectImage-wrapper h2 {\r\n  display: inline-block;\r\n  float: left;\r\n  margin: 0;\r\n  padding: 12px 32px;\r\n  padding: 0.75rem 2rem;\r\n  color: rgb(255, 255, 255);\r\n  text-align: left;\r\n  font-weight: 700;\r\n  font-size: 1em;\r\n}\r\n\r\nfigure.ProjectImage-wrapper p.description {\r\n  position: absolute;\r\n  bottom: 48px;\r\n  bottom: 3rem;\r\n  padding: 32px;\r\n  padding: 2rem;\r\n  width: 100%;\r\n  color: rgb(255, 255, 255);\r\n  text-transform: none;\r\n  text-shadow: 0 1px 2px rgb(0, 0, 0);\r\n  font-size: 90%;\r\n  opacity: 0;\r\n\r\n  -webkit-transition: opacity 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n          transition: opacity 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n  -webkit-backface-visibility: hidden;\r\n          backface-visibility: hidden;\r\n}\r\n\r\nfigure.ProjectImage-wrapper:hover p.description {\r\n  opacity: 1;\r\n}\r\n\r\nfigure.ProjectImage-wrapper h2 {\r\n  -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n          transition: transform 0.35s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n  -webkit-transform: translate3d(0, 200%, 0);\r\n          transform: translate3d(0, 200%, 0);\r\n}\r\n\r\nfigure.ProjectImage-wrapper:hover figcaption,\r\nfigure.ProjectImage-wrapper:hover h2 {\r\n  -webkit-transform: translate3d(0, 0, 0);\r\n          transform: translate3d(0, 0, 0);\r\n}\r\n\r\nfigure.ProjectImage-wrapper:hover h2 {\r\n  -webkit-transition-delay: 0.05s;\r\n          transition-delay: 0.05s;\r\n}\r\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\n\n.ProjectInfo {\n  padding: 0 16px 16px;\n  padding: 0 1rem 1rem;\n  background: rgb(196, 196, 196);\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .ProjectInfo {\n    padding: 0 4rem;\n  }\n}\n\n.ProjectInfo-card {\n  padding: 16px 0;\n  padding: 1rem 0;\n  background-color: rgb(255, 255, 255);\n  /*max-width: 1200px;*/\n  margin: 0 auto;\n}\n\n@media only screen and (min-width: 40.0625em) {\n  .ProjectInfo-card {\n    /*padding: 3rem 0;*/\n  }\n}\n\n.ProjectInfo-card h2, .ProjectInfo-card h3, .ProjectInfo-card h4, .ProjectInfo-card p {\n  margin: 0;\n  color: #000000;\n  color: rgba(0, 0, 0, 0.85);\n}\n\n.ProjectInfo-card p {\n  margin: 0;\n}\n\n.ProjectInfo-card h4 {\n  margin: 4px 0 0;\n  margin: 0.3rem 0 0;\n  font-weight: 700;\n}\n\n.ProjectInfo-card img {\n  margin: 16px 0;\n  margin: 1rem 0;\n  width: 100%;\n}\n\n.ProjectInfo-cardInfo {\n  margin: 0 auto;\n  padding: 16px 0;\n  padding: 1rem 0;\n  max-width: 1200px;\n  width: 90%;\n}\n\n.ProjectInfo-cardStackTitle {\n  text-transform: capitalize;\n}\n", ""]);
+  
+  // exports
+
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(3)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, ":root {\n  /*\n   * Colors\n   * ======================================================================== */ /* #222 */   /* #404040 */ /* #555 */ /* #777 */ /* #eee */\n\n  /*\n   * Typography\n   * ======================================================================== */\n\n  /*\n   * Layout\n   * ======================================================================== */\n\n  /*\n   * Media queries breakpoints\n   * ======================================================================== */\n\n  /*\n   * Animations\n   * ======================================================================== */\n\n\n  /*\n   * Elements\n   * ======================================================================== */\n}\r\n\r\n.ProjectWrapper {\r\n  position: relative;\r\n  overflow: hidden;\r\n  padding-bottom: 56% !important;\r\n}\r\n\r\n@media only screen and (min-width: 40.0625em) {\r\n  .ProjectWrapper {\r\n    padding-bottom: 30% !important;\r\n  }\r\n}\r\n\r\n@media only screen and (min-width: 64.0625em) {\r\n  .ProjectWrapper {\r\n    padding-bottom: 19% !important;\r\n  }\r\n}\r\n\r\n@media only screen and (min-width: 90.063em) {\r\n  .ProjectWrapper {\r\n    padding-bottom: 14.5% !important;\r\n  }\r\n}\r\n\r\n.ProjectWrapper-container {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  overflow-x: hidden;\r\n  overflow-y: auto;\r\n  width: 100%;\r\n  height: 100%;\r\n  background-color: transparent;\r\n\r\n  -webkit-transform: translate3d(0, 0, 0);\r\n\r\n          transform: translate3d(0, 0, 0);\r\n  -webkit-overflow-scrolling: touch;\r\n}\r\n\r\n.ProjectWrapper-container--closed {\r\n  position: absolute;\r\n  overflow: hidden;\r\n}\r\n\r\n.ProjectWrapper-container--hoverable {\r\n  background-color: rgb(0, 0, 0);\r\n}\r\n\r\n.ProjectWrapper-container--closed .ProjectWrapper-svgContainer {\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.ProjectWrapper-svgContainer {\r\n  max-height: 400px;\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.ProjectWrapper-svg {\r\n  position: relative;\r\n  left: 50%;\r\n  display: block;\r\n  max-height: 400px;\r\n  height: 100%;\r\n\r\n  -webkit-transition: -webkit-transform .4s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n\r\n          transition: transform .4s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n  -webkit-transform: translateX(-50%);\r\n      -ms-transform: translateX(-50%);\r\n          transform: translateX(-50%);;\r\n}\r\n\r\n.ProjectWrapper-svg image {\r\n  -webkit-transition: opacity .4s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n          transition: opacity .4s cubic-bezier(0.455, 0.030, 0.515, 0.955);\r\n}\r\n\r\n.ProjectWrapper:hover .ProjectWrapper-container--hoverable .ProjectWrapper-svg {\r\n  -webkit-transform: translateX(-50%) translateY(-10%);\r\n      -ms-transform: translateX(-50%) translateY(-10%);\r\n          transform: translateX(-50%) translateY(-10%);\r\n}\r\n\r\n.ProjectWrapper:hover .ProjectWrapper-container--hoverable .ProjectWrapper-svg image {\r\n  opacity: 0.5;\r\n}\r\n", ""]);
+  
+  // exports
+
 
 /***/ },
 /* 47 */
@@ -4276,43 +4310,43 @@ module.exports =
 /* 49 */
 /***/ function(module, exports) {
 
-  module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAM0AAAAbCAYAAADf2wtbAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjA4NjMyRjFDRDQ4NTExRTE5MTQwODlCQjM0OUYwOTYyIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjA4NjMyRjFERDQ4NTExRTE5MTQwODlCQjM0OUYwOTYyIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDg2MzJGMUFENDg1MTFFMTkxNDA4OUJCMzQ5RjA5NjIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDg2MzJGMUJENDg1MTFFMTkxNDA4OUJCMzQ5RjA5NjIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz63qas1AAAG4ElEQVR42uxc/3XiSAxW8vJ/fBXEW8GSCjAVhFRgU0FIBSEVQCoAKoBUgFNBfBXgVLBOBRxzT76dFRpb88Mb4FbvzQsQjz2jkTSfPsu+2O12EQD0oF1ycJfxvs0sjo/3rQQ/UXMqAp/TNFbVIvxe4XVsriVdg/r8RYBxZzhuJROLfonHNfMA/SW6KphjCtSdrdDxFhd7p1E/pvv2ITjB9b59ogNUFsY73bdnC8ebWC4kJ5t9GwQ+p+4oD/s21AyPM+71vi0F805wvGDhOAvUaeU4/q32fYTnk8jOQ28XAfpLdHWBx+gGr9bi3vJ6Uwz4uuMNQDkNNhC2eN/m+9YTHj9Vuxn+lV5jYnGsqW06OGeEc7eVTYu+kp2b/LBcO10XdHzSvj4Son8iPC5G/egytpgnd51/1/DSwdtLjEypYJvUIUukfT9FUXN9R1jjssW79m3T78YB8qTM+GI4L6ntVJcnIQxWel2R3x5rWHzlMSh1kjkzMF2GCE+UvKDRzE7UYTaM09cQ7E3LYZTxfTdAtzn+bYNCiwa4fMM4n1rgb0KoZoKUmQN8zXHuPoa99FybpjGsUZeZ5gxzhO1NulqRtc5/sVsHeKa3rKXvquX7KcAzBcm2zFY9wf+16Wdr2uYboEAigMjvpE8mnM/KAGm2DvDMRaeusNCkq4nD+k0toOsPus6Xnl6uvPiuITrTCPDqyZ58hUxJZFYR6hajciXQzy3Dds07gB6pkAAYksTW9L9zkYohAMaGufYQwulyT9f5MsCgPhtw84LZLtMTUnjMQKGBJeVbMXCgFyB4FISVk5yPzmVExpXCeUqB6QQNXHFLHjPjmM/LDgcaMZG4IgTBsQuNOs/gdo+kYhYthIHa5hMp2a0KEtiGZ0gImBwgIjs+dSLO0Tp1mgyhGCfLDlikrmRIDN+HxFjjotUtROC4sZxLTNYBmEQ8g/MVCrUShNkZs9ZGgiuE01wzv/XRSExsR/9EGLOIGH3lcb4aptXtPsAYE7JzSHcZncErSN/0jJ2Gc4YnzFt1eWxCFFcBDOtvJg9oM643OCxzOcZ8xgcKdS0TMsbckgAoSUAYk2PXgjH0QUZTl8DT7LFnf9cdfwa/3umnwbHxWr5O88B4rvrtRTDwJ2i+x3MMOw1YRPLf6cwPZNHrfEtKACyZ72Oy20icJhESEHmD0zx59HeVRxw3t8atNunjNKa8JRYYWNlAFvyRn/pNWyCjnuSWDtBM33n0IschdFfgeizyAofU/4vEHl1zmjEu3tqCAKDyCudzX0BBjJ1Di1p2lIQ07vgFGFgeAwFgys3+T4RAhLs1MPlNK0Fjs9MkqPw+mCt3+y0LSCHaKvC2G1JyAh164Pd4hCkxNYnaPe7AXCtVoq7bYFTKOJGk0jgV5BsLkJXBmOZZCO0lNBqZGvRa36sZSJwmFWDTEg55fS5xtplgecSEQMkEhFmH5zcxPbTmrb7DLXHg2GM3lxACH56BpOogEElgb8Y4ZKRtDpOmgHGlbc15gMF8gF3R36eBTDgWpym1YNCE8yW6o4WWkkBRoINsSDSU7nq+EEtKCJyKxMDTyyXR8RPOuwhNBHBG4WL8qyMmBJYEopkYv1xgxHMmp5PCxBHpP8WFtoVmz0JHkQSKUxRavbzQkNMzWWt17C1rl55VznUbWlTZSvpOA1Q5zwNUOXMPMg0DVOZuHaqc50z1ba9Fr7pIK8zHLVXEp1blrNsUXQNapf4u0VmoMpo7j4R+DeErBCKQPb4tgWgvzI6RWJyjB/wDTbYygsPaqVUD25O2sGNNyX3TeU5R1HrR+1r3zC5CfxtyEDeE08QBoNUHoUU/wa9wUHpHWyITgm3rpyUnAnpSHfPOQALXsd3DYTn/RkAAlBbXrIjj+JAJxyCNT2EyQXLUxrSFyGmG0F4BIIluD1oEnuFgR45O3IewVPYAjbNH8psHvM4bYWH6GKEiZp4+pAfHqPXg8AlaauS260OLar+SEMhIAL1hWM0JE6xMeUzewoKanva8DZnTzAPkH9x5eg65Tf3Sj6iDp0EjBvPayNQCpycOL33QXxpBn1SMHOZL5xp/UU6zcXwBB5ef/RDqglvraaicJoFwhYyvDCW7FOYQEfws8X7siImrn9i0fW1SiTvVY8Cx5AYYMYTDl2QsHPXxEpi+/t3SY+jlkVAXFXPsf0971u89k95rAGahQhqD6UUdasG+awl+gZ+VcVzj5+cWanTiQQYsGCfNwPxGnvqm3RLkhY8bAgdzob4yct2CBJmB49qqOW41aKP0oF7esSMUtq1ed8T5By3Hu7xt5y/MJfXgMXOw1TFxPKXfb8pp4AQjiL6Q5ZGNKdQbMP/Ikco/AgwAOXIuNkPmJ+gAAAAASUVORK5CYII="
+  module.exports = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9InBvaW50ZXItZXZlbnRzOiBub25lOyBkaXNwbGF5OiBibG9jazsiPjxnIGlkPSJtYWlsIj48cGF0aCBzdHlsZT0ib3BhY2l0eTogMC44NTsgZmlsbDogcmdiKDI1NSwgMjU1LCAyNTUpOyIgZD0iTTIwLDRINEMyLjksNCwyLDQuOSwyLDZsMCwxMmMwLDEuMSwwLjksMiwyLDJoMTZjMS4xLDAsMi0wLjksMi0yVjZDMjIsNC45LDIxLjEsNCwyMCw0eiBNMjAsOGwtOCw1TDQsOFY2bDgsNWw4LTVWOHoiPjwvcGF0aD48L2c+PC9zdmc+DQo="
 
 /***/ },
 /* 50 */
 /***/ function(module, exports) {
 
-  module.exports = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9InBvaW50ZXItZXZlbnRzOiBub25lOyBkaXNwbGF5OiBibG9jazsiPjxnIGlkPSJtYWlsIj48cGF0aCBzdHlsZT0ib3BhY2l0eTogMC44NTsgZmlsbDogcmdiKDI1NSwgMjU1LCAyNTUpOyIgZD0iTTIwLDRINEMyLjksNCwyLDQuOSwyLDZsMCwxMmMwLDEuMSwwLjksMiwyLDJoMTZjMS4xLDAsMi0wLjksMi0yVjZDMjIsNC45LDIxLjEsNCwyMCw0eiBNMjAsOGwtOCw1TDQsOFY2bDgsNWw4LTVWOHoiPjwvcGF0aD48L2c+PC9zdmc+DQo="
+  module.exports = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdGUgbW9yZSBhdCBjdXN0b21penIubmV0IC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgaWQ9ImZsaWNrciIgY2xhc3M9ImN1c3RvbS1pY29uIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBzdHlsZT0iaGVpZ2h0OiA1MHB4OyB3aWR0aDogNTBweDsiPgoJPHBhdGggY2xhc3M9ImlubmVyLXNoYXBlIiBzdHlsZT0ib3BhY2l0eTogMC44NTsgZmlsbDogcmdiKDI1NSwgMjU1LCAyNTUpOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSBzY2FsZSgxKSIgZD0iTTEsNTBjMC0xMS44MzksOS41OTgtMjEuNDM4LDIxLjQzOC0yMS40MzhTNDMuODc1LDM4LjE2MSw0My44NzUsNTBzLTkuNTk4LDIxLjQzOC0yMS40MzgsMjEuNDM4UzEsNjEuODM5LDEsNTB6IE01Ni4xMjUsNTAgYzAtMTEuODM5LDkuNTk4LTIxLjQzOCwyMS40MzgtMjEuNDM4Uzk5LDM4LjE2MSw5OSw1MHMtOS41OTgsMjEuNDM4LTIxLjQzOCwyMS40MzhTNTYuMTI1LDYxLjgzOSw1Ni4xMjUsNTB6Ij48L3BhdGg+Cjwvc3ZnPg0KDQo="
 
 /***/ },
 /* 51 */
 /***/ function(module, exports) {
 
-  module.exports = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdGUgbW9yZSBhdCBjdXN0b21penIubmV0IC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgaWQ9ImZsaWNrciIgY2xhc3M9ImN1c3RvbS1pY29uIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiBzdHlsZT0iaGVpZ2h0OiA1MHB4OyB3aWR0aDogNTBweDsiPgoJPHBhdGggY2xhc3M9ImlubmVyLXNoYXBlIiBzdHlsZT0ib3BhY2l0eTogMC44NTsgZmlsbDogcmdiKDI1NSwgMjU1LCAyNTUpOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSBzY2FsZSgxKSIgZD0iTTEsNTBjMC0xMS44MzksOS41OTgtMjEuNDM4LDIxLjQzOC0yMS40MzhTNDMuODc1LDM4LjE2MSw0My44NzUsNTBzLTkuNTk4LDIxLjQzOC0yMS40MzgsMjEuNDM4UzEsNjEuODM5LDEsNTB6IE01Ni4xMjUsNTAgYzAtMTEuODM5LDkuNTk4LTIxLjQzOCwyMS40MzgtMjEuNDM4Uzk5LDM4LjE2MSw5OSw1MHMtOS41OTgsMjEuNDM4LTIxLjQzOCwyMS40MzhTNTYuMTI1LDYxLjgzOSw1Ni4xMjUsNTB6Ij48L3BhdGg+Cjwvc3ZnPg0KDQo="
+  module.exports = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCg0KPHN2ZyBpZD0iZ2l0aHViIiBjbGFzcz0iY3VzdG9tLWljb24iIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJoZWlnaHQ6IDUwcHg7IHdpZHRoOiA1MHB4OyI+DQoJPHBhdGggY2xhc3M9ImlubmVyLXNoYXBlIiBzdHlsZT0ib3BhY2l0eTogMC44NTsgZmlsbDogcmdiKDI1NSwgMjU1LCAyNTUpOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSBzY2FsZSgxKSIgZD0iTTUwLDFDMjIuOTM4LDEsMSwyMi45MzgsMSw1MHMyMS45MzgsNDksNDksNDlzNDktMjEuOTM4LDQ5LTQ5Uzc3LjA2MiwxLDUwLDF6IE03OS4wOTksNzkuMDk5IGMtMy43ODIsMy43ODItOC4xODQsNi43NS0xMy4wODMsOC44MjNjLTEuMjQ1LDAuNTI2LTIuNTA5LDAuOTg5LTMuNzksMS4zODd2LTcuMzQ0YzAtMy44Ni0xLjMyNC02LjY5OS0zLjk3Mi04LjUxNyBjMS42NTktMC4xNiwzLjE4Mi0wLjM4Myw0LjU3LTAuNjdjMS4zODgtMC4yODcsMi44NTUtMC43MDIsNC40MDItMS4yNDVjMS41NDctMC41NDMsMi45MzUtMS4xODksNC4xNjMtMS45MzggYzEuMjI4LTAuNzUsMi40MDktMS43MjMsMy41NDEtMi45MTlzMi4wODItMi41NTIsMi44NDctNC4wNjdzMS4zNzItMy4zMzQsMS44MTgtNS40NTVjMC40NDYtMi4xMjEsMC42Ny00LjQ1OCwwLjY3LTcuMDEgYzAtNC45NDUtMS42MTEtOS4xNTUtNC44MzMtMTIuNjMzYzEuNDY3LTMuODI4LDEuMzA4LTcuOTkxLTAuNDc4LTEyLjQ4OWwtMS4xOTctMC4xNDNjLTAuODI5LTAuMDk2LTIuMzIxLDAuMjU1LTQuNDc0LDEuMDUzIGMtMi4xNTMsMC43OTgtNC41NywyLjEwNS03LjI0OSwzLjkyNGMtMy43OTctMS4wNTMtNy43MzYtMS41NzktMTEuODItMS41NzljLTQuMTE1LDAtOC4wMzksMC41MjYtMTEuNzcyLDEuNTc5IGMtMS42OS0xLjE0OS0zLjI5NC0yLjA5Ny00LjgwOS0yLjg0N2MtMS41MTUtMC43NS0yLjcyNy0xLjI2LTMuNjM3LTEuNTMyYy0wLjkwOS0wLjI3MS0xLjc1NC0wLjQzOS0yLjUzNi0wLjUwMyBjLTAuNzgyLTAuMDY0LTEuMjg0LTAuMDc5LTEuNTA3LTAuMDQ4Yy0wLjIyMywwLjAzMS0wLjM4MywwLjA2NC0wLjQ3OCwwLjA5NmMtMS43ODcsNC41My0xLjk0Niw4LjY5NC0wLjQ3OCwxMi40ODkgYy0zLjIyMiwzLjQ3Ny00LjgzMyw3LjY4OC00LjgzMywxMi42MzNjMCwyLjU1MiwwLjIyMyw0Ljg4OSwwLjY3LDcuMDFjMC40NDcsMi4xMjEsMS4wNTMsMy45NCwxLjgxOCw1LjQ1NSBjMC43NjUsMS41MTUsMS43MTUsMi44NzEsMi44NDcsNC4wNjdzMi4zMTMsMi4xNjksMy41NDEsMi45MTljMS4yMjgsMC43NTEsMi42MTYsMS4zOTYsNC4xNjMsMS45MzggYzEuNTQ3LDAuNTQzLDMuMDE0LDAuOTU3LDQuNDAyLDEuMjQ1YzEuMzg4LDAuMjg3LDIuOTExLDAuNTExLDQuNTcsMC42N2MtMi42MTYsMS43ODctMy45MjQsNC42MjYtMy45MjQsOC41MTd2Ny40ODcgYy0xLjQ0NS0wLjQzLTIuODY5LTAuOTM4LTQuMjY4LTEuNTNjLTQuODk5LTIuMDczLTkuMzAxLTUuMDQxLTEzLjA4My04LjgyM2MtMy43ODItMy43ODItNi43NS04LjE4NC04LjgyMy0xMy4wODMgQzkuOTM0LDYwLjk0OCw4Ljg0Nyw1NS41Niw4Ljg0Nyw1MHMxLjA4Ny0xMC45NDgsMy4yMzEtMTYuMDE2YzIuMDczLTQuODk5LDUuMDQxLTkuMzAxLDguODIzLTEzLjA4M3M4LjE4NC02Ljc1LDEzLjA4My04LjgyMyBDMzkuMDUyLDkuOTM0LDQ0LjQ0LDguODQ3LDUwLDguODQ3czEwLjk0OCwxLjA4NywxNi4wMTYsMy4yMzFjNC45LDIuMDczLDkuMzAxLDUuMDQxLDEzLjA4Myw4LjgyMyBjMy43ODIsMy43ODIsNi43NSw4LjE4NCw4LjgyMywxMy4wODNjMi4xNDMsNS4wNjksMy4yMywxMC40NTcsMy4yMywxNi4wMTZzLTEuMDg3LDEwLjk0OC0zLjIzMSwxNi4wMTYgQzg1Ljg0OCw3MC45MTUsODIuODgsNzUuMzE3LDc5LjA5OSw3OS4wOTlMNzkuMDk5LDc5LjA5OXoiPjwvcGF0aD4NCjwvc3ZnPg0KDQo="
 
 /***/ },
 /* 52 */
 /***/ function(module, exports) {
 
-  module.exports = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCg0KPHN2ZyBpZD0iZ2l0aHViIiBjbGFzcz0iY3VzdG9tLWljb24iIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJoZWlnaHQ6IDUwcHg7IHdpZHRoOiA1MHB4OyI+DQoJPHBhdGggY2xhc3M9ImlubmVyLXNoYXBlIiBzdHlsZT0ib3BhY2l0eTogMC44NTsgZmlsbDogcmdiKDI1NSwgMjU1LCAyNTUpOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSBzY2FsZSgxKSIgZD0iTTUwLDFDMjIuOTM4LDEsMSwyMi45MzgsMSw1MHMyMS45MzgsNDksNDksNDlzNDktMjEuOTM4LDQ5LTQ5Uzc3LjA2MiwxLDUwLDF6IE03OS4wOTksNzkuMDk5IGMtMy43ODIsMy43ODItOC4xODQsNi43NS0xMy4wODMsOC44MjNjLTEuMjQ1LDAuNTI2LTIuNTA5LDAuOTg5LTMuNzksMS4zODd2LTcuMzQ0YzAtMy44Ni0xLjMyNC02LjY5OS0zLjk3Mi04LjUxNyBjMS42NTktMC4xNiwzLjE4Mi0wLjM4Myw0LjU3LTAuNjdjMS4zODgtMC4yODcsMi44NTUtMC43MDIsNC40MDItMS4yNDVjMS41NDctMC41NDMsMi45MzUtMS4xODksNC4xNjMtMS45MzggYzEuMjI4LTAuNzUsMi40MDktMS43MjMsMy41NDEtMi45MTlzMi4wODItMi41NTIsMi44NDctNC4wNjdzMS4zNzItMy4zMzQsMS44MTgtNS40NTVjMC40NDYtMi4xMjEsMC42Ny00LjQ1OCwwLjY3LTcuMDEgYzAtNC45NDUtMS42MTEtOS4xNTUtNC44MzMtMTIuNjMzYzEuNDY3LTMuODI4LDEuMzA4LTcuOTkxLTAuNDc4LTEyLjQ4OWwtMS4xOTctMC4xNDNjLTAuODI5LTAuMDk2LTIuMzIxLDAuMjU1LTQuNDc0LDEuMDUzIGMtMi4xNTMsMC43OTgtNC41NywyLjEwNS03LjI0OSwzLjkyNGMtMy43OTctMS4wNTMtNy43MzYtMS41NzktMTEuODItMS41NzljLTQuMTE1LDAtOC4wMzksMC41MjYtMTEuNzcyLDEuNTc5IGMtMS42OS0xLjE0OS0zLjI5NC0yLjA5Ny00LjgwOS0yLjg0N2MtMS41MTUtMC43NS0yLjcyNy0xLjI2LTMuNjM3LTEuNTMyYy0wLjkwOS0wLjI3MS0xLjc1NC0wLjQzOS0yLjUzNi0wLjUwMyBjLTAuNzgyLTAuMDY0LTEuMjg0LTAuMDc5LTEuNTA3LTAuMDQ4Yy0wLjIyMywwLjAzMS0wLjM4MywwLjA2NC0wLjQ3OCwwLjA5NmMtMS43ODcsNC41My0xLjk0Niw4LjY5NC0wLjQ3OCwxMi40ODkgYy0zLjIyMiwzLjQ3Ny00LjgzMyw3LjY4OC00LjgzMywxMi42MzNjMCwyLjU1MiwwLjIyMyw0Ljg4OSwwLjY3LDcuMDFjMC40NDcsMi4xMjEsMS4wNTMsMy45NCwxLjgxOCw1LjQ1NSBjMC43NjUsMS41MTUsMS43MTUsMi44NzEsMi44NDcsNC4wNjdzMi4zMTMsMi4xNjksMy41NDEsMi45MTljMS4yMjgsMC43NTEsMi42MTYsMS4zOTYsNC4xNjMsMS45MzggYzEuNTQ3LDAuNTQzLDMuMDE0LDAuOTU3LDQuNDAyLDEuMjQ1YzEuMzg4LDAuMjg3LDIuOTExLDAuNTExLDQuNTcsMC42N2MtMi42MTYsMS43ODctMy45MjQsNC42MjYtMy45MjQsOC41MTd2Ny40ODcgYy0xLjQ0NS0wLjQzLTIuODY5LTAuOTM4LTQuMjY4LTEuNTNjLTQuODk5LTIuMDczLTkuMzAxLTUuMDQxLTEzLjA4My04LjgyM2MtMy43ODItMy43ODItNi43NS04LjE4NC04LjgyMy0xMy4wODMgQzkuOTM0LDYwLjk0OCw4Ljg0Nyw1NS41Niw4Ljg0Nyw1MHMxLjA4Ny0xMC45NDgsMy4yMzEtMTYuMDE2YzIuMDczLTQuODk5LDUuMDQxLTkuMzAxLDguODIzLTEzLjA4M3M4LjE4NC02Ljc1LDEzLjA4My04LjgyMyBDMzkuMDUyLDkuOTM0LDQ0LjQ0LDguODQ3LDUwLDguODQ3czEwLjk0OCwxLjA4NywxNi4wMTYsMy4yMzFjNC45LDIuMDczLDkuMzAxLDUuMDQxLDEzLjA4Myw4LjgyMyBjMy43ODIsMy43ODIsNi43NSw4LjE4NCw4LjgyMywxMy4wODNjMi4xNDMsNS4wNjksMy4yMywxMC40NTcsMy4yMywxNi4wMTZzLTEuMDg3LDEwLjk0OC0zLjIzMSwxNi4wMTYgQzg1Ljg0OCw3MC45MTUsODIuODgsNzUuMzE3LDc5LjA5OSw3OS4wOTlMNzkuMDk5LDc5LjA5OXoiPjwvcGF0aD4NCjwvc3ZnPg0KDQo="
+  module.exports = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdGUgbW9yZSBhdCBjdXN0b21penIubmV0IC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgaWQ9ImxpbmtlZGluIiBjbGFzcz0iY3VzdG9tLWljb24iIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJoZWlnaHQ6IDUwcHg7IHdpZHRoOiA1MHB4OyI+Cgk8cGF0aCBjbGFzcz0iaW5uZXItc2hhcGUiIHN0eWxlPSJvcGFjaXR5OiAwLjg1OyBmaWxsOiByZ2IoMjU1LCAyNTUsIDI1NSk7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIHNjYWxlKDEpIiBkPSJNODIuNTM5LDFIMTcuNDYxQzguNDA4LDEsMSw4LjQwOCwxLDE3LjQ2MXY2NS4wNzhDMSw5MS41OTIsOC40MDgsOTksMTcuNDYxLDk5aDY1LjA3OEM5MS41OTIsOTksOTksOTEuNTkyLDk5LDgyLjUzOSBWMTcuNDYxQzk5LDguNDA4LDkxLjU5MiwxLDgyLjUzOSwxeiBNMzcuNzUsODAuNjI1SDI1LjVWMzcuNzVoMTIuMjVWODAuNjI1eiBNMzEuNjI1LDMxLjYyNWMtMy4zODMsMC02LjEyNS0yLjc0Mi02LjEyNS02LjEyNSBzMi43NDItNi4xMjUsNi4xMjUtNi4xMjVzNi4xMjUsMi43NDIsNi4xMjUsNi4xMjVTMzUuMDA4LDMxLjYyNSwzMS42MjUsMzEuNjI1eiBNODAuNjI1LDgwLjYyNWgtMTIuMjV2LTI0LjUgYzAtMy4zODMtMi43NDItNi4xMjUtNi4xMjUtNi4xMjVzLTYuMTI1LDIuNzQyLTYuMTI1LDYuMTI1djI0LjVoLTEyLjI1VjM3Ljc1aDEyLjI1djcuNjA2YzIuNTI2LTMuNDcsNi4zODktNy42MDYsMTAuNzE5LTcuNjA2IGM3LjYxMiwwLDEzLjc4Miw2Ljg1NiwxMy43ODIsMTUuMzEyTDgwLjYyNSw4MC42MjVMODAuNjI1LDgwLjYyNXoiPjwvcGF0aD4KPC9zdmc+DQoNCg=="
 
 /***/ },
 /* 53 */
 /***/ function(module, exports) {
 
-  module.exports = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdGUgbW9yZSBhdCBjdXN0b21penIubmV0IC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgaWQ9ImxpbmtlZGluIiBjbGFzcz0iY3VzdG9tLWljb24iIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJoZWlnaHQ6IDUwcHg7IHdpZHRoOiA1MHB4OyI+Cgk8cGF0aCBjbGFzcz0iaW5uZXItc2hhcGUiIHN0eWxlPSJvcGFjaXR5OiAwLjg1OyBmaWxsOiByZ2IoMjU1LCAyNTUsIDI1NSk7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIHNjYWxlKDEpIiBkPSJNODIuNTM5LDFIMTcuNDYxQzguNDA4LDEsMSw4LjQwOCwxLDE3LjQ2MXY2NS4wNzhDMSw5MS41OTIsOC40MDgsOTksMTcuNDYxLDk5aDY1LjA3OEM5MS41OTIsOTksOTksOTEuNTkyLDk5LDgyLjUzOSBWMTcuNDYxQzk5LDguNDA4LDkxLjU5MiwxLDgyLjUzOSwxeiBNMzcuNzUsODAuNjI1SDI1LjVWMzcuNzVoMTIuMjVWODAuNjI1eiBNMzEuNjI1LDMxLjYyNWMtMy4zODMsMC02LjEyNS0yLjc0Mi02LjEyNS02LjEyNSBzMi43NDItNi4xMjUsNi4xMjUtNi4xMjVzNi4xMjUsMi43NDIsNi4xMjUsNi4xMjVTMzUuMDA4LDMxLjYyNSwzMS42MjUsMzEuNjI1eiBNODAuNjI1LDgwLjYyNWgtMTIuMjV2LTI0LjUgYzAtMy4zODMtMi43NDItNi4xMjUtNi4xMjUtNi4xMjVzLTYuMTI1LDIuNzQyLTYuMTI1LDYuMTI1djI0LjVoLTEyLjI1VjM3Ljc1aDEyLjI1djcuNjA2YzIuNTI2LTMuNDcsNi4zODktNy42MDYsMTAuNzE5LTcuNjA2IGM3LjYxMiwwLDEzLjc4Miw2Ljg1NiwxMy43ODIsMTUuMzEyTDgwLjYyNSw4MC42MjVMODAuNjI1LDgwLjYyNXoiPjwvcGF0aD4KPC9zdmc+DQoNCg=="
+  module.exports = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIGlkPSJzdGFja292ZXJmbG93IiBjbGFzcz0iY3VzdG9tLWljb24iIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJoZWlnaHQ6IDUwcHg7IHdpZHRoOiA1MHB4OyI+DQoJPHBhdGggY2xhc3M9ImlubmVyLXNoYXBlIiBzdHlsZT0ib3BhY2l0eTogMC44NTsgZmlsbDogcmdiKDI1NSwgMjU1LCAyNTUpOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSBzY2FsZSgxKSIgZD0iTTYyLjMxNyw4NS44OWwtMzguNjc5LDAuMDE4bC0wLjAwNC04LjI2MWwzOC42NzgtMC4wMTlMNjIuMzE3LDg1Ljg5eiBNODguNDUzLDM5LjEwN0w4MS44MzcsMWwtOC4xNCwxLjQxM2w2LjYxNSwzOC4xMDcgTDg4LjQ1MywzOS4xMDd6IE02My4yNDgsNjcuMDM3bC0zOC41MTQtMy41NDlsLTAuNzU4LDguMjI3bDM4LjUxNCwzLjU0Nkw2My4yNDgsNjcuMDM3eiBNNjUuNzg5LDU2LjI1N0wyOC40MzcsNDYuMjE2bC0yLjE0Niw3Ljk3OCBsMzcuMzUzLDEwLjA0MUw2NS43ODksNTYuMjU3eiBNNzAuNjY0LDQ2LjgwOEwzNy4zNSwyNy4xNThsLTQuMTk5LDcuMTE0bDMzLjMxNywxOS42NTFMNzAuNjY0LDQ2LjgwOHogTTc4LjgzMyw0MS4wMjFMNTcuMDQxLDkuMDY1IGwtNi44MjYsNC42NTRsMjEuNzkzLDMxLjk1NUw3OC44MzMsNDEuMDIxeiBNNjguODg1LDU4LjcxNnYzMy43NzJIMTguMTU0VjU4LjcxNmgtNi42MDd2NDAuMjUzaDAuMDY2IEMxMS42MTIsOTksMTMuNTQxLDk5LDEzLjU0MSw5OWg2MS44ODZ2LTAuMDMxYzAuMDY1LDAsMC4wNjUtMS45MywwLjA2NS0xLjkzVjU4LjcxNkg2OC44ODV6Ij48L3BhdGg+DQo8L3N2Zz4NCg0K"
 
 /***/ },
 /* 54 */
 /***/ function(module, exports) {
 
-  module.exports = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIGlkPSJzdGFja292ZXJmbG93IiBjbGFzcz0iY3VzdG9tLWljb24iIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJoZWlnaHQ6IDUwcHg7IHdpZHRoOiA1MHB4OyI+DQoJPHBhdGggY2xhc3M9ImlubmVyLXNoYXBlIiBzdHlsZT0ib3BhY2l0eTogMC44NTsgZmlsbDogcmdiKDI1NSwgMjU1LCAyNTUpOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSBzY2FsZSgxKSIgZD0iTTYyLjMxNyw4NS44OWwtMzguNjc5LDAuMDE4bC0wLjAwNC04LjI2MWwzOC42NzgtMC4wMTlMNjIuMzE3LDg1Ljg5eiBNODguNDUzLDM5LjEwN0w4MS44MzcsMWwtOC4xNCwxLjQxM2w2LjYxNSwzOC4xMDcgTDg4LjQ1MywzOS4xMDd6IE02My4yNDgsNjcuMDM3bC0zOC41MTQtMy41NDlsLTAuNzU4LDguMjI3bDM4LjUxNCwzLjU0Nkw2My4yNDgsNjcuMDM3eiBNNjUuNzg5LDU2LjI1N0wyOC40MzcsNDYuMjE2bC0yLjE0Niw3Ljk3OCBsMzcuMzUzLDEwLjA0MUw2NS43ODksNTYuMjU3eiBNNzAuNjY0LDQ2LjgwOEwzNy4zNSwyNy4xNThsLTQuMTk5LDcuMTE0bDMzLjMxNywxOS42NTFMNzAuNjY0LDQ2LjgwOHogTTc4LjgzMyw0MS4wMjFMNTcuMDQxLDkuMDY1IGwtNi44MjYsNC42NTRsMjEuNzkzLDMxLjk1NUw3OC44MzMsNDEuMDIxeiBNNjguODg1LDU4LjcxNnYzMy43NzJIMTguMTU0VjU4LjcxNmgtNi42MDd2NDAuMjUzaDAuMDY2IEMxMS42MTIsOTksMTMuNTQxLDk5LDEzLjU0MSw5OWg2MS44ODZ2LTAuMDMxYzAuMDY1LDAsMC4wNjUtMS45MywwLjA2NS0xLjkzVjU4LjcxNkg2OC44ODV6Ij48L3BhdGg+DQo8L3N2Zz4NCg0K"
+  module.exports = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9InBvaW50ZXItZXZlbnRzOiBub25lOyBkaXNwbGF5OiBibG9jazsiPjxnIGlkPSJrZXlib2FyZC1hcnJvdy11cCI+PHBvbHlnb24gc3R5bGU9Im9wYWNpdHk6IDAuODU7IGZpbGw6IHJnYigyNTUsIDI1NSwgMjU1KTsiIHBvaW50cz0iNy40LDE1LjQgMTIsMTAuOCAxNi42LDE1LjQgMTgsMTQgMTIsOCA2LDE0ICI+PC9wb2x5Z29uPjwvZz48L3N2Zz4NCg=="
 
 /***/ },
 /* 55 */
 /***/ function(module, exports) {
 
-  module.exports = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3R5bGU9InBvaW50ZXItZXZlbnRzOiBub25lOyBkaXNwbGF5OiBibG9jazsiPjxnIGlkPSJrZXlib2FyZC1hcnJvdy11cCI+PHBvbHlnb24gc3R5bGU9Im9wYWNpdHk6IDAuODU7IGZpbGw6IHJnYigyNTUsIDI1NSwgMjU1KTsiIHBvaW50cz0iNy40LDE1LjQgMTIsMTAuOCAxNi42LDE1LjQgMTgsMTQgMTIsOCA2LDE0ICI+PC9wb2x5Z29uPjwvZz48L3N2Zz4NCg=="
+  module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAM0AAAAbCAYAAADf2wtbAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjA4NjMyRjFDRDQ4NTExRTE5MTQwODlCQjM0OUYwOTYyIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjA4NjMyRjFERDQ4NTExRTE5MTQwODlCQjM0OUYwOTYyIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDg2MzJGMUFENDg1MTFFMTkxNDA4OUJCMzQ5RjA5NjIiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDg2MzJGMUJENDg1MTFFMTkxNDA4OUJCMzQ5RjA5NjIiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz63qas1AAAG4ElEQVR42uxc/3XiSAxW8vJ/fBXEW8GSCjAVhFRgU0FIBSEVQCoAKoBUgFNBfBXgVLBOBRxzT76dFRpb88Mb4FbvzQsQjz2jkTSfPsu+2O12EQD0oF1ycJfxvs0sjo/3rQQ/UXMqAp/TNFbVIvxe4XVsriVdg/r8RYBxZzhuJROLfonHNfMA/SW6KphjCtSdrdDxFhd7p1E/pvv2ITjB9b59ogNUFsY73bdnC8ebWC4kJ5t9GwQ+p+4oD/s21AyPM+71vi0F805wvGDhOAvUaeU4/q32fYTnk8jOQ28XAfpLdHWBx+gGr9bi3vJ6Uwz4uuMNQDkNNhC2eN/m+9YTHj9Vuxn+lV5jYnGsqW06OGeEc7eVTYu+kp2b/LBcO10XdHzSvj4Son8iPC5G/egytpgnd51/1/DSwdtLjEypYJvUIUukfT9FUXN9R1jjssW79m3T78YB8qTM+GI4L6ntVJcnIQxWel2R3x5rWHzlMSh1kjkzMF2GCE+UvKDRzE7UYTaM09cQ7E3LYZTxfTdAtzn+bYNCiwa4fMM4n1rgb0KoZoKUmQN8zXHuPoa99FybpjGsUZeZ5gxzhO1NulqRtc5/sVsHeKa3rKXvquX7KcAzBcm2zFY9wf+16Wdr2uYboEAigMjvpE8mnM/KAGm2DvDMRaeusNCkq4nD+k0toOsPus6Xnl6uvPiuITrTCPDqyZ58hUxJZFYR6hajciXQzy3Dds07gB6pkAAYksTW9L9zkYohAMaGufYQwulyT9f5MsCgPhtw84LZLtMTUnjMQKGBJeVbMXCgFyB4FISVk5yPzmVExpXCeUqB6QQNXHFLHjPjmM/LDgcaMZG4IgTBsQuNOs/gdo+kYhYthIHa5hMp2a0KEtiGZ0gImBwgIjs+dSLO0Tp1mgyhGCfLDlikrmRIDN+HxFjjotUtROC4sZxLTNYBmEQ8g/MVCrUShNkZs9ZGgiuE01wzv/XRSExsR/9EGLOIGH3lcb4aptXtPsAYE7JzSHcZncErSN/0jJ2Gc4YnzFt1eWxCFFcBDOtvJg9oM643OCxzOcZ8xgcKdS0TMsbckgAoSUAYk2PXgjH0QUZTl8DT7LFnf9cdfwa/3umnwbHxWr5O88B4rvrtRTDwJ2i+x3MMOw1YRPLf6cwPZNHrfEtKACyZ72Oy20icJhESEHmD0zx59HeVRxw3t8atNunjNKa8JRYYWNlAFvyRn/pNWyCjnuSWDtBM33n0IschdFfgeizyAofU/4vEHl1zmjEu3tqCAKDyCudzX0BBjJ1Di1p2lIQ07vgFGFgeAwFgys3+T4RAhLs1MPlNK0Fjs9MkqPw+mCt3+y0LSCHaKvC2G1JyAh164Pd4hCkxNYnaPe7AXCtVoq7bYFTKOJGk0jgV5BsLkJXBmOZZCO0lNBqZGvRa36sZSJwmFWDTEg55fS5xtplgecSEQMkEhFmH5zcxPbTmrb7DLXHg2GM3lxACH56BpOogEElgb8Y4ZKRtDpOmgHGlbc15gMF8gF3R36eBTDgWpym1YNCE8yW6o4WWkkBRoINsSDSU7nq+EEtKCJyKxMDTyyXR8RPOuwhNBHBG4WL8qyMmBJYEopkYv1xgxHMmp5PCxBHpP8WFtoVmz0JHkQSKUxRavbzQkNMzWWt17C1rl55VznUbWlTZSvpOA1Q5zwNUOXMPMg0DVOZuHaqc50z1ba9Fr7pIK8zHLVXEp1blrNsUXQNapf4u0VmoMpo7j4R+DeErBCKQPb4tgWgvzI6RWJyjB/wDTbYygsPaqVUD25O2sGNNyX3TeU5R1HrR+1r3zC5CfxtyEDeE08QBoNUHoUU/wa9wUHpHWyITgm3rpyUnAnpSHfPOQALXsd3DYTn/RkAAlBbXrIjj+JAJxyCNT2EyQXLUxrSFyGmG0F4BIIluD1oEnuFgR45O3IewVPYAjbNH8psHvM4bYWH6GKEiZp4+pAfHqPXg8AlaauS260OLar+SEMhIAL1hWM0JE6xMeUzewoKanva8DZnTzAPkH9x5eg65Tf3Sj6iDp0EjBvPayNQCpycOL33QXxpBn1SMHOZL5xp/UU6zcXwBB5ef/RDqglvraaicJoFwhYyvDCW7FOYQEfws8X7siImrn9i0fW1SiTvVY8Cx5AYYMYTDl2QsHPXxEpi+/t3SY+jlkVAXFXPsf0971u89k95rAGahQhqD6UUdasG+awl+gZ+VcVzj5+cWanTiQQYsGCfNwPxGnvqm3RLkhY8bAgdzob4yct2CBJmB49qqOW41aKP0oF7esSMUtq1ed8T5By3Hu7xt5y/MJfXgMXOw1TFxPKXfb8pp4AQjiL6Q5ZGNKdQbMP/Ikco/AgwAOXIuNkPmJ+gAAAAASUVORK5CYII="
 
 /***/ },
 /* 56 */
@@ -4378,25 +4412,25 @@ module.exports =
 /* 66 */
 /***/ function(module, exports) {
 
-  module.exports = require("history/lib/createBrowserHistory");
+  module.exports = require("fs");
 
 /***/ },
 /* 67 */
 /***/ function(module, exports) {
 
-  module.exports = require("history/lib/useQueries");
+  module.exports = require("history/lib/createBrowserHistory");
 
 /***/ },
 /* 68 */
 /***/ function(module, exports) {
 
-  module.exports = require("jade");
+  module.exports = require("history/lib/useQueries");
 
 /***/ },
 /* 69 */
 /***/ function(module, exports) {
 
-  module.exports = require("lodash");
+  module.exports = require("jade");
 
 /***/ },
 /* 70 */

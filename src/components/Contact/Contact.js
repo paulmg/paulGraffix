@@ -4,7 +4,7 @@ import withStyles from '../../decorators/withStyles';
 
 import styles from './Contact.css';
 
-@withStyles(styles) class Contact {
+@withStyles(styles) class Contact extends React.Component {
   static contextTypes = {};
 
   render() {

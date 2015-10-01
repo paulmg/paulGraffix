@@ -11,6 +11,7 @@ import browserSync from 'browser-sync';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
+import task from './lib/task';
 
 global.WATCH = true;
 const config = require('./config')[0]; // Client-side bundle configuration
@@ -20,8 +21,7 @@ const bundler = webpack(config);
  * Launches a development web server with "live reload" functionality -
  * synchronizing URLs, interactions and code changes across multiple devices.
  */
-export default async () => {
-
+export default task('start', async () => {
   await require('./build')();
   await require('./serve')();
 
@@ -40,15 +40,15 @@ export default async () => {
           stats: config.stats,
 
           hot: true,
-          historyApiFallback: true
+          historyApiFallback: true,
 
           // for other settings see
           // http://webpack.github.io/docs/webpack-dev-middleware.html
         }),
 
         // bundler should be the same as above
-        webpackHotMiddleware(bundler)
-      ]
+        webpackHotMiddleware(bundler),
+      ],
     },
 
     // no need to watch '*.js' here, webpack will take care of it for us,
@@ -57,7 +57,7 @@ export default async () => {
       'build/public/**/*.css',
       'build/public/**/*.html',
       'build/content/**/*.*',
-      'build/templates/**/*.*'
-    ]
+      'build/templates/**/*.*',
+    ],
   });
-};
+});
