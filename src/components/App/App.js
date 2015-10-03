@@ -1,14 +1,15 @@
 import React, { PropTypes } from 'react';
-import smoothScroll from 'smooth-scroll';
 
 import withContext from '../../decorators/withContext';
 import withStyles from '../../decorators/withStyles';
+import {whichTransitionEvent} from '../../utils/DOMUtils.js';
 
-import styles from './App.css';
 import Header from '../Header';
 import Footer from '../Footer';
 import Portfolio from '../Portfolio';
 import Contact from '../Contact';
+
+import styles from './App.css';
 
 @withContext
 @withStyles(styles) class App extends React.Component {
@@ -18,15 +19,23 @@ import Contact from '../Contact';
   };
 
   componentDidMount() {
-    smoothScroll.init({
-      easing: 'easeInOutQuad',
-      speed: 300,
-      offset: -50
-    });
+    let overlay = this.refs.overlay;
+    overlay.classList.remove('overlay--show');
+
+    let transitionEvent = whichTransitionEvent(overlay);
+
+    if(transitionEvent) {
+      overlay.addEventListener(transitionEvent, this.listenerDone.bind(this));
+    }
   }
 
   componentWillUnmount() {
-    smoothScroll.destroy();
+
+  }
+
+  listenerDone() {
+    console.log('sdasdsa')
+    this.refs.overlay.classList.add('overlay--hidden');
   }
 
   render() {
@@ -36,7 +45,7 @@ import Contact from '../Contact';
 
         {this.props.children}
 
-        <div className="overlay"></div>
+        <div className="overlay overlay--show" ref="overlay"></div>
 
         <Portfolio />
 

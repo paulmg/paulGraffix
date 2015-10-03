@@ -11,13 +11,14 @@ import GitRepo from 'git-repository';
 
 import task from './lib/task';
 import fetch from './lib/fetch';
+import {URL, WEBSITE} from './config';
 
 // TODO: Update deployment URL
 // For more information visit http://gitolite.com/deploy.html
 const getRemote = (slot) => ({
   name: slot ? slot : 'production',
-  url: `https://paulmg@paulgraffix.scm.azurewebsites.net:443/paulgraffix.git`,
-  website: `http://paulgraffix.azurewebsites.net`
+  url: URL,
+  website: WEBSITE
 });
 
 /**
@@ -42,7 +43,7 @@ export default task('deploy', async () => {
 
   // Build the project in RELEASE mode which
   // generates optimized and minimized bundles
-  //process.argv.push('release');
+  process.argv.push('release');
   await require('./build')();
 
   // Push the contents of the build folder to the remote server via Git

@@ -132,7 +132,6 @@ const slideContentDown = function(el, t) {
 };
 
 const clipImageIn = function(el, t, r) {
-  console.log('in')
   let tween = TweenLite.to(el, t, {
     attr: {
       r: r
@@ -144,7 +143,6 @@ const clipImageIn = function(el, t, r) {
 };
 
 const clipImageOut = function(el, t) {
-  console.log('out')
   let tween = TweenLite.to(el, t, {
     attr: {
       r: 992

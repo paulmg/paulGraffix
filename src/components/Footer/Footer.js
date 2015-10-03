@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 
 import withViewport from '../../decorators/withViewport';
 import withStyles from '../../decorators/withStyles';
+import {ANIM_TIME} from '../../config';
 import Link from '../Link';
 
 import styles from './Footer.css';
@@ -14,6 +15,15 @@ import styles from './Footer.css';
       height: PropTypes.number.isRequired
     }).isRequired
   };
+
+  handleClick(event) {
+    TweenLite.to(window, ANIM_TIME, {
+      scrollTo: {
+        y: 0
+      },
+      ease: Power2.easeOut
+    });
+  }
 
   render() {
     // This is just an example how one can render CSS
@@ -30,7 +40,7 @@ import styles from './Footer.css';
               <span ref="viewport" className="Footer-viewport"></span>px
             </div>
             <div className="small-4 columns text-right">
-              <a className="Footer-link text-link text-link-icon" data-scroll href="body">Back to Top<span className="icon-arrow arrow-up"><img
+              <a className="Footer-link text-link text-link-icon" data-target="info" onClick={this.handleClick.bind(this)}>Back to Top<span className="icon-arrow arrow-up"><img
                 src={require('./svg/up.svg')} /></span></a>
             </div>
           </div>

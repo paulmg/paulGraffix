@@ -19,12 +19,12 @@ import styles from './ContentPage.css';
   componentDidMount() {
     let itemContent = this.refs.contentPageContainer;
 
-    let tl = new TimelineLite({paused: true});
-
-    tl.add(animations.slideContentDown(itemContent, 0), 0);
-    tl.add(animations.slideContentUp(itemContent, 0.8), 0.8);
-
-    tl.play();
+    //let tl = new TimelineLite({paused: true});
+    //
+    //tl.add(animations.slideContentDown(itemContent, 0), 0);
+    //tl.add(animations.slideContentUp(itemContent, 0.8), 0.8);
+    //
+    //tl.play();
   }
 
   render() {

@@ -5,13 +5,12 @@ import Loader from 'react-loader';
 
 import withStyles from '../../decorators/withStyles';
 import animations from '../../utils/animations';
-import { DB } from '../../config.js';
+import { DB, ANIM_TIME } from '../../config.js';
 import ProjectInfo from '../ProjectInfo';
 import ProjectWrapper from '../ProjectWrapper';
 import styles from './Portfolio.css';
 
 let body;
-const ANIM_TIME = 0.6;
 
 let base = Rebase.createClass(DB);
 
@@ -41,7 +40,6 @@ let base = Rebase.createClass(DB);
 
   componentDidUpdate(prevProps, prevState) {
     //console.log('update');
-    console.log(ANIM_TIME)
 
     if(!this.loaded) {
       this.items = this.el.children;
@@ -77,7 +75,7 @@ let base = Rebase.createClass(DB);
     });
   }
 
-  handleClick(i) {
+  handleOpen(i) {
     let hideTl = new TimelineLite({paused: true});
     let tweenOtherProjects = this.showHideOtherProjects(i);
 
@@ -125,6 +123,13 @@ let base = Rebase.createClass(DB);
         clearProps: 'all'
       });
 
+      TweenLite.to(window, ANIM_TIME, {
+        scrollTo: {
+          y: Math.abs(document.body.getBoundingClientRect().top - this.items[i].getBoundingClientRect().top)
+        },
+        ease: Power2.easeOut
+      });
+
       let tl = new TimelineLite({paused: true});
       let tweenOtherProjects = this.showHideOtherProjects(i);
 
@@ -138,13 +143,6 @@ let base = Rebase.createClass(DB);
 
       this.setState({
         activeProjectID: ''
-      });
-
-      TweenLite.to(window, ANIM_TIME, {
-        scrollTo: {
-          y: Math.abs(document.body.getBoundingClientRect().top - this.items[i].getBoundingClientRect().top)
-        },
-        ease: Power2.easeOut
       });
     });
 
@@ -279,7 +277,7 @@ let base = Rebase.createClass(DB);
   render() {
     let projects = this.state.data.map((project, index) => {
       return (
-        <ProjectWrapper key={index} onClick={this.handleClick.bind(this, index)}
+        <ProjectWrapper key={index} onClick={this.handleOpen.bind(this, index)}
                         closeClick={this.handleClose.bind(this, index)}
                         nextClick={this.handleNext.bind(this, index)} prevClick={this.handlePrev.bind(this, index)}
                         id={index} active={index === this.state.activeProjectID ? 'active' : null}

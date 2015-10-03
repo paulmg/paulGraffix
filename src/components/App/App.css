@@ -145,18 +145,29 @@ section {
   height: 100vh;
   background-color: var(--black);
   opacity: 0;
+  z-index: 1;
 
-  transition: opacity 1.2s var(--animation-swift);
+  transition: opacity 1s var(--animation-swift);
   pointer-events: none;
 }
 
+.overlay--show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.overlay--hidden {
+  visibility: hidden;
+}
+
 .body--hidden .overlay {
+  visibility: visible;
   opacity: 1;
 }
 
 .section-title {
-  text-align: center;
   margin: 0 0 2rem 0;
+  text-align: center;
 }
 
 @media only screen and (--medium) {
@@ -201,11 +212,11 @@ section {
 
 .button-fixed {
   position: fixed;
-  z-index: 1;
+  z-index: 1001;
+  visibility: hidden;
   width: 30px;
   background-color: var(--white);
-  box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.4);
-  opacity: 0;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.4);
 
   transition: opacity 1.35s var(--animation-swift), background-color .35s var(--animation-swift);
   pointer-events: none;
@@ -220,7 +231,7 @@ section {
 }
 
 .body--hidden .button-fixed {
-  opacity: 1;
+  visibility: visible;
   pointer-events: all;
 }
 
@@ -244,23 +255,24 @@ section {
 }
 
 .button-top {
-  top: 1rem;
+  top: 0;
 }
 
 .button-bottom {
-  bottom: 1rem;
+  bottom: 0;
+  opacity: 0;
 }
 
 .button-right {
-  right: 2rem;
+  right: 0;
 }
 
 .button-left {
-  left: 1rem;
+  left: 0;
 }
 
 .button-side.button-right {
-  right: -11.5rem;
+  right: -12.5rem;
 }
 
 .button-side.button-left {
@@ -272,14 +284,26 @@ section {
     transform: scale(1.4);
   }
 
-  .button-side {
-    /* (lh = 80 w = 30) / 2 */
-    top: calc(50vh - 55px);
-    line-height: 5;
+  .button-top {
+    top: 1rem;
+  }
+
+  .button-bottom {
+    bottom: -2rem;
   }
 
   .button-right {
     right: 2rem;
+  }
+
+  .button-left {
+    left: 1rem;
+  }
+
+  .button-side {
+    /* (lh = 80 w = 30) / 2 */
+    top: calc(50vh - 55px);
+    line-height: 5;
   }
 
   .button-side.button-right {
@@ -319,7 +343,6 @@ button, .button {
 
   transition: background-color 300ms var(--animation-swift), color 300ms var(--animation-swift);
 }
-
 
 @media only screen and (--xlarge) {
   .xlarge-block-grid-1 > li {
@@ -374,6 +397,7 @@ button, .button {
     clear: both;
   }
 }
+
 /*
  * Print styles
  * Inlined to avoid the additional HTTP request:

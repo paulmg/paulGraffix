@@ -1,17 +1,20 @@
 @import '../variables.css';
 
 :root {
-  --max-height: 400px;
+  --max-height: 200px;
+  --max-height-medium: 400px;
 }
 
 .ProjectWrapper {
   position: relative;
   overflow: hidden;
   padding-bottom: 56% !important;
+  margin: 0.5rem 0;
 }
 
 @media only screen and (--medium) {
   .ProjectWrapper {
+    margin: 0;
     padding-bottom: 30% !important;
   }
 }
@@ -37,6 +40,7 @@
   width: 100%;
   height: 100%;
   background-color: transparent;
+  z-index: 2;
 
   transform: translate3d(0, 0, 0);
   -webkit-overflow-scrolling: touch;
@@ -62,11 +66,17 @@
   height: 100%;
 }
 
+@media only screen and (--medium) {
+  .ProjectWrapper-svgContainer {
+    max-height: var(--max-height-medium);
+  }
+}
+
 .ProjectWrapper-svg {
   position: relative;
   left: 50%;
   display: block;
-  max-height: var(--max-height);
+  max-height: var(--max-height-medium);
   height: 100%;
 
   transition: transform .4s var(--animation-swift);
@@ -82,5 +92,12 @@
 }
 
 .ProjectWrapper:hover .ProjectWrapper-container--hoverable .ProjectWrapper-svg image {
+  opacity: 0.5;
+}
+
+.touch .ProjectWrapper .ProjectWrapper-container--hoverable .ProjectWrapper-svg {
+  transform: translateX(-50%) translateY(-10%);
+}
+.touch .ProjectWrapper .ProjectWrapper-container--hoverable .ProjectWrapper-svg image {
   opacity: 0.5;
 }

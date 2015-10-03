@@ -7,7 +7,6 @@ import Navigation from '../Navigation';
 import styles from './Header.css';
 
 let body, html;
-const DELTA = 80;
 
 @withStyles(styles) class Header extends React.Component {
   constructor(props) {
@@ -55,7 +54,7 @@ const DELTA = 80;
     this.height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
     let scrollTop = window.scrollY || window.pageYOffset;
 
-    if(Math.abs(this.lastScrollTop - scrollTop) <= DELTA)
+    if(Math.abs(this.lastScrollTop - scrollTop) <= 80)
       return;
 
     if(scrollTop > this.lastScrollTop && scrollTop > this.navbarHeight) {

@@ -1,36 +1,37 @@
 @import '../variables.css';
 
-figure.ProjectImage-wrapper {
+.ProjectImage-wrapper {
   position: absolute;
   top: 0;
-  /*background: var(--black);*/
   left: 0;
   overflow: hidden;
   margin: 0;
   width: 100%;
   height: 100%;
+  background-image: url('https://commons.wikimedia.org/wiki/File%3ATransparent.gif');
   /*box-shadow: 0px 0px 70px rgba(0, 0, 0, 0.7) inset;*/
   text-align: center;
   cursor: pointer;
+  z-index: 2;
 
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
 }
 
-figure.ProjectImage-wrapper img {
-  position: relative;
-  opacity: 0.8;
+/*.ProjectImage-wrapper img {*/
+/*position: relative;*/
+/*opacity: 0.8;*/
 
-  transition: transform 0.35s var(--animation-swift), opacity 0.25s var(--animation-swift);
-}
+/*transition: transform 0.35s var(--animation-swift), opacity 0.25s var(--animation-swift);*/
+/*}*/
 
-figure.ProjectImage-wrapper:hover img {
-  opacity: 0.4;
+/*.ProjectImage-wrapper:hover img {*/
+/*opacity: 0.4;*/
 
-  transform: translate3d(0, -20%, 0);
-}
+/*transform: translate3d(0, -20%, 0);*/
+/*}*/
 
-figure.ProjectImage-wrapper figcaption {
+.ProjectImage-wrapper figcaption {
   position: absolute;
   top: auto;
   bottom: 0;
@@ -45,7 +46,7 @@ figure.ProjectImage-wrapper figcaption {
   backface-visibility: hidden;
 }
 
-figure.ProjectImage-wrapper h2 {
+.ProjectImage-wrapper h2 {
   display: inline-block;
   float: left;
   margin: 0;
@@ -54,11 +55,14 @@ figure.ProjectImage-wrapper h2 {
   text-align: left;
   font-weight: 700;
   font-size: 1em;
+
+  transition: transform 0.35s var(--animation-swift);
+  transform: translate3d(0, 200%, 0);
 }
 
-figure.ProjectImage-wrapper p.description {
+.ProjectImage-wrapper p.description {
   position: absolute;
-  bottom: 3rem;
+  bottom: 2rem;
   padding: 2rem;
   width: 100%;
   color: var(--white);
@@ -67,24 +71,36 @@ figure.ProjectImage-wrapper p.description {
   font-size: 90%;
   opacity: 0;
 
-  transition: opacity 0.35s var(--animation-swift);
+  transition: opacity 0.25s var(--animation-swift);
   backface-visibility: hidden;
 }
 
-figure.ProjectImage-wrapper:hover p.description {
+@media screen and (--medium) {
+  .ProjectImage-wrapper p.description {
+    bottom: 3rem;
+    padding: 2rem;
+  }
+}
+
+.ProjectImage-wrapper:hover p.description {
   opacity: 1;
 }
 
-figure.ProjectImage-wrapper h2 {
-  transition: transform 0.35s var(--animation-swift);
-  transform: translate3d(0, 200%, 0);
-}
-
-figure.ProjectImage-wrapper:hover figcaption,
-figure.ProjectImage-wrapper:hover h2 {
+.ProjectImage-wrapper:hover figcaption,
+.ProjectImage-wrapper:hover h2 {
   transform: translate3d(0, 0, 0);
 }
 
-figure.ProjectImage-wrapper:hover h2 {
+.ProjectImage-wrapper:hover h2 {
   transition-delay: 0.05s;
 }
+
+.touch .ProjectImage-wrapper p.description {
+  /*opacity: 1;*/
+}
+
+.touch .ProjectImage-wrapper figcaption,
+.touch .ProjectImage-wrapper h2 {
+  transform: translate3d(0, 0, 0);
+}
+

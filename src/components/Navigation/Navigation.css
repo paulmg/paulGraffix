@@ -1,5 +1,8 @@
 @import '../variables.css';
 
+.Navigation {
+}
+
 .Navigation-link {
   display: inline-block;
   padding: 3px 12px;
@@ -26,23 +29,63 @@
   background: rgba(0, 0, 0, .3);
 }
 
-.Navigation-desktop {
-  position: absolute;
-  top: -200px;
-  left: 0;
-  width: 100%;
-  background-color: var(--black);
-  text-align: center;
+.Navigation-mobileIcon {
+  background: var(--white);
+  height: .3rem;
+  width: 2rem;
+  display: inline-block;
 
-  transition: top 0.25s var(--animation-swift);
+}
+.Navigation-mobileIcon::before, .Navigation-mobileIcon::after {
+  background: var(--white);
+  content: '';
+  display: block;
+  height: .3rem;
+  width: 2rem;
+
+  transition: transform 0.25s var(--animation-swift);
+}
+.Navigation-mobileIcon::before {
+  transform: translateY(-0.55rem);
+}
+.Navigation-mobileIcon::after {
+  transform: translateY(0.25rem);
+}
+.Navigation-mobileIcon.Navigation-mobileIcon--clicked {
+  background: transparent;
+}
+.Navigation-mobileIcon.Navigation-mobileIcon--clicked::before {
+  transform: translateY(0rem) rotate(-45deg);
+}
+.Navigation-mobileIcon.Navigation-mobileIcon--clicked::after {
+  transform: translateY(-0.3rem) translateX(0rem) rotate(45deg);
 }
 
-@media (--medium) {
-  .Navigation-desktop {
-    position: static;
-    margin-top: 0;
-    text-align: right;
-  }
+.Navigation-mobile-list {
+  position: fixed;
+  top: 4.5rem;
+  left: 100vw;
+  width: 100%;
+  background-color: black;
+  text-align: center;
+  opacity: 0;
+
+  transition: left 0.25s var(--animation-swift), opacity 0.25s var(--animation-swift);
+}
+
+.Navigation-mobile-list--reveal {
+  left: 0;
+  opacity: 1;
+}
+
+.Header--up .Navigation-mobile-list {
+  top: -2.4rem;
+  opacity: 0;
+}
+
+.Navigation-desktop {
+  background-color: var(--black);
+  text-align: right;
 }
 
 .Navigation-mobile .Navigation-link {
@@ -52,8 +95,3 @@
 .Navigation-mobile .Navigation-link .icon-social {
   margin: 0;
 }
-
-.Navigation--down {
-  top: 45px;
-}
-
