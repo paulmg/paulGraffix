@@ -18,14 +18,14 @@
   backface-visibility: hidden;
 }
 
-/*.ProjectImage-wrapper img {*/
+/*.ProjectCaption-wrapper img {*/
 /*position: relative;*/
 /*opacity: 0.8;*/
 
 /*transition: transform 0.35s var(--animation-swift), opacity 0.25s var(--animation-swift);*/
 /*}*/
 
-/*.ProjectImage-wrapper:hover img {*/
+/*.ProjectCaption-wrapper:hover img {*/
 /*opacity: 0.4;*/
 
 /*transform: translate3d(0, -20%, 0);*/

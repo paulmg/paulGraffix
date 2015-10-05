@@ -34,7 +34,6 @@ import styles from './App.css';
   }
 
   listenerDone() {
-    console.log('sdasdsa')
     this.refs.overlay.classList.add('overlay--hidden');
   }
 

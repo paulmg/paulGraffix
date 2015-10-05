@@ -12,10 +12,10 @@
 }
 
 .ProjectInfo-card {
-  padding: 1rem 0;
-  background-color: var(--white);
-  /*max-width: 1200px;*/
   margin: 0 auto;
+  padding: 1rem 0;
+  /*max-width: 1200px;*/
+  background-color: var(--white);
 }
 
 @media only screen and (--medium) {
@@ -24,13 +24,13 @@
   }
 }
 
-.ProjectInfo-card h2, .ProjectInfo-card h3, .ProjectInfo-card h4, .ProjectInfo-card p {
+.ProjectInfo-card h2, .ProjectInfo-card h3, .ProjectInfo-card h4, .ProjectInfo-card h5, .ProjectInfo-card p {
   margin: 0;
   color: var(--text-dark);
 }
 
-.ProjectInfo-card p {
-  margin: 0;
+.ProjectInfo-card h2 {
+  font-weight: 700;
 }
 
 .ProjectInfo-card h4 {
@@ -38,9 +38,19 @@
   font-weight: 700;
 }
 
+.ProjectInfo-card h5 {
+  margin: 0 0 0.4rem;
+  line-height: 1.2;
+}
+
+.ProjectInfo-card p {
+  margin: 0;
+}
+
 .ProjectInfo-card img {
   margin: 1rem 0;
   width: 100%;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.4);
 }
 
 .ProjectInfo-cardInfo {
@@ -52,4 +62,16 @@
 
 .ProjectInfo-cardStackTitle {
   text-transform: capitalize;
+  font-weight: 700;
+}
+
+.ProjectInfo-cardAwardTitle {
+  font-weight: 700;
+}
+
+.ProjectInfo-cardSections {
+  margin: 1rem auto;
+  max-width: 1400px;
+  background-color: var(--gray-light);
+  /*box-shadow: 0 0 40px 10px rgba(0, 0, 0, 0.3);*/
 }

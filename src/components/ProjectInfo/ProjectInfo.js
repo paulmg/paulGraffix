@@ -5,8 +5,6 @@ import Link from '../Link';
 import styles from './ProjectInfo.css';
 
 import ProjectContent from '../ProjectContent';
-import ProjectImage from '../ProjectImage';
-
 
 @withStyles(styles) class ProjectInfo extends React.Component {
   static propTypes = {
@@ -47,7 +45,7 @@ import ProjectImage from '../ProjectImage';
         //console.log(section);
 
         return (
-          <p key={index}>{award.title} - {award.award}</p>
+          <p key={index}><span className="ProjectInfo-cardAwardTitle">{award.title}</span> - {award.award}</p>
         )
       })
     }

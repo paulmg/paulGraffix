@@ -6,12 +6,13 @@ import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
 import styles from './ProjectWrapper.css';
 
-import ProjectImage from '../ProjectImage';
+import ProjectCaption from '../ProjectCaption';
 import ProjectInfo from '../ProjectInfo';
 
 const ANIM_TIME = 0.2;
 const LEFT_X = 200;
 const RIGHT_X = -200;
+const RIGHT_Y = 180;
 
 @withStyles(styles) class ProjectWrapper extends React.Component {
   static propTypes = {
@@ -24,6 +25,11 @@ const RIGHT_X = -200;
     active: React.PropTypes.string
   };
 
+  componentWillMount() {
+    this.headerInterval = null;
+    this.didScroll = false;
+  }
+
   componentDidMount() {
     this.wrapper = this.refs.projectWrapperContainer;
     this.nextBtn = this.refs.nextBtn;
@@ -32,24 +38,42 @@ const RIGHT_X = -200;
     this.upBtn = this.refs.upBtn;
 
     this.disableButtons();
+
+    this.wrapper.onscroll = () => {
+      this.didScroll = true
+    };
+
+    this.headerInterval = setInterval(() => {
+      if(this.didScroll) {
+        this.hasScrolled();
+        this.didScroll = false
+      }
+    }, 250);
   }
 
   componentDidUpdate(prevProps, prevState) {
     this.isLoaded = false;
 
     if(this.props.active) {
-      TweenLite.to(this.prevBtn, ANIM_TIME, { x: LEFT_X, ease: Power2.easeOut,
+      setTimeout(() => {
+        TweenLite.to(this.prevBtn, ANIM_TIME, { x: LEFT_X, ease: Power2.easeOut,
 
-        onComplete: () => {
-          TweenLite.to(this.nextBtn, ANIM_TIME, { x: RIGHT_X, ease: Power2.easeOut,
+          onComplete: () => {
+            TweenLite.to(this.nextBtn, ANIM_TIME, { x: RIGHT_X, ease: Power2.easeOut,
 
-            onComplete: () => {
-              this.isLoaded = true;
-              this.enableButtons();
-            }
-          });
-        }
-      });
+              onComplete: () => {
+                TweenLite.to(this.closeBtn, ANIM_TIME, { y: RIGHT_Y, ease: Power2.easeOut,
+
+                  onComplete: () => {
+                    this.isLoaded = true;
+                    this.enableButtons();
+                  }
+                })
+              }
+            });
+          }
+        });
+      }, 1000);
     }
   }
 
@@ -66,7 +90,12 @@ const RIGHT_X = -200;
         TweenLite.to(this.prevBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut,
 
           onComplete: () => {
-            this.props.closeClick(this);
+            TweenLite.to(this.closeBtn, ANIM_TIME, { y: 0, ease: Power2.easeOut,
+
+              onComplete: () => {
+                this.props.closeClick(this);
+              }
+            })
           }
         });
       }
@@ -81,7 +110,13 @@ const RIGHT_X = -200;
     TweenLite.to(this.nextBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut,
 
       onComplete: () => {
-        TweenLite.to(this.prevBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut });
+        TweenLite.to(this.prevBtn, ANIM_TIME, {
+          x: 0, ease: Power2.easeOut,
+
+          onComplete: () => {
+            TweenLite.to(this.closeBtn, ANIM_TIME, {y: 0, ease: Power2.easeOut});
+          }
+        });
       }
     });
   }
@@ -94,7 +129,12 @@ const RIGHT_X = -200;
     TweenLite.to(this.prevBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut,
 
       onComplete: () => {
-        TweenLite.to(this.nextBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut });
+        TweenLite.to(this.nextBtn, ANIM_TIME, { x: 0, ease: Power2.easeOut,
+
+          onComplete: () => {
+            TweenLite.to(this.closeBtn, ANIM_TIME, {y: 0, ease: Power2.easeOut});
+          }
+        });
       }
     });
   }
@@ -108,6 +148,18 @@ const RIGHT_X = -200;
       scrollTo: { y: 0 },
       ease: Power2.easeOut
     });
+  }
+
+  hasScrolled() {
+    let scrollTop = this.wrapper.scrollTop;
+
+    if(scrollTop > 100) {
+      this.upBtn.classList.add('button-bottom--show');
+    } else {
+      this.upBtn.classList.remove('button-bottom--show')
+    }
+
+    this.lastScrollTop = scrollTop;
   }
 
   enableButtons() {
@@ -153,7 +205,7 @@ const RIGHT_X = -200;
           <ProjectInfo project={this.props.project} isActive={this.props.active} />
         </div>
 
-        <ProjectImage onClick={this.handleClick.bind(this)} src={src} alt={this.props.project.name} project={this.props.project} />
+        <ProjectCaption onClick={this.handleClick.bind(this)} src={src} alt={this.props.project.name} project={this.props.project} />
       </li>
     );
   }

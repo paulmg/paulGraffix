@@ -9,35 +9,28 @@ import styles from './Header.css';
 let body, html;
 
 @withStyles(styles) class Header extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      didScroll: false
-    }
+  componentWillMount() {
+    this.didScroll = false;
+    this.headerInterval = null;
+    this.lastScrollTop = 0;
+    this.height = 0;
   }
+
   // Hide Header on on scroll down
   componentDidMount() {
     body = document.body;
     html = document.documentElement;
     this.header = this.refs.header;
     this.navbarHeight = this.header.offsetHeight;
-    this.lastScrollTop = 0;
-    this.height = 0;
-    this.headerInterval = null;
 
     window.onscroll = () => {
-      this.setState({
-        didScroll: true
-      });
+      this.didScroll = true
     };
 
     this.headerInterval = setInterval(() => {
-      if(this.state.didScroll) {
+      if(this.didScroll) {
         this.hasScrolled();
-        this.setState({
-          didScroll: false
-        });
+        this.didScroll = false;
       }
     }, 250);
 

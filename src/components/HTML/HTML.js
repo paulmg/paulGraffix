@@ -54,7 +54,7 @@ class Html extends Component {
         <link href='https://fonts.googleapis.com/css?family=Oxygen:300,400,700' rel='stylesheet' type='text/css' />
         <link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,700' rel='stylesheet' type='text/css' />
 
-        <link href='foundation.min.css' rel='stylesheet' type='text/css' />
+        <link href='css/foundation.min.css' rel='stylesheet' type='text/css' />
 
         <style id="css" dangerouslySetInnerHTML={{__html: this.props.css}} />
 

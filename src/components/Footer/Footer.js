@@ -40,8 +40,10 @@ import styles from './Footer.css';
               <span ref="viewport" className="Footer-viewport"></span>px
             </div>
             <div className="small-4 columns text-right">
-              <a className="Footer-link text-link text-link-icon" data-target="info" onClick={this.handleClick.bind(this)}>Back to Top<span className="icon-arrow arrow-up"><img
-                src={require('./svg/up.svg')} /></span></a>
+              <a className="Footer-link text-link text-link-icon" data-target="info" onClick={this.handleClick.bind(this)}>
+                Back to Top
+                <span className="icon-arrow arrow-up"><img src={require('./svg/up.svg')} /></span>
+              </a>
             </div>
           </div>
         </div>

@@ -3,11 +3,15 @@ import classNames from 'classnames';
 
 import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
-import styles from './ProjectImage.css';
+import styles from './ProjectCaption.css';
 
 @withStyles(styles)
 class ProjectImage extends React.Component {
-  static propTypes = {};
+  static propTypes = {
+    src: React.PropTypes.string,
+    alt: React.PropTypes.string,
+    project: React.PropTypes.object.isRequired
+  };
 
   constructor(props) {
     super(props);
