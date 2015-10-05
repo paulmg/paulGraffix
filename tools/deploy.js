@@ -1,19 +1,10 @@
-/**
- * React Starter Kit (http://www.reactstarterkit.com/)
- *
- * Copyright © 2014-2015 Kriasoft, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 import GitRepo from 'git-repository';
 
 import task from './lib/task';
 import fetch from './lib/fetch';
-import {URL, WEBSITE} from './config';
 
-// TODO: Update deployment URL
+import {URL, WEBSITE} from '../src/config.js';
+
 // For more information visit http://gitolite.com/deploy.html
 const getRemote = (slot) => ({
   name: slot ? slot : 'production',
