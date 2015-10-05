@@ -23,7 +23,6 @@
     "react-loader": "^1.4.0",
     "react-routing": "0.0.4",
     "react-waypoint": "^1.0.3",
-    "smooth-scroll": "cferdinandi/smooth-scroll",
     "source-map-support": "0.3.2",
     "superagent": "1.4.0"
   },
