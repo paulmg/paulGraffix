@@ -91,10 +91,19 @@ figure {
   color: #000;
 }
 
+/*
+ * Personal changes
+ * ========================================================================== */
+
+html {
+  /*overflow-x: hidden;*/
+}
+
 body {
   padding-top: calc(var(--header-height) - var(--section-buffer-l));
   background-color: var(--black);
   font-family: var(--font-family-base);
+  overflow-x: hidden;
 }
 
 @media only screen and (--medium) {
@@ -141,11 +150,11 @@ section {
 .overlay {
   position: fixed;
   top: 0;
+  z-index: 1;
   width: 100vw;
   height: 100vh;
   background-color: var(--black);
   opacity: 0;
-  z-index: 1;
 
   transition: opacity 1s var(--animation-swift);
   pointer-events: none;
@@ -166,12 +175,13 @@ section {
 }
 
 .section-title {
-  margin: 0 0 2rem 0;
+  margin: 0 0 1rem;
   text-align: center;
 }
 
 @media only screen and (--medium) {
   .section-title {
+    margin: 0 0 2rem;
     text-align: left;
   }
 }
@@ -257,6 +267,10 @@ section {
   top: -10.5rem;
 }
 
+.touch .button-top {
+  top: -11.2rem;
+}
+
 .button-bottom {
   bottom: 0;
   transition: bottom .35s var(--animation-swift);
@@ -266,22 +280,23 @@ section {
   right: 1.2rem;
 }
 
+.touch .button-right {
+  right: 0;
+}
+
 .button-left {
   left: 0;
 }
 
-.touch.button-right {
-  right: 0;
-}
-
-.touch.button-left {
+.touch .button-left {
   left: 0;
 }
 
 .button-side.button-right {
   right: -11.3rem;
 }
-.touch.button-side.button-right {
+
+.touch .button-side.button-right {
   right: -12.5rem;
 }
 
@@ -326,6 +341,24 @@ section {
 
   .button-side.button-left {
     left: -11.5rem;
+  }
+}
+
+#container {
+  position: absolute;
+  top: 20vh;
+  z-index: -1;
+  overflow: hidden;
+}
+
+#container.container--below {
+  position: fixed;
+  top: -4vh;
+}
+
+@media only screen and (--medium) {
+  #container {
+    top: 12vh;
   }
 }
 

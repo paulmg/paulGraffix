@@ -10,14 +10,14 @@
 
 .ContentPage-info {
   height: 100vh;
-  background-image: url('https://res.cloudinary.com/dp1pal3mi/image/upload/v1442463714/Form_React_Wallpaper_3_-_1280x800_lcuotl.jpg');
+  /*background-image: url('https://res.cloudinary.com/dp1pal3mi/image/upload/v1442463714/Form_React_Wallpaper_3_-_1280x800_lcuotl.jpg');*/
   background-position: bottom center;
   background-size: cover;
   color: var(--text-light);
 }
 
 .ContentPage-info h1 {
-  margin: 1rem 0 10px;
+  margin: 2rem 0 10px;
   color: var(--white);
   text-transform: uppercase;
   font-weight: 500;
@@ -27,6 +27,7 @@
 
 @media only screen and (--medium) {
   .ContentPage-info h1 {
+    margin: 1rem 0 10px;
     font-size: 5.2em;
   }
 }
@@ -45,8 +46,8 @@
 }
 
 .ContentPage-skills {
-  text-align: center;
   background: linear-gradient(to bottom, #000 0, #034060 100%);
+  text-align: center;
 }
 
 @media only screen and (--medium) {
@@ -57,6 +58,16 @@
 
 .ContentPage-skills h2, h3 {
   color: var(--text-light);
+}
+
+.ContentPage-skills .ContentPage-skillsContainer {
+  margin-bottom: 1rem;
+}
+
+@media only screen and (--medium) {
+  .ContentPage-skills .ContentPage-skillsContainer {
+    margin-bottom: 2rem;
+  }
 }
 
 .ContentPage-skills .ContentPage-skillsContainerItem > ul {
@@ -85,8 +96,4 @@
   list-style: none;
   font-weight: normal;
   font-size: 0.85em;
-}
-
-.ContentPage-skillsContainer {
-  margin-bottom: 2rem;
 }

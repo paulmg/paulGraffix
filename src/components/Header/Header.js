@@ -47,17 +47,23 @@ let body, html;
     this.height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
     let scrollTop = window.scrollY || window.pageYOffset;
 
-    if(Math.abs(this.lastScrollTop - scrollTop) <= 80)
-      return;
+    if(Math.abs(this.lastScrollTop - scrollTop) > 80) {
 
-    if(scrollTop > this.lastScrollTop && scrollTop > this.navbarHeight) {
-      // Scroll Down
-      this.header.classList.add('Header--up');
-    } else {
-      // Scroll Up
-      if(scrollTop + window.innerHeight < this.height) {
-        this.header.classList.remove('Header--up');
+      if(scrollTop > this.lastScrollTop && scrollTop > this.navbarHeight) {
+        // Scroll Down
+        this.header.classList.add('Header--up');
+      } else {
+        // Scroll Up
+        if(scrollTop + window.innerHeight < this.height) {
+          this.header.classList.remove('Header--up');
+        }
       }
+    }
+
+    if(scrollTop > 1200) {
+      document.getElementById('container').classList.add('container--below');
+    } else {
+      document.getElementById('container').classList.remove('container--below');
     }
 
     this.lastScrollTop = scrollTop;

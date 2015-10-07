@@ -9,8 +9,8 @@
   top: 0;
   z-index: 1000;
   width: 100%;
-  background: var(--black);
-  box-shadow: 0px 0px 4px 4px rgba(0, 0, 0, 0.2);
+  background: var(--gray-darker);
+  box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.2);
 
   transition: top 0.25s var(--animation-swift);
 }
@@ -20,7 +20,13 @@
 }
 
 .Header-container {
-  padding: 20px 0;
+  padding: 10px 0;
+}
+
+@media only screen and (--medium) {
+  .Header-container {
+    padding: 20px 0;
+  }
 }
 
 .Header-brand {

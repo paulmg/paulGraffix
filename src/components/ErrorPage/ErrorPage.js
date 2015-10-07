@@ -3,7 +3,7 @@ import withStyles from '../../decorators/withStyles';
 import styles from './ErrorPage.css';
 
 @withStyles(styles)
-class ErrorPage {
+class ErrorPage extends React.Component {
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
     onPageNotFound: PropTypes.func.isRequired

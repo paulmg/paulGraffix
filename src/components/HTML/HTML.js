@@ -62,9 +62,23 @@ class Html extends Component {
       </head>
       <body>
         <div id="app" dangerouslySetInnerHTML={{__html: this.props.body}} />
+        <div id="container"></div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/plugins/ScrollToPlugin.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r72/three.min.js"></script>
+
+        <script src="http://www.paulgraffix.com/js/threeX.windowResize.js"></script>
+        <script src="http://threejs.org/examples/js/postprocessing/EffectComposer.js"></script>
+        <script src="http://threejs.org/examples/js/shaders/CopyShader.js"></script>
+        <script src="http://threejs.org/examples/js/shaders/ConvolutionShader.js"></script>
+        <script src="http://threejs.org/examples/js/shaders/FXAAShader.js"></script>
+        <script src="http://threejs.org/examples/js/postprocessing/ShaderPass.js"></script>
+        <script src="http://threejs.org/examples/js/postprocessing/MaskPass.js"></script>
+        <script src="http://threejs.org/examples/js/postprocessing/RenderPass.js"></script>
+        <script src="http://threejs.org/examples/js/postprocessing/BloomPass.js"></script>
+        <script src="js/lightWaves.js"></script>
+
 
         <script src="/app.js"></script>
 

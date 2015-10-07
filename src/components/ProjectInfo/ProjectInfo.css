@@ -1,7 +1,7 @@
 @import '../variables.css';
 
 .ProjectInfo {
-  padding: 0 1rem 1rem;
+  padding: 0 1rem;
   background: var(--gray-light);
 }
 

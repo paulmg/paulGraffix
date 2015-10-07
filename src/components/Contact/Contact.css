@@ -2,7 +2,8 @@
 
 .Contact {
   text-align: center;
-  padding-bottom: 2rem;
+  padding-bottom: 3rem;
+  background-color: var(--black);
 }
 
 @media only screen and (--medium) {
@@ -15,8 +16,22 @@
   color: var(--text-light);
 }
 
+.Contact-leftSection .columns {
+  padding: 0;
+}
+
 .Contact-leftSection .icon-social {
   margin-left: 0;
+}
+
+.Contact-leftSectionImg {
+  margin-top: 2rem;
+}
+
+@media only screen and (--medium) {
+  .Contact-leftSectionImg {
+    margin-top: 0;
+  }
 }
 
 .Contact-rightSection {

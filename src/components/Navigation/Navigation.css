@@ -30,43 +30,49 @@
 }
 
 .Navigation-mobileIcon {
-  background: var(--white);
-  height: .3rem;
-  width: 2rem;
   display: inline-block;
+  width: 2rem;
+  height: .3rem;
+  background: var(--white);
 
 }
+
 .Navigation-mobileIcon::before, .Navigation-mobileIcon::after {
+  display: block;
+  width: 2rem;
+  height: .3rem;
   background: var(--white);
   content: '';
-  display: block;
-  height: .3rem;
-  width: 2rem;
 
   transition: transform 0.25s var(--animation-swift);
 }
+
 .Navigation-mobileIcon::before {
   transform: translateY(-0.55rem);
 }
+
 .Navigation-mobileIcon::after {
   transform: translateY(0.25rem);
 }
+
 .Navigation-mobileIcon.Navigation-mobileIcon--clicked {
   background: transparent;
 }
+
 .Navigation-mobileIcon.Navigation-mobileIcon--clicked::before {
   transform: translateY(0rem) rotate(-45deg);
 }
+
 .Navigation-mobileIcon.Navigation-mobileIcon--clicked::after {
   transform: translateY(-0.3rem) translateX(0rem) rotate(45deg);
 }
 
 .Navigation-mobile-list {
   position: fixed;
-  top: 4.5rem;
+  top: 3.9rem;
   left: 100vw;
   width: 100%;
-  background-color: black;
+  background-color: var(--gray-darker);
   text-align: center;
   opacity: 0;
 
@@ -84,7 +90,7 @@
 }
 
 .Navigation-desktop {
-  background-color: var(--black);
+  background-color: var(--gray-darker);
   text-align: right;
 }
 

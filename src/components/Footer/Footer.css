@@ -1,7 +1,7 @@
 @import '../variables.css';
 
 .Footer {
-  background: var(--black);
+  background-color: var(--black);
   color: var(--text-light);
 }
 

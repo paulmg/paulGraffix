@@ -2,6 +2,7 @@
 
 .Portfolio {
   background: linear-gradient(to bottom, #034060 0, var(--gray-light) 100%);
+  margin-bottom: 70vh;
 }
 
 .Portfolio h2 {
