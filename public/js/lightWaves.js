@@ -362,41 +362,82 @@
 
 })(this);
 
+var container;
+
+var camera, scene, sceneBG, meshBG, renderer, composer;
+
+var texture;
+var waveGroup;
+
+var clock;
+var newTime = {
+  currentTime: 0,
+  futureTime: 0
+};
+var isSpeedingUp = isTweening = false;
+var speed = 20,
+    speedTime = 2;
+
+var dpr, renderModel, effectFXAA, effectBloom, effectCopy;
+
+var width = window.innerWidth,
+    height = window.innerHeight;
+
+var planeWidth = 220,
+    planeHeight = 20,
+    planeWSegs = 100,
+    planeHSegs = 20;
+
+var postProcess = true;
+var bloomStrength = 0.65,
+    bloomKernel = 30,
+    bloomSigma = 16;
+var wireframe = false;
+
 var WaveGroup = function() {
-  this.waveCount = 3;
+  this.waveCount = 2;
   this.waves = [];
+  // scale, frequency, magnitude vals for each wave
   this.waveVals = [
-    [40, 0.08, 10],
-    [30, 0.09, 12],
-    [35, 0.05, 8]
+    {'scale': 40, 'frequency': 0.06, 'magnitude': 10},
+    {'scale': 30, 'frequency': 0.09, 'magnitude': 12},
+    {'scale': 35, 'frequency': 0.05, 'magnitude': 8}
   ];
   this.waveHolder = new THREE.Object3D();
+  this.isChanging = false;
 };
 
 WaveGroup.prototype.init = function() {
   for (var i = 0; i < this.waveCount; i++) {
-    this.waves.push(new Wave(i, this.waveVals[i], this));
+    this.waves.push(new Wave(i, this));
     this.waveHolder.add(this.waves[i].mesh);
   }
   scene.add(this.waveHolder);
 };
 
-WaveGroup.prototype.update = function() {
-  for (var i = 0; i < this.waveCount; i++) {
-    this.waves[i].update();
+WaveGroup.prototype.update = function(time) {
+  if (!this.isChanging) {
+    for (var i = 0; i < this.waveCount; i++) {
+      this.waves[i].update(this.waveVals[i], time);
+    }
   }
 };
 
-var Wave = function(count, waveVals) {
+WaveGroup.prototype.destroy = function() {
+  this.waves = [];
+  scene.remove(this.waveHolder.children);
+  this.waveHolder.children = [];
+};
+
+var Wave = function(count) {
   this.count = count;
-  this.waveVals = waveVals;
 
   this.material = new THREE.MeshBasicMaterial({
     color: 0xffffff,
     transparent: true,
     opacity: 0.6,
     side: THREE.DoubleSide,
-    wireframe: false,
+    wireframe: wireframe,
     depthWrite: false,
     depthTest: false,
     map: texture
@@ -407,21 +448,27 @@ var Wave = function(count, waveVals) {
 
   this.mesh = new THREE.Mesh(this.geometry, this.material);
   this.mesh.rotation.x = -0.5 * Math.PI;
-  this.mesh.position.set(0, 0, -(count * planeHeight));
+  this.mesh.position.set(0, 0, -(count * planeHeight) / 2);
+
+  /*for (var i = 0, l = this.mesh.geometry.vertices.length; i < l; i++) {
+   var vertex = this.mesh.geometry.vertices[i];
+   vertex.y = 1 * Math.pow(2, 0.2 * vertex.y);
+   }*/
 };
 
-noise.seed(Math.random() * 1000);
-
-Wave.prototype.update = function() {
-  var delta = clock.getDelta(),
-      time = clock.getElapsedTime();
+Wave.prototype.update = function(waveVals, time) {
+  this.waveVals = waveVals;
 
   var nValues = [];
+
+  var scale = this.waveVals.scale,
+      frequency = this.waveVals.frequency,
+      magnitude = this.waveVals.magnitude;
 
   // loop through and get random perlin noise values
   for (var x = 0; x <= planeHSegs; x++) {
     for (var y = 0; y <= planeWSegs; y++) {
-      nValues.push((noise.simplex2(-x / this.waveVals[0] + time * this.waveVals[1], -y / this.waveVals[0] + time * this.waveVals[1]) * this.waveVals[2]));
+      nValues.push(noise.simplex2(-x / scale + time * frequency, -y / scale + time * frequency) * magnitude);
     }
   }
 
@@ -429,41 +476,20 @@ Wave.prototype.update = function() {
   for (var i = 0, l = this.mesh.geometry.vertices.length; i < l; i++) {
     var vertex = this.mesh.geometry.vertices[i];
     vertex.z = nValues[i];
+    //vertex.y = 1 * Math.pow(2, 0.7 * vertex.y);
   }
 
   // set update flag
   this.mesh.geometry.verticesNeedUpdate = true;
 
   // color loop
-  var h = ((time * 8 % 360 / 360) + (this.count * 0.15)) % 1;
+  var h = ((time * 8 % 360 / 360) + (this.count * 0.25)) % 1;
   this.mesh.material.color.setHSL(h, 1, 0.5);
 };
 
-var container, stats, renderStats;
-
-var camera, controls, scene, sceneBG, renderer;
-
-var meshBG;
-
-var texture;
-var waveGroup;
-
-var clock;
-
-var composer, dpr, effectFXAA;
-
-var width = window.innerWidth,
-    height = window.innerHeight;
-
-var planeWidth = 300,
-    planeHeight = 20,
-    planeWSegs = 200,
-    planeHSegs = 20;
-
-var postProcess = true;
-
+// check for webgl
 if (document.documentElement.classList.contains('no-webgl')) {
-  document.getElementById('container').innerHTML = "no bueno";
+  document.getElementById('container').innerHTML = "";
 } else {
   clock = new THREE.Clock();
 
@@ -474,6 +500,7 @@ if (document.documentElement.classList.contains('no-webgl')) {
 function init() {
   container = document.getElementById('container');
 
+  // set up scenes
   scene = new THREE.Scene();
   sceneBG = new THREE.Scene();
 
@@ -488,20 +515,29 @@ function init() {
   texture = THREE.ImageUtils.loadTexture('http://i.imgur.com/pZJ70Zq.png');
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
+  // background
   var map = THREE.ImageUtils.loadTexture('http://i.imgur.com/yU1t4dp.jpg');
   var geometry = new THREE.PlaneGeometry(512, 256, 10, 10);
   var material = new THREE.MeshBasicMaterial({
     color: 0xffffff,
     transparent: true,
-    opacity: 0.15,
+    opacity: 0.18,
     side: THREE.FrontSide,
     map: map,
     wireframe: false,
     blending: THREE.AdditiveBlending
   });
   meshBG = new THREE.Mesh(geometry, material);
-  meshBG.position.set(0, 0, -120);
+  meshBG.position.set(0, -20, -120);
   sceneBG.add(meshBG);
+
+  // generate new random seed
+  noise.seed(Math.random() * 1000);
+
+  // set speed up interval
+  setInterval(function() {
+    isSpeedingUp = true;
+  }, Math.max(14000 * Math.random(), 8000));
 
   try {
     // WebGL Renderer
@@ -511,7 +547,7 @@ function init() {
     });
     renderer.setClearColor(0x000000, 1);
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(width, height);
 
     // set to container
     container.innerHTML = "";
@@ -520,6 +556,7 @@ function init() {
     console.log(e);
   }
 
+  // initialize wavegroup
   waveGroup = new WaveGroup();
   waveGroup.init();
 
@@ -530,12 +567,12 @@ function init() {
     renderer.gammaInput = true;
     renderer.gammaOutput = true;
 
-    var renderBackground = new THREE.RenderPass(sceneBG, camera);
-    var renderModel = new THREE.RenderPass(scene, camera);
-    renderModel.clear = false;
+    //var renderBackground = new THREE.RenderPass(sceneBG, camera);
+    renderModel = new THREE.RenderPass(scene, camera);
+    //renderModel.clear = false;
 
-    var effectBloom = new THREE.BloomPass(1.25);
-    var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
+    effectBloom = new THREE.BloomPass(bloomStrength, bloomKernel, bloomSigma);
+    effectCopy = new THREE.ShaderPass(THREE.CopyShader);
 
     // pixel ratio
     dpr = 1;
@@ -545,11 +582,6 @@ function init() {
 
     effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
     effectFXAA.uniforms['resolution'].value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
-
-    var clearMask = new THREE.ClearMaskPass();
-    var renderMask = new THREE.MaskPass(scene, camera);
-    var renderMaskInverse = new THREE.MaskPass(scene, camera);
-    renderMaskInverse.inverse = true;
 
     effectCopy.renderToScreen = true;
 
@@ -562,25 +594,33 @@ function init() {
     composer = new THREE.EffectComposer(renderer, new THREE.WebGLRenderTarget(width, height, rtParameters));
     composer.setSize(width * dpr, height * dpr);
 
-    composer.addPass(renderBackground);
     composer.addPass(renderModel);
     composer.addPass(effectFXAA);
-    composer.addPass(renderMask);
     composer.addPass(effectBloom);
-    composer.addPass(clearMask);
     composer.addPass(effectCopy);
   }
 
   // window resize
-  THREEx.WindowResize(renderer, camera);
-  window.addEventListener('resize', onWindowResize, false)
+  window.addEventListener('resize', onWindowResize, false);
 }
 
 function onWindowResize() {
-  effectFXAA.uniforms['resolution'].value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
-  /*camera.aspect = window.innerWidth / window.innerHeight;
-   camera.updateProjectionMatrix();*/
-  composer.setSize(window.innerWidth * dpr, window.innerHeight * dpr);
+  // threex window resize
+  var rendererSize = {
+    width: window.innerWidth,
+    height: window.innerHeight
+  };
+  // notify the renderer of the size change
+  renderer.setSize(rendererSize.width, rendererSize.height);
+  // update the camera
+  camera.aspect = rendererSize.width / rendererSize.height;
+  camera.updateProjectionMatrix();
+
+  // set post process to drp resolution
+  if (postProcess) {
+    effectFXAA.uniforms['resolution'].value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
+    composer.setSize(window.innerWidth * dpr, window.innerHeight * dpr);
+  }
 }
 
 function animate() {
@@ -590,10 +630,35 @@ function animate() {
 }
 
 function render() {
-  waveGroup.update();
-
   var time = clock.getElapsedTime(),
       delta = clock.getDelta();
+
+  if (isSpeedingUp) {
+    if (!isTweening) {
+      isTweening = true;
+
+      var newSpeed = newTime.futureTime + speed;
+      newTime.currentTime = time;
+      TweenMax.to(newTime, speedTime, {
+        futureTime: newSpeed,
+
+        onUpdate: function() {
+          waveGroup.update(newTime.futureTime);
+        },
+
+        onComplete: function() {
+          waveGroup.update(newTime.futureTime);
+
+          newTime.currentTime = newTime.futureTime - time - speedTime;
+          isSpeedingUp = isTweening = false;
+        },
+        ease: Circ.easeInOut
+      });
+    }
+  } else {
+    waveGroup.update(newTime.currentTime + time);
+    newTime.futureTime = newTime.currentTime + time;
+  }
 
   // bg color loop
   var h = time * 8 % 360 / 360;
@@ -603,6 +668,8 @@ function render() {
   if (postProcess) {
     renderer.clear();
     composer.render(delta);
+    renderer.clearDepth();
+    renderer.render(sceneBG, camera);
   } else {
     renderer.clear();
     renderer.render(scene, camera);
