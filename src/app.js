@@ -1,11 +1,15 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
-import 'babel/polyfill';
+import 'babel-core/polyfill';
 import ReactDOM from 'react-dom';
 import FastClick from 'fastclick';
+import { Provider } from 'react-redux';
+import configureStore from './store/configureStore';
 import Router from './routes';
 import Location from './core/Location';
 import { addEventListener, removeEventListener } from './utils/DOMUtils';
+
+const store = configureStore();
 
 let cssContainer = document.getElementById('css');
 const appContainer = document.getElementById('app');
