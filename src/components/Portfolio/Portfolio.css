@@ -5,6 +5,10 @@
   margin-bottom: 70vh;
 }
 
+.webgl .Portfolio {
+  margin-bottom: 70vh;
+}
+
 .Portfolio h2 {
   color: var(--text-light);
 }

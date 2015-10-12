@@ -80,7 +80,7 @@
   height: 100%;
 
   transition: transform .4s var(--animation-swift);
-  transform: translateX(-50%);;
+  transform: translateX(-50%);
 }
 
 .ProjectWrapper-svg image {
@@ -99,5 +99,5 @@
   transform: translateX(-50%) translateY(-10%);
 }
 .touch .ProjectWrapper .ProjectWrapper-container--hoverable .ProjectWrapper-svg image {
-  opacity: 0.5;
+  opacity: 1;
 }

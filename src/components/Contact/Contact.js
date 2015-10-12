@@ -13,13 +13,13 @@ import styles from './Contact.css';
         <div className="Contact-container row">
           <div className="columns">
             <div className="Contact-leftSection small-12 medium-6 columns">
-              <div className="medium-8 large-6 columns">
+              <div className="medium-9 large-6 columns">
                 <h2>Contact Me</h2>
                 <a className="text-link text-link-icon" target="_blank" href="mailto:paulgraffix@gmail.com"><span
                   className="icon-social"><img src={require('./svg/email.svg')} /></span>paulgraffix@gmail.com</a>
               </div>
-              <div className="Contact-leftSectionImg medium-4 large-6 columns">
-                <img className="small-5 medium-10 large-5" src="https://res.cloudinary.com/dp1pal3mi/image/upload/v1442042607/me_kod5c8.png" />
+              <div className="Contact-leftSectionImg medium-3 large-6 columns">
+                <img className="small-5 medium-12 large-4" src="https://res.cloudinary.com/dp1pal3mi/image/upload/v1442042607/me_kod5c8.png" />
               </div>
             </div>
 
