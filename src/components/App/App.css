@@ -367,7 +367,7 @@ section {
 
 @media only screen and (--medium) {
   #container {
-    top: 12vh;
+    top: 5rem;
   }
 }
 
