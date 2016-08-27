@@ -64,22 +64,23 @@ class Html extends Component {
         <div id="app" dangerouslySetInnerHTML={{__html: this.props.body}} />
         <div id="container"></div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/plugins/ScrollToPlugin.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r72/three.min.js"></script>
-
-        <script src="http://threejs.org/examples/js/postprocessing/EffectComposer.js"></script>
-        <script src="http://threejs.org/examples/js/shaders/CopyShader.js"></script>
-        <script src="http://threejs.org/examples/js/shaders/ConvolutionShader.js"></script>
-        <script src="http://threejs.org/examples/js/shaders/FXAAShader.js"></script>
-        <script src="http://threejs.org/examples/js/postprocessing/ShaderPass.js"></script>
-        <script src="http://threejs.org/examples/js/postprocessing/MaskPass.js"></script>
-        <script src="http://threejs.org/examples/js/postprocessing/RenderPass.js"></script>
-        <script src="http://threejs.org/examples/js/postprocessing/BloomPass.js"></script>
-        <script src="js/lightWaves.js"></script>
-
-
         <script src="/app.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/plugins/ScrollToPlugin.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r80/three.min.js"></script>
+
+        <script src="js/EffectComposer.js"></script>
+        <script src="js/CopyShader.js"></script>
+        <script src="js/ConvolutionShader.js"></script>
+        <script src="js/FXAAShader.js"></script>
+        <script src="js/VignetteShader.js"></script>
+        <script src="js/ShaderPass.js"></script>
+        <script src="js/MaskPass.js"></script>
+        <script src="js/RenderPass.js"></script>
+        <script src="js/BloomPass.js"></script>
+
+        <script src="js/lightWaves.js"></script>
 
         <script dangerouslySetInnerHTML={this.trackingCode()} />
       </body>
