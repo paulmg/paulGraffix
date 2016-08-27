@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 
 import withStyles from '../../decorators/withStyles';
-import Link from '../Link';
 import styles from './ProjectInfo.css';
 
 import ProjectContent from '../ProjectContent';
@@ -14,12 +13,9 @@ import ProjectContent from '../ProjectContent';
 
   render() {
     let sections = null;
-    //console.log(this.props.project)
 
     if(this.props.isActive) {
       sections = this.props.project.content.map((section, index) => {
-        //console.log(section);
-
         return (
           <ProjectContent key={index} section={section} />
         )
@@ -42,8 +38,6 @@ import ProjectContent from '../ProjectContent';
     let award = null;
     if(this.props.project.awards) {
       award = this.props.project.awards.map((award, index) => {
-        //console.log(section);
-
         return (
           <p key={index}><span className="ProjectInfo-cardAwardTitle">{award.title}</span> - {award.award}</p>
         )

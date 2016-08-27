@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
 import withStyles from '../../decorators/withStyles';
-import Link from '../Link';
 import styles from './ProjectWrapper.css';
 
 import ProjectCaption from '../ProjectCaption';
