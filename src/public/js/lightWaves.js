@@ -57,19 +57,19 @@
   // This isn't a very good seeding function, but it works ok. It supports 2^16
   // different seed values. Write something better if you need more seeds.
   module.seed = function(seed) {
-    if (seed > 0 && seed < 1) {
+    if(seed > 0 && seed < 1) {
       // Scale the seed out
       seed *= 65536;
     }
 
     seed = Math.floor(seed);
-    if (seed < 256) {
+    if(seed < 256) {
       seed |= seed << 8;
     }
 
-    for (var i = 0; i < 256; i++) {
+    for(var i = 0; i < 256; i++) {
       var v;
-      if (i & 1) {
+      if(i & 1) {
         v = p[i] ^ (seed & 255);
       } else {
         v = p[i] ^ ((seed >> 8) & 255);
@@ -108,7 +108,7 @@
     // For the 2D case, the simplex shape is an equilateral triangle.
     // Determine which simplex we are in.
     var i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords
-    if (x0 > y0) { // lower triangle, XY order: (0,0)->(1,0)->(1,1)
+    if(x0 > y0) { // lower triangle, XY order: (0,0)->(1,0)->(1,1)
       i1 = 1;
       j1 = 0;
     } else { // upper triangle, YX order: (0,0)->(0,1)->(1,1)
@@ -130,21 +130,21 @@
     var gi2 = gradP[i + 1 + perm[j + 1]];
     // Calculate the contribution from the three corners
     var t0 = 0.5 - x0 * x0 - y0 * y0;
-    if (t0 < 0) {
+    if(t0 < 0) {
       n0 = 0;
     } else {
       t0 *= t0;
       n0 = t0 * t0 * gi0.dot2(x0, y0); // (x,y) of grad3 used for 2D gradient
     }
     var t1 = 0.5 - x1 * x1 - y1 * y1;
-    if (t1 < 0) {
+    if(t1 < 0) {
       n1 = 0;
     } else {
       t1 *= t1;
       n1 = t1 * t1 * gi1.dot2(x1, y1);
     }
     var t2 = 0.5 - x2 * x2 - y2 * y2;
-    if (t2 < 0) {
+    if(t2 < 0) {
       n2 = 0;
     } else {
       t2 *= t2;
@@ -174,15 +174,15 @@
     // Determine which simplex we are in.
     var i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
     var i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
-    if (x0 >= y0) {
-      if (y0 >= z0) {
+    if(x0 >= y0) {
+      if(y0 >= z0) {
         i1 = 1;
         j1 = 0;
         k1 = 0;
         i2 = 1;
         j2 = 1;
         k2 = 0;
-      } else if (x0 >= z0) {
+      } else if(x0 >= z0) {
         i1 = 1;
         j1 = 0;
         k1 = 0;
@@ -198,14 +198,14 @@
         k2 = 1;
       }
     } else {
-      if (y0 < z0) {
+      if(y0 < z0) {
         i1 = 0;
         j1 = 0;
         k1 = 1;
         i2 = 0;
         j2 = 1;
         k2 = 1;
-      } else if (x0 < z0) {
+      } else if(x0 < z0) {
         i1 = 0;
         j1 = 1;
         k1 = 0;
@@ -248,28 +248,28 @@
 
     // Calculate the contribution from the four corners
     var t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-    if (t0 < 0) {
+    if(t0 < 0) {
       n0 = 0;
     } else {
       t0 *= t0;
       n0 = t0 * t0 * gi0.dot3(x0, y0, z0); // (x,y) of grad3 used for 2D gradient
     }
     var t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-    if (t1 < 0) {
+    if(t1 < 0) {
       n1 = 0;
     } else {
       t1 *= t1;
       n1 = t1 * t1 * gi1.dot3(x1, y1, z1);
     }
     var t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-    if (t2 < 0) {
+    if(t2 < 0) {
       n2 = 0;
     } else {
       t2 *= t2;
       n2 = t2 * t2 * gi2.dot3(x2, y2, z2);
     }
     var t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-    if (t3 < 0) {
+    if(t3 < 0) {
       n3 = 0;
     } else {
       t3 *= t3;
@@ -375,23 +375,23 @@ var newTime = {
   futureTime: 0
 };
 var isSpeedingUp = isTweening = false;
-var speed = 20,
+var speed     = 20,
     speedTime = 2;
 
-var dpr, renderModel, effectFXAA, effectBloom, effectCopy;
+var dpr, renderModel, effectFXAA, shaderVignette, effectBloom, effectCopy;
 
-var width = window.innerWidth,
+var width  = window.innerWidth,
     height = window.innerHeight;
 
-var planeWidth = 220,
+var planeWidth  = 220,
     planeHeight = 20,
-    planeWSegs = 100,
-    planeHSegs = 20;
+    planeWSegs  = 100,
+    planeHSegs  = 20;
 
 var postProcess = true;
 var bloomStrength = 0.65,
-    bloomKernel = 30,
-    bloomSigma = 16;
+    bloomKernel   = 30,
+    bloomSigma    = 16;
 var wireframe = false;
 
 var WaveGroup = function() {
@@ -408,7 +408,7 @@ var WaveGroup = function() {
 };
 
 WaveGroup.prototype.init = function() {
-  for (var i = 0; i < this.waveCount; i++) {
+  for(var i = 0; i < this.waveCount; i++) {
     this.waves.push(new Wave(i, this));
     this.waveHolder.add(this.waves[i].mesh);
   }
@@ -416,8 +416,8 @@ WaveGroup.prototype.init = function() {
 };
 
 WaveGroup.prototype.update = function(time) {
-  if (!this.isChanging) {
-    for (var i = 0; i < this.waveCount; i++) {
+  if(!this.isChanging) {
+    for(var i = 0; i < this.waveCount; i++) {
       this.waves[i].update(this.waveVals[i], time);
     }
   }
@@ -449,11 +449,6 @@ var Wave = function(count) {
   this.mesh = new THREE.Mesh(this.geometry, this.material);
   this.mesh.rotation.x = -0.5 * Math.PI;
   this.mesh.position.set(0, 0, -(count * planeHeight) / 2);
-
-  /*for (var i = 0, l = this.mesh.geometry.vertices.length; i < l; i++) {
-   var vertex = this.mesh.geometry.vertices[i];
-   vertex.y = 1 * Math.pow(2, 0.2 * vertex.y);
-   }*/
 };
 
 Wave.prototype.update = function(waveVals, time) {
@@ -461,22 +456,21 @@ Wave.prototype.update = function(waveVals, time) {
 
   var nValues = [];
 
-  var scale = this.waveVals.scale,
+  var scale     = this.waveVals.scale,
       frequency = this.waveVals.frequency,
       magnitude = this.waveVals.magnitude;
 
   // loop through and get random perlin noise values
-  for (var x = 0; x <= planeHSegs; x++) {
-    for (var y = 0; y <= planeWSegs; y++) {
+  for(var x = 0; x <= planeHSegs; x++) {
+    for(var y = 0; y <= planeWSegs; y++) {
       nValues.push(noise.simplex2(-x / scale + time * frequency, -y / scale + time * frequency) * magnitude);
     }
   }
 
   // loop through all individual vertices and set z to noise value
-  for (var i = 0, l = this.mesh.geometry.vertices.length; i < l; i++) {
+  for(var i = 0, l = this.mesh.geometry.vertices.length; i < l; i++) {
     var vertex = this.mesh.geometry.vertices[i];
     vertex.z = nValues[i];
-    //vertex.y = 1 * Math.pow(2, 0.7 * vertex.y);
   }
 
   // set update flag
@@ -488,7 +482,7 @@ Wave.prototype.update = function(waveVals, time) {
 };
 
 // check for webgl
-if (document.documentElement.classList.contains('no-webgl')) {
+if(document.documentElement.classList.contains('no-webgl')) {
   document.getElementById('container').innerHTML = "";
 } else {
   clock = new THREE.Clock();
@@ -521,23 +515,21 @@ function init() {
   var material = new THREE.MeshBasicMaterial({
     color: 0xffffff,
     transparent: true,
-    opacity: 0.18,
+    opacity: 0.15,
     side: THREE.FrontSide,
     map: map,
     wireframe: false,
     blending: THREE.AdditiveBlending
   });
   meshBG = new THREE.Mesh(geometry, material);
-  meshBG.position.set(0, -20, -120);
+  meshBG.position.set(0, -20, -180);
   sceneBG.add(meshBG);
 
   // generate new random seed
   noise.seed(Math.random() * 1000);
 
-  // set speed up interval
-  setInterval(function() {
-    isSpeedingUp = true;
-  }, Math.max(14000 * Math.random(), 8000));
+  // set speed up loop
+  speedUpLoop();
 
   try {
     // WebGL Renderer
@@ -552,7 +544,7 @@ function init() {
     // set to container
     container.innerHTML = "";
     container.appendChild(renderer.domElement);
-  } catch (e) {
+  } catch(e) {
     console.log(e);
   }
 
@@ -563,7 +555,7 @@ function init() {
   renderer.autoClear = false;
 
   // postprocess
-  if (postProcess) {
+  if(postProcess) {
     renderer.gammaInput = true;
     renderer.gammaOutput = true;
 
@@ -576,12 +568,17 @@ function init() {
 
     // pixel ratio
     dpr = 1;
-    if (window.devicePixelRatio !== undefined) {
+    if(window.devicePixelRatio !== undefined) {
       dpr = window.devicePixelRatio;
     }
 
     effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
+    effectVignette = new THREE.ShaderPass(THREE.VignetteShader);
+
     effectFXAA.uniforms['resolution'].value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
+
+    effectVignette.uniforms['offset'].value = 0.65;
+    effectVignette.uniforms['darkness'].value = 1.6;
 
     effectCopy.renderToScreen = true;
 
@@ -595,6 +592,7 @@ function init() {
     composer.setSize(width * dpr, height * dpr);
 
     composer.addPass(renderModel);
+    composer.addPass(effectVignette)
     composer.addPass(effectFXAA);
     composer.addPass(effectBloom);
     composer.addPass(effectCopy);
@@ -602,6 +600,13 @@ function init() {
 
   // window resize
   window.addEventListener('resize', onWindowResize, false);
+}
+
+function speedUpLoop() {
+  var nextTime = Math.max(14000 * Math.random(), 8000);
+  isSpeedingUp = true;
+
+  setTimeout(speedUpLoop, nextTime);
 }
 
 function onWindowResize() {
@@ -617,7 +622,7 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 
   // set post process to drp resolution
-  if (postProcess) {
+  if(postProcess) {
     effectFXAA.uniforms['resolution'].value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
     composer.setSize(window.innerWidth * dpr, window.innerHeight * dpr);
   }
@@ -630,11 +635,11 @@ function animate() {
 }
 
 function render() {
-  var time = clock.getElapsedTime(),
+  var time  = clock.getElapsedTime(),
       delta = clock.getDelta();
 
-  if (isSpeedingUp) {
-    if (!isTweening) {
+  if(isSpeedingUp) {
+    if(!isTweening) {
       isTweening = true;
 
       var newSpeed = newTime.futureTime + speed;
@@ -650,9 +655,11 @@ function render() {
           waveGroup.update(newTime.futureTime);
 
           newTime.currentTime = newTime.futureTime - time - speedTime;
-          isSpeedingUp = isTweening = false;
+
+          isSpeedingUp = false;
+          isTweening = false;
         },
-        ease: Circ.easeInOut
+        ease: Quad.easeInOut
       });
     }
   } else {
@@ -661,11 +668,11 @@ function render() {
   }
 
   // bg color loop
-  var h = time * 8 % 360 / 360;
-  meshBG.material.color.setHSL(h, 1, 0.5);
+  var h = time * 10 % 360 / 360;
+  meshBG.material.color.setHSL(h, 1, 0.20);
 
   // postprocess check
-  if (postProcess) {
+  if(postProcess) {
     renderer.clear();
     composer.render(delta);
     renderer.clearDepth();
