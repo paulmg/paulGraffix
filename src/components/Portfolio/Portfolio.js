@@ -5,14 +5,19 @@ import Loader from 'react-loader';
 
 import withStyles from '../../decorators/withStyles';
 import animations from '../../utils/animations';
-import { DB, ANIM_TIME } from '../../config.js';
+import { DATABASE_URL, API_KEY, STORAGE_BUCKET, AUTH_DOMAIN, ANIM_TIME } from '../../config.js';
 import ProjectInfo from '../ProjectInfo';
 import ProjectWrapper from '../ProjectWrapper';
 import styles from './Portfolio.css';
 
 let body;
 
-let base = Rebase.createClass(DB);
+let base = Rebase.createClass({
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  databaseURL: DATABASE_URL,
+  storageBucket: STORAGE_BUCKET
+});
 
 @withStyles(styles) class Portfolio extends React.Component {
   constructor(props) {
