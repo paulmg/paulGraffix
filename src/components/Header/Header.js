@@ -60,7 +60,7 @@ let body, html;
       }
     }
 
-    if(scrollTop > 1200) {
+    if(scrollTop > 2000) {
       document.getElementById('container').classList.add('container--below');
     } else {
       document.getElementById('container').classList.remove('container--below');
