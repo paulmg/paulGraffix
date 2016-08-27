@@ -24,8 +24,10 @@ class ProjectContent extends React.Component {
   }
 
   render() {
-    let imageArr = this.props.section.images.map((images, index) => {
-      return ( <img src={images} key={index} /> )
+    let imageArr = this.props.section.images.map((image, index) => {
+      return (
+          <img key={index} src={image} />
+      );
     });
     let text = this.props.section.text;
 
@@ -35,6 +37,7 @@ class ProjectContent extends React.Component {
           <div className="ProjectContent-text">
             <p>{text}</p>
           </div>
+
           <div className="ProjectContent-images">
             {imageArr}
           </div>
